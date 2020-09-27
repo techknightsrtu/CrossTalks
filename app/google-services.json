@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "949619346808",
+    "firebase_url": "https://cross-talks-e6d43.firebaseio.com",
+    "project_id": "cross-talks-e6d43",
+    "storage_bucket": "cross-talks-e6d43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949619346808:android:77b119c0fb2ea91b57cc8d",
+        "android_client_info": {
+          "package_name": "com.techknightsrtu.crosstalks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "949619346808-0d9c3h0li0mgvb97p65cie230pifurpr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.techknightsrtu.crosstalks",
+            "certificate_hash": "7dfb546950d4a53d1bc1a4090ec9b6efd94d9ecd"
+          }
+        },
+        {
+          "client_id": "949619346808-pd38btmgne34sade1ajdegqschq3d82c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.techknightsrtu.crosstalks",
+            "certificate_hash": "db667e9c956506a0f9392bf4e9f976c34f383b6a"
+          }
+        },
+        {
+          "client_id": "949619346808-o2bmc6utocgo71hh7n1hb4tu6fnethpg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBICH6anGr0rByhfmxDNzQuIBXar9Z5isk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "949619346808-o2bmc6utocgo71hh7n1hb4tu6fnethpg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
