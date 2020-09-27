@@ -1,11 +1,13 @@
 package com.techknightsrtu.crosstalks.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -21,6 +23,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.techknightsrtu.crosstalks.R;
 
 import androidx.annotation.NonNull;
@@ -30,11 +34,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 1000;
+    public static final String PREFS_NAME = "AppLocalData";
 
     //Firebase Auth
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
+    private FirebaseFirestore firestore;
 
     // Widgets
     private TextView tvAppName;
@@ -51,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
 
         setupGoogleSignInClient();
 
@@ -98,7 +105,17 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+
+                String displayName = account.getDisplayName();
+                String email = account.getEmail();
+                String photoUrl = String.valueOf(account.getPhotoUrl());
+
+                saveUserDataInCache("displayName",displayName);
+                saveUserDataInCache("email",email);
+                saveUserDataInCache("photoUrl",photoUrl);
+
                 firebaseAuthWithGoogle(account.getIdToken());
 
             } catch (ApiException e) {
@@ -120,7 +137,11 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredentialForFirebase:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Log.d("User : ", user.getUid());
+                            String userId = user.getUid();
+
+                            Log.d("User : ", userId);
+
+                            ifUserExist(userId);
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -132,4 +153,50 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
     }
+
+
+    private void ifUserExist(String userId){
+
+        firestore.collection("users")
+                .whereEqualTo("id",userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            if(task.getResult().isEmpty()){
+                                //send user to gender activity
+                                Toast.makeText(LoginActivity.this, "GenderActivity", Toast.LENGTH_SHORT).show();
+                            }else{
+                                //send user to home activity
+                                Toast.makeText(LoginActivity.this, "Home Activity", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+
+    private void saveUserDataInCache(String key, String value){
+
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putString(key, value);
+        editor.apply();
+
+    }
+
+    private String getUserDatafromCache(String key){
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        //No name defined" is the default value.
+        return prefs.getString(key, "No name defined");
+
+    }
+
+
+
 }
