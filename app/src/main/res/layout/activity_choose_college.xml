@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screenBackground"
+    tools:context=".activity.ChooseCollegeActivity">
+
+    <TextView
+        android:id="@+id/tvChooseCollege"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="22sp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/mont_semibold"/>
+
+    <Spinner
+        android:id="@+id/spCollege"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/white"
+        android:paddingLeft="8dp"
+        android:gravity="center"
+        android:popupBackground="@android:color/white"
+        android:scrollbars="none"
+        android:spinnerMode="dropdown" />
+
+    <Button
+        android:id="@+id/btCollegeNotListed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="College Not Listed"
+        android:textAllCaps="false"
+        android:layout_above="@id/btSelectCollege"
+        android:background="@drawable/red_bg_fill_round"/>
+
+    <Button
+        android:id="@+id/btSelectCollege"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Select College"
+        android:fontFamily="@font/mont_regular"
+        android:textAllCaps="false"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/red_bg_fill_round"/>
+
+</RelativeLayout>

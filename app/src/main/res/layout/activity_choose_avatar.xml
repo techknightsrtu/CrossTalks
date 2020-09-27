@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screenBackground"
+    tools:context=".activity.ChooseAvatarActivity">
+
+    <TextView
+        android:id="@+id/tvChooseAvatar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:fontFamily="@font/mont_semibold"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:layout_marginTop="24dp"/>
+
+    <ImageView
+        android:id="@+id/ivUserAvatar"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_below="@id/tvChooseAvatar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/bg_avatar"
+        android:padding="32dp"/>
+
+    <TextView
+        android:id="@+id/tvAvatarName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivUserAvatar"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"/>
+
+</RelativeLayout>
