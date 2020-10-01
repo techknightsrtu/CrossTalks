@@ -1,4 +1,4 @@
-package com.techknightsrtu.crosstalks.activity;
+package com.techknightsrtu.crosstalks.activity.auth;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,12 +33,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 1000;
-    public static final String PREFS_NAME = "AppLocalData";
+    private static final String PREFS_NAME = "AppLocalData";
 
     //Firebase Auth
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
-
     private FirebaseFirestore firestore;
 
     // Widgets
@@ -61,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
         setupGoogleSignInClient();
 
     }
-
 
 
     private void setupAppName() {
@@ -107,11 +105,11 @@ public class LoginActivity extends AppCompatActivity {
 
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
 
-                String displayName = account.getDisplayName();
+                String originalName = account.getDisplayName();
                 String email = account.getEmail();
                 String photoUrl = String.valueOf(account.getPhotoUrl());
 
-                saveUserDataInCache("displayName",displayName);
+                saveUserDataInCache("originalName",originalName);
                 saveUserDataInCache("email",email);
                 saveUserDataInCache("photoUrl",photoUrl);
 
@@ -165,8 +163,9 @@ public class LoginActivity extends AppCompatActivity {
 
                             if(task.getResult().isEmpty()){
                                 //send user to gender activity
-                                Toast.makeText(LoginActivity.this, "GenderActivity", Toast.LENGTH_SHORT).show();
-                            }else{
+                                startActivity(new Intent(LoginActivity.this,SelectGenderActivity.class));
+
+                           }else{
                                 //send user to home activity
                                 Toast.makeText(LoginActivity.this, "Home Activity", Toast.LENGTH_SHORT).show();
                             }

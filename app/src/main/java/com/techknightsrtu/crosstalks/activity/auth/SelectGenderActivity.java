@@ -1,8 +1,9 @@
-package com.techknightsrtu.crosstalks.activity;
+package com.techknightsrtu.crosstalks.activity.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.techknightsrtu.crosstalks.R;
 public class SelectGenderActivity extends AppCompatActivity {
 
     private static final String TAG = "SelectGenderActivity";
+    private static final String PREFS_NAME = "AppLocalData";
 
     // Widgets
     private TextView tvGreetings, tvGenderInfo;
@@ -38,14 +40,18 @@ public class SelectGenderActivity extends AppCompatActivity {
                 String gender = "";
 
                 if( ivMale.getTag().equals("unclicked") && ivFemale.getTag().equals("unclicked")){
+
                     Toast.makeText(SelectGenderActivity.this, "Please choose your gender.", Toast.LENGTH_SHORT).show();
+
                 }else{
+
                     if(ivMale.getTag().equals("clicked")){
                         gender = "male";
                     }else if(ivFemale.getTag().equals("clicked")){
                         gender = "female";
                     }
                     updateGenderInDatabase(gender);
+
                 }
 
             }
@@ -84,6 +90,13 @@ public class SelectGenderActivity extends AppCompatActivity {
 
     private void updateGenderInDatabase(String gender) {
         Log.i(TAG, "updateGenderInDatabase: " + gender);
+
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putString("gender", gender);
+        editor.apply();
+
+        startActivity(new Intent(SelectGenderActivity.this,ChooseCollegeActivity.class));
+
     }
 
     private void setupGreetingsAndGenderInfo() {
@@ -103,4 +116,6 @@ public class SelectGenderActivity extends AppCompatActivity {
         // Button
         btRegister = findViewById(R.id.btRegister);
     }
+
+
 }

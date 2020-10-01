@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screenBackground"
-    tools:context=".activity.ChooseCollegeActivity">
+    tools:context=".activity.auth.ChooseCollegeActivity">
 
     <TextView
         android:id="@+id/tvChooseCollege"
@@ -39,6 +39,7 @@
         android:layout_marginEnd="16dp"
         android:text="College Not Listed"
         android:textAllCaps="false"
+        android:onClick="noCollege"
         android:layout_above="@id/btSelectCollege"
         android:background="@drawable/red_bg_fill_round"/>
 
@@ -47,9 +48,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Select College"
+        android:text="Register"
         android:fontFamily="@font/mont_regular"
         android:textAllCaps="false"
+        android:onClick="selectCollege"
         android:layout_alignParentBottom="true"
         android:background="@drawable/red_bg_fill_round"/>
 

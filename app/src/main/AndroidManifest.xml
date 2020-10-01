@@ -9,11 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ChooseCollegeActivity"></activity>
-        <activity android:name=".activity.ChooseAvatarActivity" />
-        <activity android:name=".activity.SelectGenderActivity" />
+        <activity android:name=".activity.auth.ChooseCollegeActivity"></activity>
+        <activity android:name=".activity.auth.ChooseAvatarActivity" />
+        <activity android:name=".activity.auth.SelectGenderActivity" />
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.auth.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
