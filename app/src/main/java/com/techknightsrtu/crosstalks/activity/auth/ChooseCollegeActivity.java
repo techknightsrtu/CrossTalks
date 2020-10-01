@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.techknightsrtu.crosstalks.R;
+import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
 import com.techknightsrtu.crosstalks.helper.Utility;
 import com.techknightsrtu.crosstalks.models.User;
 
@@ -74,7 +75,7 @@ public class ChooseCollegeActivity extends AppCompatActivity {
 
     public void noCollege(View view){
         //Handle no College user
-        startActivity(new Intent(ChooseCollegeActivity.this,ChooseAvatarActivity.class));
+        createNewUserInDatabase();
     }
 
     public void selectCollege(View view){
@@ -115,7 +116,24 @@ public class ChooseCollegeActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
 
-                        startActivity(new Intent(ChooseCollegeActivity.this,ChooseAvatarActivity.class));
+                        if(Utility.isAppAccessAllowed()){
+
+                            Intent i = new Intent(ChooseCollegeActivity.this,ChooseAvatarActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                            finish();
+
+                        }else{
+
+                            Intent i = new Intent(ChooseCollegeActivity.this, NoAppAccessActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                            finish();
+
+                        }
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

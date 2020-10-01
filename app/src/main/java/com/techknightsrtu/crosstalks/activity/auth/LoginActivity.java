@@ -25,6 +25,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.techknightsrtu.crosstalks.R;
+import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
+import com.techknightsrtu.crosstalks.helper.Utility;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -154,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
     private void ifUserExist(String userId){
 
         firestore.collection("users")
-                .whereEqualTo("id",userId)
+                .whereEqualTo("userId",userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -166,8 +168,26 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(new Intent(LoginActivity.this,SelectGenderActivity.class));
 
                            }else{
+
                                 //send user to home activity
-                                Toast.makeText(LoginActivity.this, "Home Activity", Toast.LENGTH_SHORT).show();
+                                if(Utility.isAppAccessAllowed()){
+
+                                    Intent i = new Intent(LoginActivity.this,ChooseAvatarActivity.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(i);
+                                    finish();
+
+                                }else{
+
+                                    Intent i = new Intent(LoginActivity.this,NoAppAccessActivity.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(i);
+                                    finish();
+
+                                }
+
                             }
 
                         } else {

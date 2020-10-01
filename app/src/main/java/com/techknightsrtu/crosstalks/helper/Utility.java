@@ -3,6 +3,7 @@ package com.techknightsrtu.crosstalks.helper;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -70,6 +71,19 @@ public class Utility {
 
         return timeFromTimestamp;
 
+    }
+
+
+    public static boolean isAppAccessAllowed(){
+
+        int from = 2300;
+        int to = 800;
+        Date date = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int t = c.get(Calendar.HOUR_OF_DAY) * 100 + c.get(Calendar.MINUTE);
+
+        return to > from && t >= from && t <= to || to < from && (t >= from || t <= to);
     }
 
 }
