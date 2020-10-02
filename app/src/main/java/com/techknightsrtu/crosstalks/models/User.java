@@ -3,6 +3,7 @@ package com.techknightsrtu.crosstalks.models;
 public class User {
 
     private String userId;
+    private String avatarId;
     private String originalName;
     private String email;
     private String photoUrl;
@@ -15,15 +16,24 @@ public class User {
 
     }
 
-    public User(String userId, String originalName, String email, String photoUrl,
+    public User(String userId,String avatarId, String originalName, String email, String photoUrl,
                 String gender, String collegeName, String joiningDate) {
         this.userId = userId;
+        this.avatarId = avatarId;
         this.originalName = originalName;
         this.email = email;
         this.photoUrl = photoUrl;
         this.gender = gender;
         this.collegeName = collegeName;
         this.joiningDate = joiningDate;
+    }
+
+    public String getAvatarId() {
+        return avatarId;
+    }
+
+    public void setAvatarId(String avatarId) {
+        this.avatarId = avatarId;
     }
 
     public String getUserId() {

@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
+import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
 import com.techknightsrtu.crosstalks.helper.Utility;
 
 import androidx.annotation.NonNull;
@@ -171,7 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                                 //send user to home activity
                                 if(Utility.isAppAccessAllowed()){
 
-                                    Intent i = new Intent(LoginActivity.this,ChooseAvatarActivity.class);
+                                    Intent i = new Intent(LoginActivity.this, HomeActivity.class);
                                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);

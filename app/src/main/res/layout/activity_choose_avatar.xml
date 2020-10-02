@@ -63,6 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="Choose Avatar"
+        android:onClick="createChatProfile"
         android:fontFamily="@font/mont_regular"
         android:textAllCaps="false"
         android:layout_alignParentBottom="true"

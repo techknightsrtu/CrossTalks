@@ -77,7 +77,7 @@ public class Utility {
     public static boolean isAppAccessAllowed(){
 
         int from = 2300;
-        int to = 800;
+        int to = 2200;
         Date date = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(date);
