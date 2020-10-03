@@ -3,21 +3,31 @@ package com.techknightsrtu.crosstalks.activity.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.techknightsrtu.crosstalks.R;
+import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.interfaces.CollegeListCallback;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 public class ChooseCollegeActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "AppLocalData";
     private static final String TAG = "ChooseCollegeActivity";
+
+    private Context mContext = ChooseCollegeActivity.this;
 
     private TextView tvChooseCollege;
     private Spinner spCollege;
@@ -31,16 +41,33 @@ public class ChooseCollegeActivity extends AppCompatActivity {
         init();
         setupTvChooseCollege();
         setupSpinner();
+
     }
 
     private void setupSpinner() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.spinner_item, getResources()
-                .getStringArray(R.array.college_name));//setting the country_array to spinner
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        FirebaseMethods.getCollegesFromDatabase(new CollegeListCallback() {
+            @Override
+            public void onCallback(Map<String, String> collegesList) {
 
-        spCollege.setAdapter(adapter);
+                ArrayList<String> colleges = new ArrayList<>(collegesList.values());
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext,
+                        R.layout.spinner_item, colleges);
+
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                spCollege.setAdapter(adapter);
+
+                //Save College Id's data to local cache
+                SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+                editor.putStringSet("collegeIds", collegesList.keySet());
+                //editor.putStringSet("collegeNames", (Set<String>) collegesList.values());
+                editor.apply();
+
+            }
+        });
+
     }
 
     private void setupTvChooseCollege() {
@@ -49,7 +76,6 @@ public class ChooseCollegeActivity extends AppCompatActivity {
 
     private void init() {
         tvChooseCollege = findViewById(R.id.tvChooseCollege);
-
         spCollege = findViewById(R.id.spCollege);
     }
 
@@ -62,9 +88,19 @@ public class ChooseCollegeActivity extends AppCompatActivity {
 
         //Handle user with college
         String collegeName = spCollege.getSelectedItem().toString();
+        int position = spCollege.getSelectedItemPosition();
 
+        //Extract data from local cache to find out collegeId
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        Set<String> collegeIdSet = prefs.getStringSet("collegeIds",null);
+        ArrayList<String> idList = new ArrayList<>(collegeIdSet);
+
+        String collegeId = idList.get(position);
+
+        //Save user data to local cache
         SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
         editor.putString("collegeName", collegeName);
+        editor.putString("collegeId",collegeId);
         editor.apply();
 
         startActivity(new Intent(ChooseCollegeActivity.this,ChooseAvatarActivity.class));

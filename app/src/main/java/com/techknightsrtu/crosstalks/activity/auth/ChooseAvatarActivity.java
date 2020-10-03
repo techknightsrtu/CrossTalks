@@ -110,12 +110,12 @@ public class ChooseAvatarActivity extends AppCompatActivity {
         String email = prefs.getString("email","");
         String gender = prefs.getString("gender","");
         String photoUrl = prefs.getString("photoUrl","");
-        String collegeName = prefs.getString("collegeName","no college");
+        String collegeId = prefs.getString("collegeId","");
 
         String joiningDate = Utility.getCurrentTimestamp();
 
         // Create a new user with a first and last name
-        User newUser = new User(userId,String.valueOf(avatarId),originalName,email,photoUrl,gender,collegeName,joiningDate);
+        User newUser = new User(userId,String.valueOf(avatarId),originalName,email,photoUrl,gender,collegeId,joiningDate);
 
         // Add a new document with a generated ID
         db.collection("users")

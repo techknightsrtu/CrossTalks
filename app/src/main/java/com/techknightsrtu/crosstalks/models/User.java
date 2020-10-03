@@ -8,7 +8,7 @@ public class User {
     private String email;
     private String photoUrl;
     private String gender;
-    private String collegeName;
+    private String collegeId;
     private String joiningDate;
 
 
@@ -16,15 +16,15 @@ public class User {
 
     }
 
-    public User(String userId,String avatarId, String originalName, String email, String photoUrl,
-                String gender, String collegeName, String joiningDate) {
+    public User(String userId, String avatarId, String originalName, String email, String photoUrl,
+                String gender, String collegeId, String joiningDate) {
         this.userId = userId;
         this.avatarId = avatarId;
         this.originalName = originalName;
         this.email = email;
         this.photoUrl = photoUrl;
         this.gender = gender;
-        this.collegeName = collegeName;
+        this.collegeId = collegeId;
         this.joiningDate = joiningDate;
     }
 
@@ -76,12 +76,12 @@ public class User {
         this.gender = gender;
     }
 
-    public String getCollegeName() {
-        return collegeName;
+    public String getCollegeId() {
+        return collegeId;
     }
 
-    public void setCollegeName(String collegeName) {
-        this.collegeName = collegeName;
+    public void setCollegeId(String collegeId) {
+        this.collegeId = collegeId;
     }
 
     public String getJoiningDate() {

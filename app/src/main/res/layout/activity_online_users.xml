@@ -61,7 +61,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tvChatsTitle"
+            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ONLINE USERS"
@@ -73,7 +73,8 @@
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_below="@+id/tvChatsTitle"
+            android:id="@+id/rvOnlineUsers"
+            android:layout_below="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

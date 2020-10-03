@@ -1,23 +1,40 @@
 package com.techknightsrtu.crosstalks.activity.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.profile.ProfileActivity;
 
 public class OnlineUsersActivity extends AppCompatActivity {
+
+    //Firebase
+    FirebaseAuth mAuth;
+    FirebaseFirestore db;
+
+    //Widgets
+    RecyclerView rvOnlineUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_users);
 
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        rvOnlineUsers = findViewById(R.id.rvOnlineUsers);
+
         setupBottomNavigationBar();
+        
     }
 
     private void setupBottomNavigationBar(){
