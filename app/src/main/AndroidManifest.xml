@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.chat.HomeActivity"></activity>
+        <activity android:name=".activity.chat.OnlineUsersActivity"></activity>
+        <activity android:name=".activity.profile.ProfileActivity" />
+        <activity android:name=".activity.chat.HomeActivity" />
         <activity android:name=".activity.NoAppAccessActivity" />
         <activity android:name=".activity.auth.ChooseCollegeActivity" />
         <activity android:name=".activity.auth.ChooseAvatarActivity" />

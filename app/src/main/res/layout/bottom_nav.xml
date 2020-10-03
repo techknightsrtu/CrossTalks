@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_navigation"
+    android:weightSum="3"
+    android:layout_centerInParent="true"
+    android:layout_marginBottom="15dp"
+    android:layout_width="244dp"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:background="@drawable/bg_bottom_navigation"
+    android:elevation="8dp"
+    android:padding="10dp"
+    android:layout_alignParentBottom="true"
+   >
+
+    <ImageView
+        android:background="@drawable/navigation_button_bg_ripple"
+        android:id="@+id/ivChatIcon"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_chats_selected"/>
+
+
+    <ImageView
+        android:background="@drawable/navigation_button_bg_ripple"
+        android:id="@+id/ivOnlineIcon"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_online_not_selected"/>
+
+
+    <ImageView
+        android:background="@drawable/navigation_button_bg_ripple"
+        android:id="@+id/ivProfileIcon"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_iron_man"/>
+
+</LinearLayout>

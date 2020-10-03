@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/screenBackground"
+    tools:context=".activity.chat.OnlineUsersActivity">
+
+
+    <RelativeLayout
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/llAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvAppFirstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mont_semibold"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:text="Cross"
+                />
+
+            <TextView
+                android:id="@+id/tvAppLastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mont_semibold"
+                android:textColor="@color/red"
+                android:textSize="20sp"
+                android:text="Talks"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvCollegeName"
+            android:layout_below="@+id/llAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/mont_regular"
+            android:textSize="9sp"
+            android:text="Rajasthan Technical University, Kota"
+            android:textColor="@color/white"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:background="@drawable/home_screen_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvChatsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ONLINE USERS"
+            android:textSize="16sp"
+            android:fontFamily="@font/mont_bold"
+            android:textColor="@color/white"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@+id/tvChatsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <include layout="@layout/bottom_nav" />
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>
