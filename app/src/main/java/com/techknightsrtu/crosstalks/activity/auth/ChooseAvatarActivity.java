@@ -20,7 +20,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
 import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
+import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
 import com.techknightsrtu.crosstalks.helper.Utility;
+import com.techknightsrtu.crosstalks.helper.interfaces.CreateNewUser;
 import com.techknightsrtu.crosstalks.models.User;
 
 import java.util.HashMap;
@@ -95,6 +97,7 @@ public class ChooseAvatarActivity extends AppCompatActivity {
 
         SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
         editor.putString("avatarId", String.valueOf(avatarId));
+        editor.putString("joiningDate",Utility.getCurrentTimestamp());
         editor.apply();
 
         createNewUserInDatabase();
@@ -111,48 +114,42 @@ public class ChooseAvatarActivity extends AppCompatActivity {
         String gender = prefs.getString("gender","");
         String photoUrl = prefs.getString("photoUrl","");
         String collegeId = prefs.getString("collegeId","");
-
-        String joiningDate = Utility.getCurrentTimestamp();
+        String joiningDate = prefs.getString("joiningDate","") ;
 
         // Create a new user with a first and last name
-        User newUser = new User(userId,String.valueOf(avatarId),originalName,email,photoUrl,gender,collegeId,joiningDate);
+        User newUser = new User(userId,String.valueOf(avatarId),
+                originalName,email,photoUrl,gender,collegeId,joiningDate);
 
-        // Add a new document with a generated ID
-        db.collection("users")
-                .document(userId)
-                .set(newUser)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
+        FirebaseMethods.createNewUserInDatabase(userId, newUser, new CreateNewUser() {
+            @Override
+            public void onCallback(boolean done) {
 
-                        if(Utility.isAppAccessAllowed()){
+                if(done){
 
-                            Intent i = new Intent(ChooseAvatarActivity.this, HomeActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
-                            finish();
+                    if(Utility.isAppAccessAllowed()){
 
-                        }else{
+                        Intent i = new Intent(ChooseAvatarActivity.this, HomeActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                        finish();
 
-                            Intent i = new Intent(ChooseAvatarActivity.this, NoAppAccessActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
-                            finish();
+                    }else{
 
-                        }
+                        Intent i = new Intent(ChooseAvatarActivity.this, NoAppAccessActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                        finish();
 
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                        Toast.makeText(ChooseAvatarActivity.this, "User not created in database", Toast.LENGTH_SHORT).show();
-                    }
-                });
+
+                }else{
+                    Log.w(TAG, "Error adding document");
+                    Toast.makeText(ChooseAvatarActivity.this, "User not created in database", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 }

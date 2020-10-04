@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Register"
+        android:text="Next"
         android:fontFamily="@font/mont_regular"
         android:textAllCaps="false"
         android:onClick="selectCollege"

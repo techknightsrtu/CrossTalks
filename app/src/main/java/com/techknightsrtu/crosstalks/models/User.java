@@ -92,4 +92,17 @@ public class User {
         this.joiningDate = joiningDate;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", avatarId='" + avatarId + '\'' +
+                ", originalName='" + originalName + '\'' +
+                ", email='" + email + '\'' +
+                ", photoUrl='" + photoUrl + '\'' +
+                ", gender='" + gender + '\'' +
+                ", collegeId='" + collegeId + '\'' +
+                ", joiningDate='" + joiningDate + '\'' +
+                '}';
+    }
 }

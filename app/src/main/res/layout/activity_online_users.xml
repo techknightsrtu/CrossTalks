@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/mont_regular"
             android:textSize="9sp"
-            android:text="Rajasthan Technical University, Kota"
+            android:text=""
             android:textColor="@color/white"/>
 
 

@@ -21,12 +21,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
 import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
+import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
 import com.techknightsrtu.crosstalks.helper.Utility;
+import com.techknightsrtu.crosstalks.helper.interfaces.DoesUserExist;
+import com.techknightsrtu.crosstalks.helper.interfaces.GetUserData;
+import com.techknightsrtu.crosstalks.models.User;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     //Firebase Auth
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
-    private FirebaseFirestore firestore;
+
 
     // Widgets
     private TextView tvAppName;
@@ -57,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
 
         setupGoogleSignInClient();
 
@@ -125,6 +126,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
 
@@ -153,67 +155,76 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void ifUserExist(String userId){
+    private void ifUserExist(final String userId){
 
-        firestore.collection("users")
-                .whereEqualTo("userId",userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
+        FirebaseMethods.checkIfUserExist(userId, new DoesUserExist() {
+            @Override
+            public void onCallback(boolean exist) {
+                if(!exist){
+                    //send user to gender activity
 
-                            if(task.getResult().isEmpty()){
-                                //send user to gender activity
-                                startActivity(new Intent(LoginActivity.this,SelectGenderActivity.class));
+                    startActivity(new Intent(LoginActivity.this,SelectGenderActivity.class));
 
-                           }else{
+                }else{
 
-                                //send user to home activity
-                                if(Utility.isAppAccessAllowed()){
+                    Log.d(TAG, "onCallback: LOGIN SUCCESS");
+                    saveUserDataLocally(userId);
 
-                                    Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(i);
-                                    finish();
+                    //send user to home activity
+                    if(Utility.isAppAccessAllowed()){ ;
 
-                                }else{
+                        Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                        finish();
 
-                                    Intent i = new Intent(LoginActivity.this,NoAppAccessActivity.class);
-                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(i);
-                                    finish();
+                    }else{
 
-                                }
+                        Intent i = new Intent(LoginActivity.this,NoAppAccessActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                        finish();
 
-                            }
-
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
                     }
-                });
+                }
+            }
+        });
+
     }
 
 
-    private void saveUserDataInCache(String key, String value){
-
+    private void saveUserDataInCache(String key, String value) {
         SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
         editor.putString(key, value);
         editor.apply();
-
-    }
-
-    private String getUserDatafromCache(String key){
-
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        //No name defined" is the default value.
-        return prefs.getString(key, "No name defined");
-
     }
 
 
+    private void saveUserDataLocally(String userId){
+
+        FirebaseMethods.getUserData(userId, new GetUserData() {
+            @Override
+            public void onCallback(User user,String collegeName) {
+
+                Log.d(TAG, "onCallback: userData " + user.toString() + collegeName);
+                SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+                editor.putString("userId", user.getUserId());
+                editor.putString("avatarId", user.getAvatarId());
+                editor.putString("originalName", user.getOriginalName());
+                editor.putString("email", user.getEmail());
+                editor.putString("photoUrl", user.getPhotoUrl());
+                editor.putString("gender", user.getGender());
+                editor.putString("collegeId", user.getCollegeId());
+                editor.putString("joiningDate", user.getJoiningDate());
+
+                editor.putString("collegeName", collegeName);
+                editor.apply();
+
+            }
+        });
+
+    }
 
 }

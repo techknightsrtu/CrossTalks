@@ -2,7 +2,7 @@ package com.techknightsrtu.crosstalks.helper.interfaces;
 
 import java.util.Map;
 
-public interface CollegeListCallback {
+public interface GetCollegeList {
 
     void onCallback(Map<String,String> collegesList);
 }

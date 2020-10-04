@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
-import com.techknightsrtu.crosstalks.helper.interfaces.CollegeListCallback;
+import com.techknightsrtu.crosstalks.helper.interfaces.GetCollegeList;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class ChooseCollegeActivity extends AppCompatActivity {
 
     private void setupSpinner() {
 
-        FirebaseMethods.getCollegesFromDatabase(new CollegeListCallback() {
+        FirebaseMethods.getCollegesFromDatabase(new GetCollegeList() {
             @Override
             public void onCallback(Map<String, String> collegesList) {
 
@@ -62,7 +61,6 @@ public class ChooseCollegeActivity extends AppCompatActivity {
                 //Save College Id's data to local cache
                 SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
                 editor.putStringSet("collegeIds", collegesList.keySet());
-                //editor.putStringSet("collegeNames", (Set<String>) collegesList.values());
                 editor.apply();
 
             }
@@ -81,6 +79,11 @@ public class ChooseCollegeActivity extends AppCompatActivity {
 
     public void noCollege(View view){
         //Handle no College user
+        //Save user data to local cache
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putString("collegeName", "noCollege");
+        editor.putString("collegeId","nc");
+        editor.apply();
         startActivity(new Intent(ChooseCollegeActivity.this,ChooseAvatarActivity.class));
     }
 
