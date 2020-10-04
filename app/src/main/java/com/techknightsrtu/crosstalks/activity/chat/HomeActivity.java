@@ -1,6 +1,7 @@
 package com.techknightsrtu.crosstalks.activity.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,14 +13,27 @@ import android.widget.TextView;
 
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.profile.ProfileActivity;
+import com.techknightsrtu.crosstalks.adapter.ChatAdapter;
+import com.techknightsrtu.crosstalks.adapter.StoriesAdapter;
 import com.techknightsrtu.crosstalks.helper.Avatar;
 
 public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
+
+    // Final data
     private static final String PREFS_NAME = "AppLocalData";
+
+    // Data
     private int avatarId;
     private String collegeName, collegeId;
+
+    // Widgets
+    private RecyclerView rvAnonymousStories, rvChats;
+
+    // Adapter
+    private StoriesAdapter storiesAdapter;
+    private ChatAdapter chatAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +43,12 @@ public class HomeActivity extends AppCompatActivity {
         getDataFromLocalCache();
         init();
         setupBottomNavigationBar();
+
+        storiesAdapter = new StoriesAdapter(HomeActivity.this);
+        rvAnonymousStories.setAdapter(storiesAdapter);
+
+        chatAdapter = new ChatAdapter(HomeActivity.this);
+        rvChats.setAdapter(chatAdapter);
 
     }
 
@@ -47,6 +67,9 @@ public class HomeActivity extends AppCompatActivity {
         if (!collegeName.equals("noCollege")){
             tvCollegeName.setText(collegeName);
         }
+
+        rvAnonymousStories = findViewById(R.id.rvAnonymousStories);
+        rvChats = findViewById(R.id.rvChats);
 
     }
 

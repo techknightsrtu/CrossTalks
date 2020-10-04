@@ -5,14 +5,14 @@
     android:weightSum="3"
     android:layout_centerInParent="true"
     android:layout_marginBottom="15dp"
-    android:layout_width="244dp"
+    android:layout_width="wrap_content"
     android:layout_height="50dp"
     android:orientation="horizontal"
     android:background="@drawable/bg_bottom_navigation"
     android:elevation="8dp"
     android:padding="10dp"
-    android:layout_alignParentBottom="true"
-   >
+    android:layout_gravity="bottom|center"
+    android:layout_alignParentBottom="true">
 
     <ImageView
         android:background="@drawable/navigation_button_bg_ripple"
@@ -20,6 +20,8 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="24dp"
         android:src="@drawable/ic_chats_selected"/>
 
 
@@ -28,6 +30,8 @@
         android:id="@+id/ivOnlineIcon"
         android:layout_weight="1"
         android:layout_width="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_height="match_parent"
         android:src="@drawable/ic_online_not_selected"/>
 
@@ -37,6 +41,8 @@
         android:id="@+id/ivProfileIcon"
         android:layout_weight="1"
         android:layout_width="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="8dp"
         android:layout_height="match_parent"
         android:src="@drawable/ic_iron_man"/>
 

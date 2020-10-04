@@ -4,109 +4,114 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/screenBackground"
+    android:orientation="vertical"
     tools:context=".activity.chat.HomeActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp">
 
-   <RelativeLayout
-       android:layout_margin="15dp"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/llAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-       <LinearLayout
-           android:id="@+id/llAppName"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tvAppFirstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mont_semibold"
+                android:text="Cross"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-           <TextView
-               android:id="@+id/tvAppFirstName"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:fontFamily="@font/mont_semibold"
-               android:textColor="@color/white"
-               android:textSize="20sp"
-               android:text="Cross"
-               />
+            <TextView
+                android:id="@+id/tvAppLastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mont_semibold"
+                android:text="Talks"
+                android:textColor="@color/red"
+                android:textSize="20sp" />
 
-           <TextView
-               android:id="@+id/tvAppLastName"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:fontFamily="@font/mont_semibold"
-               android:textColor="@color/red"
-               android:textSize="20sp"
-               android:text="Talks"
-               />
+        </LinearLayout>
 
-       </LinearLayout>
+        <TextView
+            android:id="@+id/tvCollegeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llAppName"
+            android:fontFamily="@font/mont_regular"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="10sp" />
 
-       <TextView
-           android:id="@+id/tvCollegeName"
-           android:layout_below="@+id/llAppName"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:fontFamily="@font/mont_regular"
-           android:textSize="9sp"
-           android:text=""
-           android:textColor="@color/white"/>
-
-
-   </RelativeLayout>
+    </RelativeLayout>
 
     <RelativeLayout
-        android:layout_margin="15dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp">
 
         <TextView
             android:id="@+id/tvAnonymousStories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/mont_semibold"
-            android:textSize="12sp"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/mont_light"
             android:text="Anonymous Stories"
             android:textColor="@color/white"
-            />
+            android:textSize="12sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvAnonymousStories"
-            android:layout_below="@+id/tvAnonymousStories"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:scrollbars="horizontal"
-            />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvAnonymousStories"
+            android:layout_marginTop="16dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:background="@drawable/home_screen_bg"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/home_screen_bg">
 
         <TextView
             android:id="@+id/tvChatsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CHATS"
-            android:textSize="16sp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/mont_bold"
+            android:text="CHATS"
             android:textColor="@color/white"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            />
+            android:textSize="16sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_below="@+id/tvChatsTitle"
+            android:id="@+id/rvChats"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_below="@id/tvChatsTitle"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="71dp"
+            android:clipToPadding="false"
+            android:layout_marginTop="24dp"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <include layout="@layout/bottom_nav" />
 
     </RelativeLayout>
-
-
-
 
 </LinearLayout>

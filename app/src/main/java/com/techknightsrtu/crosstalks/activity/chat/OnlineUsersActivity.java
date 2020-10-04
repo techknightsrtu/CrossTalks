@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.profile.ProfileActivity;
+import com.techknightsrtu.crosstalks.adapter.OnlineChatAdapter;
 import com.techknightsrtu.crosstalks.helper.Avatar;
 import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
 
@@ -27,7 +28,10 @@ public class OnlineUsersActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "AppLocalData";
 
     //Widgets
-    RecyclerView rvOnlineUsers;
+    private RecyclerView rvOnlineUsers;
+
+    //Adapter
+    private OnlineChatAdapter onlineChatAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,9 @@ public class OnlineUsersActivity extends AppCompatActivity {
         getDataFromLocalCache();
         init();
         setupBottomNavigationBar();
+
+        onlineChatAdapter = new OnlineChatAdapter(OnlineUsersActivity.this);
+        rvOnlineUsers.setAdapter(onlineChatAdapter);
         
     }
 

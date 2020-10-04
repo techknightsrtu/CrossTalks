@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +46,7 @@ public class ChooseAvatarActivity extends AppCompatActivity {
     // Widgets
     private TextView tvChooseAvatar;
     private TextView tvAvatarName;
-    private ImageView ivAvatarImage;
+    private ImageView ivAvatarImage, ivGenerateNewAvatar;
 
     //Variables
     private int avatarId;
@@ -74,7 +75,10 @@ public class ChooseAvatarActivity extends AppCompatActivity {
         // Text view
         tvChooseAvatar = findViewById(R.id.tvChooseAvatar);
         tvAvatarName = findViewById(R.id.tvAvatarName);
+
+        // ImageView
         ivAvatarImage = findViewById(R.id.ivUserAvatar);
+        ivGenerateNewAvatar = findViewById(R.id.ivGenerateNewAvatar);
 
     }
 
@@ -83,6 +87,9 @@ public class ChooseAvatarActivity extends AppCompatActivity {
     }
 
     public void generateProfile(){
+
+        // For rotating generate icon
+        ivGenerateNewAvatar.startAnimation(AnimationUtils.loadAnimation(ChooseAvatarActivity.this, R.anim.rotate));
 
         // create instance of Random class
         Random rand = new Random();
