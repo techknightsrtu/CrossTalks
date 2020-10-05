@@ -25,6 +25,7 @@ import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
 import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
 import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.UserProfileDataPref;
 import com.techknightsrtu.crosstalks.helper.Utility;
 import com.techknightsrtu.crosstalks.helper.interfaces.DoesUserExist;
 import com.techknightsrtu.crosstalks.helper.interfaces.GetUserData;
@@ -37,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 1000;
-    private static final String PREFS_NAME = "AppLocalData";
 
     //Firebase Auth
     private FirebaseAuth mAuth;
@@ -47,6 +47,9 @@ public class LoginActivity extends AppCompatActivity {
     // Widgets
     private TextView tvAppName;
     private View parentLayout;
+
+    //LocalData
+    UserProfileDataPref prefs;
 
 
     @Override
@@ -70,10 +73,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void init() {
+        prefs = new UserProfileDataPref(LoginActivity.this);
         // Text view
         tvAppName = findViewById(R.id.tvAppName);
+        parentLayout = findViewById(android.R.id.content);
 
-       parentLayout = findViewById(android.R.id.content);
+
+
     }
 
     private void setupGoogleSignInClient(){
@@ -108,13 +114,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
 
-                String originalName = account.getDisplayName();
-                String email = account.getEmail();
-                String photoUrl = String.valueOf(account.getPhotoUrl());
-
-                saveUserDataInCache("originalName",originalName);
-                saveUserDataInCache("email",email);
-                saveUserDataInCache("photoUrl",photoUrl);
+                prefs.setOriginalName(account.getDisplayName());
+                prefs.setEmail(account.getEmail());
+                prefs.setPhotoUrl(String.valueOf(account.getPhotoUrl()));
 
                 firebaseAuthWithGoogle(account.getIdToken());
 
@@ -128,6 +130,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void firebaseAuthWithGoogle(String idToken) {
+
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
 
         mAuth.signInWithCredential(credential)
@@ -195,13 +198,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void saveUserDataInCache(String key, String value) {
-        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
-
-
     private void saveUserDataLocally(String userId){
 
         FirebaseMethods.getUserData(userId, new GetUserData() {
@@ -209,18 +205,16 @@ public class LoginActivity extends AppCompatActivity {
             public void onCallback(User user,String collegeName) {
 
                 Log.d(TAG, "onCallback: userData " + user.toString() + collegeName);
-                SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-                editor.putString("userId", user.getUserId());
-                editor.putString("avatarId", user.getAvatarId());
-                editor.putString("originalName", user.getOriginalName());
-                editor.putString("email", user.getEmail());
-                editor.putString("photoUrl", user.getPhotoUrl());
-                editor.putString("gender", user.getGender());
-                editor.putString("collegeId", user.getCollegeId());
-                editor.putString("joiningDate", user.getJoiningDate());
 
-                editor.putString("collegeName", collegeName);
-                editor.apply();
+                prefs.setUserId(user.getUserId());
+                prefs.setAvatarId(user.getAvatarId());
+                prefs.setOriginalName(user.getOriginalName());
+                prefs.setEmail(user.getEmail());
+                prefs.setPhotoUrl(user.getPhotoUrl());
+                prefs.setGender(user.getGender());
+                prefs.setCollegeId(user.getCollegeId());
+                prefs.setJoiningDate(user.getJoiningDate());
+                prefs.setCollegeName(collegeName);
 
             }
         });

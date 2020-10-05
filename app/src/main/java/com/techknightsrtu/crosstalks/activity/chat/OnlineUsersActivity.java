@@ -17,15 +17,12 @@ import com.techknightsrtu.crosstalks.activity.profile.ProfileActivity;
 import com.techknightsrtu.crosstalks.adapter.OnlineChatAdapter;
 import com.techknightsrtu.crosstalks.helper.Avatar;
 import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.UserProfileDataPref;
 
 import org.w3c.dom.Text;
 
 public class OnlineUsersActivity extends AppCompatActivity {
 
-    //Values
-    private int avatarId;
-    private String collegeName, collegeId;
-    private static final String PREFS_NAME = "AppLocalData";
 
     //Widgets
     private RecyclerView rvOnlineUsers;
@@ -33,12 +30,14 @@ public class OnlineUsersActivity extends AppCompatActivity {
     //Adapter
     private OnlineChatAdapter onlineChatAdapter;
 
+    //LocalData
+    UserProfileDataPref prefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_users);
 
-        getDataFromLocalCache();
         init();
         setupBottomNavigationBar();
 
@@ -47,20 +46,13 @@ public class OnlineUsersActivity extends AppCompatActivity {
         
     }
 
-    private void getDataFromLocalCache(){
-
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
-        avatarId = Integer.parseInt(prefs.getString("avatarId",""));
-        collegeName = prefs.getString("collegeName","noCollege");
-        collegeId = prefs.getString("collegeId","nc");
-
-    }
 
     private void init(){
+
+        prefs = new UserProfileDataPref(OnlineUsersActivity.this);
+
         TextView tvCollegeName = findViewById(R.id.tvCollegeName);
-        if (!collegeName.equals("noCollege")){
-            tvCollegeName.setText(collegeName);
-        }
+        tvCollegeName.setText(prefs.getCollegeName());
 
         rvOnlineUsers = findViewById(R.id.rvOnlineUsers);
     }
@@ -68,13 +60,13 @@ public class OnlineUsersActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        FirebaseMethods.setUserOnlineStatus(true,collegeId);
+        FirebaseMethods.setUserOnlineStatus(true,prefs.getCollegeId());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        FirebaseMethods.setUserOnlineStatus(false,collegeId);
+        FirebaseMethods.setUserOnlineStatus(false,prefs.getCollegeId());
     }
 
     private void setupBottomNavigationBar(){
@@ -97,7 +89,7 @@ public class OnlineUsersActivity extends AppCompatActivity {
 
         onlineLabel.setImageResource(R.drawable.ic_online_selected);
 
-        profileLabel.setImageResource(Avatar.avatarList.get(avatarId));
+        profileLabel.setImageResource(Avatar.avatarList.get(Integer.parseInt(prefs.getAvatarId())));
 
         profileLabel.setOnClickListener(new View.OnClickListener() {
             @Override

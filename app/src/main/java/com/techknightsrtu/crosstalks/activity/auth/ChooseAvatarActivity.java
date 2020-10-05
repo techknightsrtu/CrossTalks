@@ -22,6 +22,7 @@ import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
 import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
 import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.UserProfileDataPref;
 import com.techknightsrtu.crosstalks.helper.Utility;
 import com.techknightsrtu.crosstalks.helper.interfaces.CreateNewUser;
 import com.techknightsrtu.crosstalks.models.User;
@@ -37,16 +38,13 @@ public class ChooseAvatarActivity extends AppCompatActivity {
 
     private static final String TAG = "ChooseAvatarActivity";
 
-    private static final String PREFS_NAME = "AppLocalData";
-
-    //Firebase
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
-
     // Widgets
     private TextView tvChooseAvatar;
     private TextView tvAvatarName;
     private ImageView ivAvatarImage, ivGenerateNewAvatar;
+
+    //LocalData
+    UserProfileDataPref prefs;
 
     //Variables
     private int avatarId;
@@ -55,9 +53,6 @@ public class ChooseAvatarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_avatar);
-
-        db = FirebaseFirestore.getInstance();
-        mAuth = FirebaseAuth.getInstance();
 
         init();
 
@@ -80,6 +75,7 @@ public class ChooseAvatarActivity extends AppCompatActivity {
         ivAvatarImage = findViewById(R.id.ivUserAvatar);
         ivGenerateNewAvatar = findViewById(R.id.ivGenerateNewAvatar);
 
+        prefs = new UserProfileDataPref(ChooseAvatarActivity.this);
     }
 
     public void newProfile(View view){
@@ -102,10 +98,8 @@ public class ChooseAvatarActivity extends AppCompatActivity {
 
     public void createChatProfile(View view){
 
-        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-        editor.putString("avatarId", String.valueOf(avatarId));
-        editor.putString("joiningDate",Utility.getCurrentTimestamp());
-        editor.apply();
+        prefs.setAvatarId(String.valueOf(avatarId));
+        prefs.setJoiningDate(Utility.getCurrentTimestamp());
 
         createNewUserInDatabase();
 
@@ -114,14 +108,14 @@ public class ChooseAvatarActivity extends AppCompatActivity {
     private void createNewUserInDatabase(){
 
         //Extract data from local cache
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String userId = mAuth.getUid();
-        String originalName = prefs.getString("originalName", "No name defined");
-        String email = prefs.getString("email","");
-        String gender = prefs.getString("gender","");
-        String photoUrl = prefs.getString("photoUrl","");
-        String collegeId = prefs.getString("collegeId","");
-        String joiningDate = prefs.getString("joiningDate","") ;
+
+        String userId = prefs.getUserId();
+        String originalName = prefs.getOriginalName();
+        String email = prefs.getEmail();
+        String gender = prefs.getGender();
+        String photoUrl = prefs.getPhotoUrl();
+        String collegeId = prefs.getCollegeId();
+        String joiningDate = prefs.getJoiningDate();
 
         // Create a new user with a first and last name
         User newUser = new User(userId,String.valueOf(avatarId),

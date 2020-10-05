@@ -16,17 +16,13 @@ import com.techknightsrtu.crosstalks.activity.profile.ProfileActivity;
 import com.techknightsrtu.crosstalks.adapter.ChatAdapter;
 import com.techknightsrtu.crosstalks.adapter.StoriesAdapter;
 import com.techknightsrtu.crosstalks.helper.Avatar;
+import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.UserProfileDataPref;
 
 public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
 
-    // Final data
-    private static final String PREFS_NAME = "AppLocalData";
-
-    // Data
-    private int avatarId;
-    private String collegeName, collegeId;
 
     // Widgets
     private RecyclerView rvAnonymousStories, rvChats;
@@ -35,12 +31,14 @@ public class HomeActivity extends AppCompatActivity {
     private StoriesAdapter storiesAdapter;
     private ChatAdapter chatAdapter;
 
+    //LocalData
+    UserProfileDataPref prefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        getDataFromLocalCache();
         init();
         setupBottomNavigationBar();
 
@@ -52,21 +50,25 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    private void getDataFromLocalCache(){
-
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
-        avatarId = Integer.parseInt(prefs.getString("avatarId",""));
-        collegeName = prefs.getString("collegeName","noCollege");
-        collegeId = prefs.getString("collegeId","nc");
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FirebaseMethods.setUserOnlineStatus(true,prefs.getCollegeId());
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        FirebaseMethods.setUserOnlineStatus(false,prefs.getCollegeId());
+    }
+
 
     private void init(){
 
+        prefs = new UserProfileDataPref(HomeActivity.this);
+
         TextView tvCollegeName = findViewById(R.id.tvCollegeName);
-        if (!collegeName.equals("noCollege")){
-            tvCollegeName.setText(collegeName);
-        }
+        tvCollegeName.setText(prefs.getCollegeName());
 
         rvAnonymousStories = findViewById(R.id.rvAnonymousStories);
         rvChats = findViewById(R.id.rvChats);
@@ -94,7 +96,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        profileLabel.setImageResource(Avatar.avatarList.get(avatarId));
+        profileLabel.setImageResource(Avatar.avatarList.get(Integer.parseInt(prefs.getAvatarId())));
 
         profileLabel.setOnClickListener(new View.OnClickListener() {
             @Override

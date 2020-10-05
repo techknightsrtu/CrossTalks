@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.UserProfileDataPref;
 import com.techknightsrtu.crosstalks.helper.interfaces.GetCollegeList;
 
 import java.util.ArrayList;
@@ -23,19 +25,18 @@ import java.util.Set;
 
 public class ChooseCollegeActivity extends AppCompatActivity {
 
-    private static final String PREFS_NAME = "AppLocalData";
     private static final String TAG = "ChooseCollegeActivity";
 
     private Context mContext = ChooseCollegeActivity.this;
 
     private TextView tvChooseCollege;
     private Spinner spCollege;
+    private UserProfileDataPref prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_college);
-
 
         init();
         setupTvChooseCollege();
@@ -59,9 +60,7 @@ public class ChooseCollegeActivity extends AppCompatActivity {
                 spCollege.setAdapter(adapter);
 
                 //Save College Id's data to local cache
-                SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-                editor.putStringSet("collegeIds", collegesList.keySet());
-                editor.apply();
+                prefs.setCollegeIdSet(collegesList.keySet());
 
             }
         });
@@ -75,36 +74,38 @@ public class ChooseCollegeActivity extends AppCompatActivity {
     private void init() {
         tvChooseCollege = findViewById(R.id.tvChooseCollege);
         spCollege = findViewById(R.id.spCollege);
+        prefs = new UserProfileDataPref(ChooseCollegeActivity.this);
     }
 
     public void noCollege(View view){
         //Handle no College user
-        //Save user data to local cache
-        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-        editor.putString("collegeName", "noCollege");
-        editor.putString("collegeId","nc");
-        editor.apply();
+
+        // Save user data to local cache
+        prefs.setCollegeId("nc");
+        prefs.setCollegeName("noCollege");
+
         startActivity(new Intent(ChooseCollegeActivity.this,ChooseAvatarActivity.class));
+
     }
 
     public void selectCollege(View view){
+
 
         //Handle user with college
         String collegeName = spCollege.getSelectedItem().toString();
         int position = spCollege.getSelectedItemPosition();
 
+        Log.d(TAG, "selectCollege: " + collegeName);
+
         //Extract data from local cache to find out collegeId
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        Set<String> collegeIdSet = prefs.getStringSet("collegeIds",null);
+        Set<String> collegeIdSet = prefs.getCollegeIdSet();
         ArrayList<String> idList = new ArrayList<>(collegeIdSet);
 
         String collegeId = idList.get(position);
 
         //Save user data to local cache
-        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-        editor.putString("collegeName", collegeName);
-        editor.putString("collegeId",collegeId);
-        editor.apply();
+        prefs.setCollegeId(collegeId);
+        prefs.setCollegeName(collegeName);
 
         startActivity(new Intent(ChooseCollegeActivity.this,ChooseAvatarActivity.class));
 

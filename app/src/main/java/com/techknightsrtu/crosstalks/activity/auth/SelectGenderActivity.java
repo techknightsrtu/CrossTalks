@@ -14,16 +14,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techknightsrtu.crosstalks.R;
+import com.techknightsrtu.crosstalks.helper.UserProfileDataPref;
 
 public class SelectGenderActivity extends AppCompatActivity {
 
     private static final String TAG = "SelectGenderActivity";
-    private static final String PREFS_NAME = "AppLocalData";
 
     // Widgets
     private TextView tvGreetings, tvGenderInfo;
     private ImageView ivMale, ivFemale;
     private Button btRegister;
+
+    //LocalData
+    UserProfileDataPref prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +94,7 @@ public class SelectGenderActivity extends AppCompatActivity {
     private void updateGenderInDatabase(String gender) {
         Log.i(TAG, "updateGenderInDatabase: " + gender);
 
-        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-        editor.putString("gender", gender);
-        editor.apply();
+        prefs.setGender(gender);
 
         startActivity(new Intent(SelectGenderActivity.this,ChooseCollegeActivity.class));
 
@@ -115,6 +116,8 @@ public class SelectGenderActivity extends AppCompatActivity {
 
         // Button
         btRegister = findViewById(R.id.btRegister);
+
+        prefs = new UserProfileDataPref(SelectGenderActivity.this);
     }
 
 
