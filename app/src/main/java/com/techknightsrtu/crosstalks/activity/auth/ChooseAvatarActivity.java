@@ -1,10 +1,8 @@
 package com.techknightsrtu.crosstalks.activity.auth;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -14,21 +12,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
 import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
-import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
-import com.techknightsrtu.crosstalks.helper.UserProfileDataPref;
+import com.techknightsrtu.crosstalks.helper.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 import com.techknightsrtu.crosstalks.helper.Utility;
-import com.techknightsrtu.crosstalks.helper.interfaces.CreateNewUser;
+import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.CreateNewUser;
 import com.techknightsrtu.crosstalks.models.User;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import static com.techknightsrtu.crosstalks.helper.Avatar.avatarList;
@@ -76,6 +68,7 @@ public class ChooseAvatarActivity extends AppCompatActivity {
         ivGenerateNewAvatar = findViewById(R.id.ivGenerateNewAvatar);
 
         prefs = new UserProfileDataPref(ChooseAvatarActivity.this);
+
     }
 
     public void newProfile(View view){
@@ -110,6 +103,7 @@ public class ChooseAvatarActivity extends AppCompatActivity {
         //Extract data from local cache
 
         String userId = prefs.getUserId();
+        Log.d(TAG, "createNewUserInDatabase: userId" + userId);
         String originalName = prefs.getOriginalName();
         String email = prefs.getEmail();
         String gender = prefs.getGender();

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -15,9 +14,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.techknightsrtu.crosstalks.R;
-import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
-import com.techknightsrtu.crosstalks.helper.UserProfileDataPref;
-import com.techknightsrtu.crosstalks.helper.interfaces.GetCollegeList;
+import com.techknightsrtu.crosstalks.helper.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
+import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.GetCollegeList;
 
 import java.util.ArrayList;
 import java.util.Map;

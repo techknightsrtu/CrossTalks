@@ -1,4 +1,4 @@
-package com.techknightsrtu.crosstalks.adapter;
+package com.techknightsrtu.crosstalks.activity.chat.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.techknightsrtu.crosstalks.R;
-import com.techknightsrtu.crosstalks.viewholder.ChatViewHolder;
+import com.techknightsrtu.crosstalks.activity.chat.viewholder.ChatViewHolder;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

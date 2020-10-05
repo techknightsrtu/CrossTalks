@@ -4,24 +4,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.techknightsrtu.crosstalks.R;
+import com.techknightsrtu.crosstalks.activity.chat.onClickListeners.OnChatButtonClick;
 import com.techknightsrtu.crosstalks.activity.profile.ProfileActivity;
-import com.techknightsrtu.crosstalks.adapter.OnlineChatAdapter;
+import com.techknightsrtu.crosstalks.activity.chat.adapter.OnlineChatAdapter;
 import com.techknightsrtu.crosstalks.helper.Avatar;
-import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
-import com.techknightsrtu.crosstalks.helper.UserProfileDataPref;
+import com.techknightsrtu.crosstalks.helper.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
+import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.OnlineUsersFromCollege;
 
-import org.w3c.dom.Text;
+import java.util.ArrayList;
 
-public class OnlineUsersActivity extends AppCompatActivity {
+public class OnlineUsersActivity extends AppCompatActivity implements OnChatButtonClick {
 
 
     //Widgets
@@ -33,6 +33,7 @@ public class OnlineUsersActivity extends AppCompatActivity {
     //LocalData
     UserProfileDataPref prefs;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,10 +41,8 @@ public class OnlineUsersActivity extends AppCompatActivity {
 
         init();
         setupBottomNavigationBar();
+        setupOnlineUsers();
 
-        onlineChatAdapter = new OnlineChatAdapter(OnlineUsersActivity.this);
-        rvOnlineUsers.setAdapter(onlineChatAdapter);
-        
     }
 
 
@@ -55,6 +54,7 @@ public class OnlineUsersActivity extends AppCompatActivity {
         tvCollegeName.setText(prefs.getCollegeName());
 
         rvOnlineUsers = findViewById(R.id.rvOnlineUsers);
+
     }
 
     @Override
@@ -105,5 +105,29 @@ public class OnlineUsersActivity extends AppCompatActivity {
     }
 
 
+    private void setupOnlineUsers(){
 
+        FirebaseMethods.getOnlineUserFromCollege(prefs.getCollegeId(), new OnlineUsersFromCollege() {
+            @Override
+            public void onCallback(ArrayList<String> onlineUsersList) {
+
+                onlineChatAdapter = new OnlineChatAdapter(OnlineUsersActivity.this,onlineUsersList,OnlineUsersActivity.this);
+                rvOnlineUsers.setAdapter(onlineChatAdapter);
+
+                onlineChatAdapter.notifyDataSetChanged();
+            }
+        });
+
+    }
+
+
+    @Override
+    public void onChatClick(String userId) {
+
+        Toast.makeText(this, "Chat button clicked : " + userId, Toast.LENGTH_SHORT).show();
+
+        Intent i = new Intent(OnlineUsersActivity.this,ChatActivity.class);
+        i.putExtra("userId",userId);
+        startActivity(i);
+    }
 }

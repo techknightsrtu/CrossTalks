@@ -1,8 +1,6 @@
-package com.techknightsrtu.crosstalks.helper.interfaces;
+package com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces;
 
 import com.techknightsrtu.crosstalks.models.User;
-
-import java.util.Map;
 
 public interface GetUserData {
 

@@ -1,7 +1,6 @@
 package com.techknightsrtu.crosstalks.activity.auth;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -24,11 +23,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
 import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
-import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
-import com.techknightsrtu.crosstalks.helper.UserProfileDataPref;
+import com.techknightsrtu.crosstalks.helper.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 import com.techknightsrtu.crosstalks.helper.Utility;
-import com.techknightsrtu.crosstalks.helper.interfaces.DoesUserExist;
-import com.techknightsrtu.crosstalks.helper.interfaces.GetUserData;
+import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.DoesUserExist;
+import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.GetUserData;
 import com.techknightsrtu.crosstalks.models.User;
 
 import androidx.annotation.NonNull;
@@ -144,6 +143,9 @@ public class LoginActivity extends AppCompatActivity {
                             String userId = user.getUid();
 
                             Log.d("User : ", userId);
+
+                            //Save to local data
+                            prefs.setUserId(userId);
 
                             ifUserExist(userId);
 

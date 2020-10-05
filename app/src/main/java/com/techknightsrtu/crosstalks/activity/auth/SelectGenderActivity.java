@@ -3,7 +3,6 @@ package com.techknightsrtu.crosstalks.activity.auth;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -14,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techknightsrtu.crosstalks.R;
-import com.techknightsrtu.crosstalks.helper.UserProfileDataPref;
+import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 
 public class SelectGenderActivity extends AppCompatActivity {
 

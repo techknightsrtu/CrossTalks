@@ -1,4 +1,4 @@
-package com.techknightsrtu.crosstalks.helper;
+package com.techknightsrtu.crosstalks.helper.firebase;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -10,12 +10,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.techknightsrtu.crosstalks.helper.interfaces.CreateNewUser;
-import com.techknightsrtu.crosstalks.helper.interfaces.DoesUserExist;
-import com.techknightsrtu.crosstalks.helper.interfaces.GetCollegeList;
-import com.techknightsrtu.crosstalks.helper.interfaces.GetUserData;
+import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.CreateNewUser;
+import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.DoesUserExist;
+import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.GetCollegeList;
+import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.GetOnlyUserData;
+import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.GetUserData;
+import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.OnlineUsersFromCollege;
 import com.techknightsrtu.crosstalks.models.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -153,6 +156,29 @@ public class FirebaseMethods {
 
     }
 
+    public static void getOnlyUserData(String userId, final GetOnlyUserData userDataCallback){
+
+        FirebaseFirestore db  = FirebaseFirestore.getInstance();
+
+        db.collection("users")
+                .document(userId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(final DocumentSnapshot userDocumentSnapshot) {
+
+                        userDataCallback.onCallback(userDocumentSnapshot.toObject(User.class));
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onComplete: Something went wrong" + e.getMessage());
+            }
+        });
+
+    }
+
     public static void createNewUserInDatabase(String userId, User user, final CreateNewUser createNewUser){
 
         FirebaseFirestore db  = FirebaseFirestore.getInstance();
@@ -172,6 +198,42 @@ public class FirebaseMethods {
                         createNewUser.onCallback(false);
                     }
                 });
+    }
+
+
+    public static void getOnlineUserFromCollege(String collegeId,
+                                                final OnlineUsersFromCollege onlineUsersFromCollege){
+
+        final ArrayList<String> onlineUserList = new ArrayList<>();
+
+        final FirebaseFirestore db  = FirebaseFirestore.getInstance();
+
+        db.collection("onlineUsers")
+                .document(collegeId)
+                .collection("users")
+                .whereEqualTo("status",true)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        for (DocumentSnapshot ds: queryDocumentSnapshots.getDocuments()) {
+
+                            String userId = ds.getId();
+
+                            if(!userId.equals(getUserId())){
+
+                                Log.d(TAG, "onSuccess: user Id" + userId);
+                                onlineUserList.add(userId);
+
+                            }
+
+                        }
+
+                        onlineUsersFromCollege.onCallback(onlineUserList);
+                    }
+                });
+
     }
 
 }

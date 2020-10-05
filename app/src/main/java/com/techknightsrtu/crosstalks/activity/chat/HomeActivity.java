@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,11 +11,11 @@ import android.widget.TextView;
 
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.profile.ProfileActivity;
-import com.techknightsrtu.crosstalks.adapter.ChatAdapter;
-import com.techknightsrtu.crosstalks.adapter.StoriesAdapter;
+import com.techknightsrtu.crosstalks.activity.chat.adapter.ChatAdapter;
+import com.techknightsrtu.crosstalks.activity.chat.adapter.StoriesAdapter;
 import com.techknightsrtu.crosstalks.helper.Avatar;
-import com.techknightsrtu.crosstalks.helper.FirebaseMethods;
-import com.techknightsrtu.crosstalks.helper.UserProfileDataPref;
+import com.techknightsrtu.crosstalks.helper.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 
 public class HomeActivity extends AppCompatActivity {
 

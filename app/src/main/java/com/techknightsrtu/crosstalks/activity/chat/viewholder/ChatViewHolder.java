@@ -1,4 +1,4 @@
-package com.techknightsrtu.crosstalks.viewholder;
+package com.techknightsrtu.crosstalks.activity.chat.viewholder;
 
 import android.view.View;
 import android.widget.ImageView;
