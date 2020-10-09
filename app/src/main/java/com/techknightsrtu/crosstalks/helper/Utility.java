@@ -77,13 +77,13 @@ public class Utility {
     public static boolean isAppAccessAllowed(){
 
         int from = 2300;
-        int to = 2200;
+        int to = 2300;
         Date date = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         int t = c.get(Calendar.HOUR_OF_DAY) * 100 + c.get(Calendar.MINUTE);
-
-        return to > from && t >= from && t <= to || to < from && (t >= from || t <= to);
+        return true;
+        //return to > from && t >= from && t <= to || to < from && (t >= from || t <= to);
     }
 
 }

@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.chat.ChatActivity"></activity>
-        <activity android:name=".activity.chat.OnlineUsersActivity" />
         <activity android:name=".activity.profile.ProfileActivity" />
         <activity android:name=".activity.chat.HomeActivity" />
         <activity android:name=".activity.NoAppAccessActivity" />
