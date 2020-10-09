@@ -14,9 +14,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.techknightsrtu.crosstalks.R;
-import com.techknightsrtu.crosstalks.helper.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.GetCollegeList;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetCollegeList;
 
 import java.util.ArrayList;
 import java.util.Map;

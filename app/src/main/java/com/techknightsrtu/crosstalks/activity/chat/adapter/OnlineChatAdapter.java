@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.chat.onClickListeners.OnChatButtonClick;
 import com.techknightsrtu.crosstalks.helper.Avatar;
-import com.techknightsrtu.crosstalks.helper.firebase.FirebaseMethods;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.GetOnlyUserData;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.OnlineUsersFromCollege;
+import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetOnlyUserData;
 import com.techknightsrtu.crosstalks.models.User;
 import com.techknightsrtu.crosstalks.activity.chat.viewholder.OnlineChatViewHolder;
 

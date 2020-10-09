@@ -15,10 +15,10 @@ import android.widget.Toast;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
 import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
-import com.techknightsrtu.crosstalks.helper.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 import com.techknightsrtu.crosstalks.helper.Utility;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.CreateNewUser;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.CreateNewUser;
 import com.techknightsrtu.crosstalks.models.User;
 
 import java.util.Random;

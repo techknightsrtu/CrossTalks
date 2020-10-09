@@ -14,7 +14,7 @@ import com.techknightsrtu.crosstalks.activity.profile.ProfileActivity;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.ChatAdapter;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.StoriesAdapter;
 import com.techknightsrtu.crosstalks.helper.Avatar;
-import com.techknightsrtu.crosstalks.helper.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 
 public class HomeActivity extends AppCompatActivity {

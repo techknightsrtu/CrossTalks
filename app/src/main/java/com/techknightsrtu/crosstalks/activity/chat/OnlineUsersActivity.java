@@ -15,9 +15,9 @@ import com.techknightsrtu.crosstalks.activity.chat.onClickListeners.OnChatButton
 import com.techknightsrtu.crosstalks.activity.profile.ProfileActivity;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.OnlineChatAdapter;
 import com.techknightsrtu.crosstalks.helper.Avatar;
-import com.techknightsrtu.crosstalks.helper.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.OnlineUsersFromCollege;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.OnlineUsersFromCollege;
 
 import java.util.ArrayList;
 

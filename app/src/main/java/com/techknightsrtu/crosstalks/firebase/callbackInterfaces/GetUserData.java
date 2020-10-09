@@ -1,4 +1,4 @@
-package com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces;
+package com.techknightsrtu.crosstalks.firebase.callbackInterfaces;
 
 import com.techknightsrtu.crosstalks.models.User;
 

@@ -20,4 +20,6 @@ public class ChatActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Chat with " + chatUserId, Toast.LENGTH_LONG).show();
     }
+
+
 }

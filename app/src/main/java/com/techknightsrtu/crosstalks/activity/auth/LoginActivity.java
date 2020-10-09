@@ -23,11 +23,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
 import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
-import com.techknightsrtu.crosstalks.helper.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 import com.techknightsrtu.crosstalks.helper.Utility;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.DoesUserExist;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.GetUserData;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.DoesUserExist;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserData;
 import com.techknightsrtu.crosstalks.models.User;
 
 import androidx.annotation.NonNull;

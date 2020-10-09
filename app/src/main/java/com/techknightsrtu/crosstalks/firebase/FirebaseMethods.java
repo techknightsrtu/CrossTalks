@@ -1,4 +1,4 @@
-package com.techknightsrtu.crosstalks.helper.firebase;
+package com.techknightsrtu.crosstalks.firebase;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -10,12 +10,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.CreateNewUser;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.DoesUserExist;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.GetCollegeList;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.GetOnlyUserData;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.GetUserData;
-import com.techknightsrtu.crosstalks.helper.firebase.callbackInterfaces.OnlineUsersFromCollege;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.CreateNewUser;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.DoesUserExist;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetCollegeList;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetOnlyUserData;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserData;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.OnlineUsersFromCollege;
 import com.techknightsrtu.crosstalks.models.User;
 
 import java.util.ArrayList;
