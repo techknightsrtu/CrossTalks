@@ -2,6 +2,6 @@ package com.techknightsrtu.crosstalks.activity.chat.onClickListeners;
 
 public interface OnChatButtonClick {
 
-    void onChatClick(String userId);
+    void onChatClick(int avatarId, String userId);
 
 }

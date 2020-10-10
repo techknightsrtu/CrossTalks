@@ -6,10 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.techknightsrtu.crosstalks.R;
+import com.techknightsrtu.crosstalks.activity.chat.models.Message;
 import com.techknightsrtu.crosstalks.activity.chat.viewholder.ChatViewHolder;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
@@ -37,4 +40,5 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
     public int getItemCount() {
         return 8;
     }
+
 }

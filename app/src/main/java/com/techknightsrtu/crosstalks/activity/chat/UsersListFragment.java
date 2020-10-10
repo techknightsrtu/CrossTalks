@@ -41,11 +41,9 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
     //LocalData
     UserProfileDataPref prefs;
 
-
     public UsersListFragment() {
         // Required empty public constructor
     }
-
 
     public static UsersListFragment newInstance() {
         return new UsersListFragment();
@@ -54,7 +52,6 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -89,19 +86,20 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
                 onlineChatAdapter = new OnlineChatAdapter(getActivity(),onlineUsersList,UsersListFragment.this);
                 rvOnlineUsers.setAdapter(onlineChatAdapter);
 
-                //onlineChatAdapter.notifyDataSetChanged();
+                onlineChatAdapter.notifyDataSetChanged();
             }
         });
 
     }
 
     @Override
-    public void onChatClick(String userId) {
+    public void onChatClick(int avatarId, String userId) {
 
-        Toast.makeText(getActivity(), "Chat button clicked : " + userId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Chat button clicked : " + avatarId + " " + userId, Toast.LENGTH_SHORT).show();
 
         Intent i = new Intent(getContext(),ChatActivity.class);
         i.putExtra("userId",userId);
+        i.putExtra("avatarId",avatarId);
         startActivity(i);
 
     }

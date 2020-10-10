@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.chat.onClickListeners.OnChatButtonClick;
+import com.techknightsrtu.crosstalks.helper.Avatar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,7 +36,9 @@ public class OnlineChatViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
 
-                onChatButtonClick.onChatClick(onlineUsersList.get(getAdapterPosition()));
+                int avatarId = Avatar.nameList.indexOf(tvUserName.getText().toString());
+
+                onChatButtonClick.onChatClick(avatarId, onlineUsersList.get(getAdapterPosition()));
 
             }
         });

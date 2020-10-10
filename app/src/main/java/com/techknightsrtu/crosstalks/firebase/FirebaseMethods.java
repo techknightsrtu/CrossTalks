@@ -2,13 +2,19 @@ package com.techknightsrtu.crosstalks.firebase;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.CreateNewUser;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.DoesUserExist;
@@ -37,6 +43,8 @@ public class FirebaseMethods {
         String userId = mAuth.getUid();
         return userId != null;
     }
+
+
 
     public static void checkIfUserExist(String userId, final DoesUserExist doesUserExist){
 
@@ -208,24 +216,37 @@ public class FirebaseMethods {
 
         final FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
-        db.collection("onlineUsers")
-                .document(collegeId)
-                .collection("users")
-                .whereEqualTo("status",true)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        CollectionReference collRef = db.collection("users");
+
+        collRef.whereEqualTo("collegeId",collegeId)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                        for (DocumentSnapshot ds: queryDocumentSnapshots.getDocuments()) {
+                        if (error != null) {
+                            Log.w(TAG, "Listen failed.", error);
+                            return;
+                        }
 
-                            String userId = ds.getId();
+                        onlineUserList.clear();
 
-                            if(!userId.equals(getUserId())){
+                        for (DocumentSnapshot ds: value.getDocuments()) {
 
-                                Log.d(TAG, "onSuccess: user Id" + userId);
-                                onlineUserList.add(userId);
+                            if (ds != null && ds.exists()) {
 
+                                Log.d(TAG, "Current data: " + ds.getData());
+
+                                String userId = ds.getId();
+
+                                if(!userId.equals(getUserId())){
+
+                                    Log.d(TAG, "onSuccess: user Id" + userId);
+                                    onlineUserList.add(userId);
+
+                                }
+
+                            } else {
+                                Log.d(TAG, "Current data: null");
                             }
 
                         }
@@ -235,6 +256,8 @@ public class FirebaseMethods {
                 });
 
     }
+
+
 
 }
 
