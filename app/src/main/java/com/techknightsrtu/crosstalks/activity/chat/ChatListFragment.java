@@ -1,5 +1,6 @@
 package com.techknightsrtu.crosstalks.activity.chat;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,14 +14,20 @@ import android.widget.TextView;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.ChatAdapter;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.StoriesAdapter;
+import com.techknightsrtu.crosstalks.activity.chat.onClickListeners.OnChatButtonClick;
+import com.techknightsrtu.crosstalks.firebase.ChatMethods;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetRecentChats;
 import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ChatListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChatListFragment extends Fragment {
+public class ChatListFragment extends Fragment implements OnChatButtonClick {
 
 
     // Widgets
@@ -30,6 +37,7 @@ public class ChatListFragment extends Fragment {
     // Adapter
     private StoriesAdapter storiesAdapter;
     private ChatAdapter chatAdapter;
+
 
     //LocalData
     UserProfileDataPref prefs;
@@ -55,6 +63,7 @@ public class ChatListFragment extends Fragment {
         // Inflate the layout for this fragment
         mView =  inflater.inflate(R.layout.fragment_chat_list, container, false);
         init();
+        setupRecentChats();
 
         return mView;
     }
@@ -66,19 +75,34 @@ public class ChatListFragment extends Fragment {
 //        storiesAdapter = new StoriesAdapter(getActivity());
 //        rvAnonymousStories.setAdapter(storiesAdapter);
 
+        prefs = new UserProfileDataPref(getActivity());
         rvChats = mView.findViewById(R.id.rvChats);
-        chatAdapter = new ChatAdapter(getActivity());
-        rvChats.setAdapter(chatAdapter);
+
 
     }
 
     private void setupRecentChats(){
 
+        ChatMethods.getRecentChats(prefs.getUserId(), new GetRecentChats() {
+            @Override
+            public void onCallback(ArrayList<Map<String, String>> recentChatsList) {
 
+                chatAdapter = new ChatAdapter(getActivity(),recentChatsList,ChatListFragment.this);
+                rvChats.setAdapter(chatAdapter);
 
-
+            }
+        });
 
     }
 
 
+    @Override
+    public void onChatClick(int avatarId, String userId) {
+
+        Intent i = new Intent(getContext(),ChatActivity.class);
+        i.putExtra("userId",userId);
+        i.putExtra("avatarId",avatarId);
+        startActivity(i);
+
+    }
 }

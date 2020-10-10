@@ -1,5 +1,6 @@
 package com.techknightsrtu.crosstalks.firebase;
 
+import android.util.AttributeSet;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.techknightsrtu.crosstalks.activity.chat.models.ChatChannel;
 import com.techknightsrtu.crosstalks.activity.chat.models.Message;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetLastMessage;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetMessagesFromChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetRecentChats;
 import com.techknightsrtu.crosstalks.helper.Utility;
@@ -127,9 +129,39 @@ public class ChatMethods {
     }
     
 
-    public static void getRecentChats(String userId, GetRecentChats getRecentChats){
+    public static void getLastMessage(String channelId, final GetLastMessage getLastMessage){
 
-        final ArrayList<String> recentChatsList = new ArrayList<>();
+        final FirebaseFirestore db  = FirebaseFirestore.getInstance();
+
+        db.collection("chatChannels")
+                .document(channelId)
+                .collection("messages").orderBy("timestamp")
+                .limitToLast(1)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.w(TAG, "Listen failed.", error);
+                            return;
+                        }
+                        Log.d(TAG, "onEvent:" +
+                                " Query Size " + value.size() + " Messages :" + value.getDocuments());
+
+                        if(value.size() == 1){
+
+                            DocumentSnapshot dsMessage = value.getDocuments().get(0);
+                            getLastMessage.onCallback(dsMessage.toObject(Message.class));
+
+                        }
+
+                    }
+                });
+    }
+
+    public static void getRecentChats(String userId, final GetRecentChats getRecentChats){
+
+        final ArrayList<Map<String,String>> recentChatsList = new ArrayList<>();
+
         final FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
         CollectionReference collRef = db.collection("users")
@@ -145,11 +177,18 @@ public class ChatMethods {
                     return;
                 }
 
+                recentChatsList.clear();
                 for(DocumentSnapshot ds : value.getDocuments()){
 
-                    recentChatsList.add(ds.getId());
+                    Map<String,String> chatList = new HashMap<>();
+                    chatList.put("userId",ds.getId());
+                    chatList.put("channelId",ds.get("channelId").toString());
+
+                    recentChatsList.add(chatList);
 
                 }
+
+                getRecentChats.onCallback(recentChatsList);
 
             }
         });

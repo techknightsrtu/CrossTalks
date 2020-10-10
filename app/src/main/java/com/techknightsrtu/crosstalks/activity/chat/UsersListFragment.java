@@ -95,8 +95,6 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
     @Override
     public void onChatClick(int avatarId, String userId) {
 
-        Toast.makeText(getActivity(), "Chat button clicked : " + avatarId + " " + userId, Toast.LENGTH_SHORT).show();
-
         Intent i = new Intent(getContext(),ChatActivity.class);
         i.putExtra("userId",userId);
         i.putExtra("avatarId",avatarId);
