@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -15,6 +16,7 @@ import com.techknightsrtu.crosstalks.activity.chat.models.ChatChannel;
 import com.techknightsrtu.crosstalks.activity.chat.models.Message;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetMessagesFromChannel;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetRecentChats;
 import com.techknightsrtu.crosstalks.helper.Utility;
 
 import java.util.ArrayList;
@@ -125,4 +127,32 @@ public class ChatMethods {
     }
     
 
+    public static void getRecentChats(String userId, GetRecentChats getRecentChats){
+
+        final ArrayList<String> recentChatsList = new ArrayList<>();
+        final FirebaseFirestore db  = FirebaseFirestore.getInstance();
+
+        CollectionReference collRef = db.collection("users")
+                .document(userId)
+                .collection("engagedChatChannels");
+
+        collRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                if (error != null) {
+                    Log.w(TAG, "Listen failed.", error);
+                    return;
+                }
+
+                for(DocumentSnapshot ds : value.getDocuments()){
+
+                    recentChatsList.add(ds.getId());
+
+                }
+
+            }
+        });
+
+    }
 }

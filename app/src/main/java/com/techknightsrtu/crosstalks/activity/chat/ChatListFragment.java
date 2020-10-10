@@ -60,7 +60,6 @@ public class ChatListFragment extends Fragment {
     }
 
 
-
     private void init(){
 
         //rvAnonymousStories = mView.findViewById(R.id.rvAnonymousStories);
@@ -70,6 +69,14 @@ public class ChatListFragment extends Fragment {
         rvChats = mView.findViewById(R.id.rvChats);
         chatAdapter = new ChatAdapter(getActivity());
         rvChats.setAdapter(chatAdapter);
+
+    }
+
+    private void setupRecentChats(){
+
+
+
+
 
     }
 
