@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -108,9 +110,12 @@ public class ChatActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        if(!etWriteMessage.getText().toString().isEmpty()){
+                        Animation animateButton = AnimationUtils.loadAnimation(ChatActivity.this, R.anim.send_msg_button_anim);
+                        btSendMessage.startAnimation(animateButton);
+
+                        if(!etWriteMessage.getText().toString().trim().isEmpty()){
                             Message m = new Message(Utility.getCurrentTimestamp(),
-                                    currUserId, chatUserId,etWriteMessage.getText().toString(),
+                                    currUserId, chatUserId,etWriteMessage.getText().toString().trim(),
                                     MessageType.TEXT);
 
                             etWriteMessage.setText("");

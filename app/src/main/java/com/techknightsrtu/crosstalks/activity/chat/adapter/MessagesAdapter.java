@@ -109,7 +109,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageItemViewHolder>
                 Animation expandIn = AnimationUtils.loadAnimation(activity, R.anim.recieve_msg_anim);
                 viewToAnimate.startAnimation(expandIn);
             }
-
             lastPosition = position;
         }
     }
