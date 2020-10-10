@@ -22,6 +22,11 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/bg_fill"
             android:elevation="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
             style="@style/Widget.MaterialComponents.Toolbar.Primary" >
 
             <LinearLayout
@@ -32,8 +37,8 @@
 
                 <ImageView
                     android:id="@+id/ivChatAvatar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
                     android:src="@drawable/ic_thor"/>
 
                 <TextView

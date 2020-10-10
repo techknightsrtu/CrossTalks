@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_round_arrow_back_24_red"
         android:padding="16dp"
-        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
         android:clickable="true"
         android:focusable="true"
         android:background="?attr/selectableItemBackgroundBorderless"/>

@@ -48,7 +48,6 @@ public class ChatActivity extends AppCompatActivity {
         setupToolbar();
         setupChatChannel();
 
-
     }
 
     private void init() {
