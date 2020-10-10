@@ -64,11 +64,11 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
         mView = inflater.inflate(R.layout.fragment_users_list, container, false);
 
         init();
+
         setupOnlineUsers();
 
         return mView;
     }
-
 
     private void init(){
 
@@ -89,7 +89,7 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
                 onlineChatAdapter = new OnlineChatAdapter(getActivity(),onlineUsersList,UsersListFragment.this);
                 rvOnlineUsers.setAdapter(onlineChatAdapter);
 
-                onlineChatAdapter.notifyDataSetChanged();
+                //onlineChatAdapter.notifyDataSetChanged();
             }
         });
 
