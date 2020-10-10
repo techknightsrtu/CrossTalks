@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp">
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sended_message_bg_fill_round"
+        android:text="This is a demoefeegegegegegegegegeg message"
+        android:padding="12dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/mont_light"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="120dp"
+        android:layout_marginEnd="16dp"/>
+
+    <TextView
+        android:id="@+id/tvTimeStamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvMessage"
+        android:text="00:00 am, 2 Sep"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:paddingEnd="16dp"
+        android:fontFamily="@font/mont_light"
+        android:textColor="@color/gray_text_color"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"/>
+
+</RelativeLayout>
