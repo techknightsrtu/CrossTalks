@@ -12,15 +12,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
 import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetCurrentFCMToken;
 import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 import com.techknightsrtu.crosstalks.helper.Utility;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.CreateNewUser;
 import com.techknightsrtu.crosstalks.models.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static com.techknightsrtu.crosstalks.helper.Avatar.avatarList;
@@ -100,51 +105,51 @@ public class ChooseAvatarActivity extends AppCompatActivity {
 
     private void createNewUserInDatabase(){
 
-        //Extract data from local cache
 
-        String userId = prefs.getUserId();
-        Log.d(TAG, "createNewUserInDatabase: userId" + userId);
-        String originalName = prefs.getOriginalName();
-        String email = prefs.getEmail();
-        String gender = prefs.getGender();
-        String photoUrl = prefs.getPhotoUrl();
-        String collegeId = prefs.getCollegeId();
-        String joiningDate = prefs.getJoiningDate();
+       FirebaseMethods.getCurrentToken(new GetCurrentFCMToken() {
+           @Override
+           public void onCallback(String currToken) {
 
-        // Create a new user with a first and last name
-        User newUser = new User(userId,String.valueOf(avatarId),
-                originalName,email,photoUrl,gender,collegeId,joiningDate);
+               List<String> tokens = new ArrayList<>();
+               tokens.add(currToken);
 
-        FirebaseMethods.createNewUserInDatabase(userId, newUser, new CreateNewUser() {
-            @Override
-            public void onCallback(boolean done) {
+               //Extract data from local cache
+               String userId = prefs.getUserId();
+               Log.d(TAG, "createNewUserInDatabase: userId" + userId);
+               String originalName = prefs.getOriginalName();
+               String email = prefs.getEmail();
+               String gender = prefs.getGender();
+               String photoUrl = prefs.getPhotoUrl();
+               String collegeId = prefs.getCollegeId();
+               String joiningDate = prefs.getJoiningDate();
 
-                if(done){
+               // Create a new user with a first and last name
+               User newUser = new User(userId,String.valueOf(avatarId),
+                       originalName,email,photoUrl,gender,collegeId,joiningDate,tokens);
 
-                    if(Utility.isAppAccessAllowed()){
+               FirebaseMethods.createNewUserInDatabase(userId, newUser, new CreateNewUser() {
+                   @Override
+                   public void onCallback(boolean done) {
 
-                        Intent i = new Intent(ChooseAvatarActivity.this, HomeActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
-                        finish();
+                       if(done){
 
-                    }else{
+                               Intent i = new Intent(ChooseAvatarActivity.this, HomeActivity.class);
+                               i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                               i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                               startActivity(i);
+                               finish();
 
-                        Intent i = new Intent(ChooseAvatarActivity.this, NoAppAccessActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
-                        finish();
+                       }else{
+                           Log.w(TAG, "Error adding document");
+                           Toast.makeText(ChooseAvatarActivity.this, "User not created in database", Toast.LENGTH_SHORT).show();
+                       }
+                   }
+               });
 
-                    }
+           }
+       });
 
-                }else{
-                    Log.w(TAG, "Error adding document");
-                    Toast.makeText(ChooseAvatarActivity.this, "User not created in database", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
     }
 
 }

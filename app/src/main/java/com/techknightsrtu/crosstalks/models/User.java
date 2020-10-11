@@ -1,5 +1,7 @@
 package com.techknightsrtu.crosstalks.models;
 
+import java.util.List;
+
 public class User {
 
     private String userId;
@@ -10,6 +12,8 @@ public class User {
     private String gender;
     private String collegeId;
     private String joiningDate;
+    private List<String> tokens;
+
 
 
     public User() {
@@ -17,7 +21,7 @@ public class User {
     }
 
     public User(String userId, String avatarId, String originalName, String email, String photoUrl,
-                String gender, String collegeId, String joiningDate) {
+                String gender, String collegeId, String joiningDate,List<String> tokens) {
         this.userId = userId;
         this.avatarId = avatarId;
         this.originalName = originalName;
@@ -26,6 +30,15 @@ public class User {
         this.gender = gender;
         this.collegeId = collegeId;
         this.joiningDate = joiningDate;
+        this.tokens = tokens;
+    }
+
+    public List<String> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(List<String> tokens) {
+        this.tokens = tokens;
     }
 
     public String getAvatarId() {

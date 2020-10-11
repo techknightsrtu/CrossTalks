@@ -4,13 +4,19 @@ public class Message {
 
     private String timestamp;
     private String sender;
+    private String senderAvatarName;
+    private String sendAvatarId;
     private String receiver;
     private String message;
     private MessageType type;
 
-    public Message(String timestamp, String sender, String receiver,String message, MessageType type) {
+    public Message(String timestamp, String sender,
+                   String senderAvatarName, String sendAvatarId,
+                   String receiver, String message, MessageType type) {
         this.timestamp = timestamp;
         this.sender = sender;
+        this.senderAvatarName = senderAvatarName;
+        this.sendAvatarId = sendAvatarId;
         this.receiver = receiver;
         this.message = message;
         this.type = type;

@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
@@ -20,6 +21,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
 import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
@@ -29,9 +32,13 @@ import com.techknightsrtu.crosstalks.helper.Utility;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.DoesUserExist;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserData;
 import com.techknightsrtu.crosstalks.models.User;
+import com.techknightsrtu.crosstalks.services.FirebaseCloudMessagingService;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -144,6 +151,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             Log.d("User : ", userId);
 
+
+
                             //Save to local data
                             prefs.setUserId(userId);
 
@@ -166,8 +175,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCallback(boolean exist) {
                 if(!exist){
-                    //send user to gender activity
 
+                    //send user to gender activity
                     startActivity(new Intent(LoginActivity.this,SelectGenderActivity.class));
 
                 }else{
@@ -175,24 +184,23 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "onCallback: LOGIN SUCCESS");
                     saveUserDataLocally(userId);
 
-                    //send user to home activity
-                    if(Utility.isAppAccessAllowed()){ ;
+                    FirebaseMessaging
+                            .getInstance()
+                            .getToken()
+                            .addOnSuccessListener(new OnSuccessListener<String>() {
+                        @Override
+                        public void onSuccess(String token) {
+                            FirebaseCloudMessagingService.addTokenToFirebase(token);
 
-                        Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
-                        finish();
+                            Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                            finish();
 
-                    }else{
+                        }
+                    });
 
-                        Intent i = new Intent(LoginActivity.this,NoAppAccessActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
-                        finish();
-
-                    }
                 }
             }
         });
