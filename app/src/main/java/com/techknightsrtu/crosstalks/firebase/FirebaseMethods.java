@@ -16,16 +16,20 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.CreateNewUser;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.DoesUserExist;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetCollegeList;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetCurrentFCMToken;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetOnlyUserData;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetRegistrationToken;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserData;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.OnlineUsersFromCollege;
 import com.techknightsrtu.crosstalks.models.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -44,6 +48,10 @@ public class FirebaseMethods {
         return userId != null;
     }
 
+    public static void signOut(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+    }
 
 
     public static void checkIfUserExist(String userId, final DoesUserExist doesUserExist){
@@ -252,6 +260,48 @@ public class FirebaseMethods {
                         }
 
                         onlineUsersFromCollege.onCallback(onlineUserList);
+                    }
+                });
+
+    }
+
+
+    // REGION : Firebase Cloud Messaging
+
+    public static void getCurrentToken(final GetCurrentFCMToken getCurrentFCMToken){
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                getCurrentFCMToken.onCallback(s);
+            }
+        });
+    }
+
+    public static void setRegistrationToken(List<String> tokens){
+
+        FirebaseFirestore db  = FirebaseFirestore.getInstance();
+
+        db.collection("users")
+                .document(getUserId())
+                .update("tokens",tokens);
+
+    }
+
+    public static void getRegistrationTokens(final GetRegistrationToken getRegistrationToken){
+
+        FirebaseFirestore db  = FirebaseFirestore.getInstance();
+
+        db.collection("users")
+                .document(getUserId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot ds) {
+
+                        User user = ds.toObject(User.class);
+
+                        getRegistrationToken.onCallback(user.getTokens());
+
                     }
                 });
 

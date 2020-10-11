@@ -82,6 +82,9 @@ public class ChatMethods {
 
     public static void sendTextMessage(String channelId, Message message){
 
+        Log.d(TAG, "sendTextMessage: " + message.toString());
+
+
         DocumentReference chatChannelsRef = FirebaseFirestore.getInstance()
                 .collection("chatChannels").document(channelId);
 

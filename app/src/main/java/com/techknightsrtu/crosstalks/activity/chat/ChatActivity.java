@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techknightsrtu.crosstalks.R;
+import com.techknightsrtu.crosstalks.activity.auth.ChooseCollegeActivity;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.MessagesAdapter;
 import com.techknightsrtu.crosstalks.activity.chat.models.Message;
 import com.techknightsrtu.crosstalks.activity.chat.models.MessageType;
@@ -27,15 +29,20 @@ import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetMessagesFromChannel;
 import com.techknightsrtu.crosstalks.helper.Avatar;
 import com.techknightsrtu.crosstalks.helper.Utility;
+import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 
 import java.util.ArrayList;
 
 public class ChatActivity extends AppCompatActivity {
 
+    private static final String TAG = "ChatActivity";
+    
     private String chatUserId;
     private String currUserId;
     private int chatUserAvatarId;
     private RecyclerView rvMessages;
+
+    private UserProfileDataPref prefs;
 
     private MessagesAdapter messagesAdapter;
     private AppCompatButton btSendMessage;
@@ -53,6 +60,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void init() {
+
+        prefs = new UserProfileDataPref(ChatActivity.this);
 
         currUserId = FirebaseMethods.getUserId();
 
@@ -114,8 +123,13 @@ public class ChatActivity extends AppCompatActivity {
                         btSendMessage.startAnimation(animateButton);
 
                         if(!etWriteMessage.getText().toString().trim().isEmpty()){
+
+                            String senderAvatarName = Avatar.nameList.get(Integer.parseInt(prefs.getAvatarId()));
+                            String senderAvatarId = prefs.getAvatarId();
+
                             Message m = new Message(Utility.getCurrentTimestamp(),
-                                    currUserId, chatUserId,etWriteMessage.getText().toString().trim(),
+                                    currUserId,senderAvatarName,senderAvatarId,
+                                    chatUserId,etWriteMessage.getText().toString().trim(),
                                     MessageType.TEXT);
 
                             etWriteMessage.setText("");
@@ -144,4 +158,5 @@ public class ChatActivity extends AppCompatActivity {
         super.onBackPressed();
         finish();
     }
+
 }
