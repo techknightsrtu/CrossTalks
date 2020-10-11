@@ -39,7 +39,7 @@ public class ChatActivity extends AppCompatActivity {
     
     private String chatUserId;
     private String currUserId;
-    private int chatUserAvatarId;
+    private String chatUserAvatarId;
     private RecyclerView rvMessages;
 
     private UserProfileDataPref prefs;
@@ -66,14 +66,13 @@ public class ChatActivity extends AppCompatActivity {
         currUserId = FirebaseMethods.getUserId();
 
         chatUserId = getIntent().getStringExtra("userId");
-        chatUserAvatarId = getIntent().getIntExtra("avatarId",0);
+        chatUserAvatarId = getIntent().getStringExtra("avatarId");
 
         TextView tvChatUserName = findViewById(R.id.tvChatUserName);
-        tvChatUserName.setText(Avatar.nameList.get(chatUserAvatarId));
+        tvChatUserName.setText(Avatar.nameList.get(Integer.parseInt(chatUserAvatarId)));
 
         ImageView ivChatAvatar = findViewById(R.id.ivChatAvatar);
-        ivChatAvatar.setImageResource(Avatar.avatarList.get(chatUserAvatarId));
-
+        ivChatAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(chatUserAvatarId)));
 
         etWriteMessage = findViewById(R.id.etWriteMessage);
 

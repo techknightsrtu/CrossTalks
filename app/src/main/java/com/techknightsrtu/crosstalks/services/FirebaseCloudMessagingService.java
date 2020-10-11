@@ -24,6 +24,7 @@ public class FirebaseCloudMessagingService extends FirebaseMessagingService {
             //todo: Show notification
             Log.d(TAG, "onMessageReceived: FCM Message received" + remoteMessage.getData());
 
+
         }
 
     }

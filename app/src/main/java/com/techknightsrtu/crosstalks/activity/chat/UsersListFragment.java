@@ -97,7 +97,7 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
 
         Intent i = new Intent(getContext(),ChatActivity.class);
         i.putExtra("userId",userId);
-        i.putExtra("avatarId",avatarId);
+        i.putExtra("avatarId",String.valueOf(avatarId));
         startActivity(i);
 
     }
