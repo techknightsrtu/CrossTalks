@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.ChatAdapter;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.StoriesAdapter;
@@ -33,6 +35,7 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
     // Widgets
     private RecyclerView rvAnonymousStories, rvChats;
     private View mView;
+    private LinearLayout llEmpty;
 
     // Adapter
     private StoriesAdapter storiesAdapter;
@@ -78,14 +81,26 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
         prefs = new UserProfileDataPref(getActivity());
         rvChats = mView.findViewById(R.id.rvChats);
 
+        llEmpty = mView.findViewById(R.id.llEmpty);
+
 
     }
 
     private void setupRecentChats(){
 
+        rvChats.setVisibility(View.GONE);
+        llEmpty.setVisibility(View.VISIBLE);
+
         ChatMethods.getRecentChats(prefs.getUserId(), new GetRecentChats() {
             @Override
             public void onCallback(ArrayList<Map<String, String>> recentChatsList) {
+
+                if(!recentChatsList.isEmpty()){
+                    rvChats.setVisibility(View.VISIBLE);
+                    llEmpty.setVisibility(View.GONE);
+                }else {
+                    llEmpty.setVisibility(View.VISIBLE);
+                }
 
                 chatAdapter = new ChatAdapter(getActivity(),recentChatsList,ChatListFragment.this);
                 rvChats.setAdapter(chatAdapter);

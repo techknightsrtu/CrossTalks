@@ -62,18 +62,11 @@
             android:clickable="true"
             android:focusable="true"/>
 
-        <TextView
+        <FrameLayout
+            android:id="@+id/ad_view_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/bg_fill"
-            android:text="Option 2"
-            android:textColor="@color/white"
-            android:foreground="?attr/selectableItemBackground"
-            android:fontFamily="@font/mont_regular"
-            android:clickable="true"
-            android:focusable="true"/>
+            android:layout_marginTop="16dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -96,6 +89,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:text="Logout"
+        android:padding="12dp"
         android:textColor="@color/colorPrimary"
         android:fontFamily="@font/mont_semibold"
         android:layout_above="@id/tvAppVersion"

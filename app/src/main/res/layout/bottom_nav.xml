@@ -15,7 +15,7 @@
     android:layout_alignParentBottom="true">
 
     <ImageView
-        android:background="@drawable/navigation_button_bg_ripple"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:id="@+id/ivChatIcon"
         android:layout_weight="1"
         android:layout_width="0dp"
@@ -26,18 +26,19 @@
 
 
     <ImageView
-        android:background="@drawable/navigation_button_bg_ripple"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:id="@+id/ivOnlineIcon"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_height="match_parent"
+        android:padding="2dp"
         android:src="@drawable/ic_online_not_selected"/>
 
 
     <ImageView
-        android:background="@drawable/navigation_button_bg_ripple"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:id="@+id/ivProfileIcon"
         android:layout_weight="1"
         android:layout_width="0dp"

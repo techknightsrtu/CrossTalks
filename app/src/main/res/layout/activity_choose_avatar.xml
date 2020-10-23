@@ -75,12 +75,15 @@
 
     </LinearLayout>
 
-    <Button
+    <TextView
         android:id="@+id/btSelectCollege"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="Register"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:padding="16dp"
         android:onClick="createChatProfile"
         android:fontFamily="@font/mont_regular"
         android:textAllCaps="false"

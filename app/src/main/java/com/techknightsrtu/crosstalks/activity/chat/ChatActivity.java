@@ -9,15 +9,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.auth.ChooseCollegeActivity;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.MessagesAdapter;
@@ -28,6 +36,7 @@ import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetMessagesFromChannel;
 import com.techknightsrtu.crosstalks.helper.Avatar;
+import com.techknightsrtu.crosstalks.helper.ProgressDialog;
 import com.techknightsrtu.crosstalks.helper.Utility;
 import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 
@@ -41,6 +50,14 @@ public class ChatActivity extends AppCompatActivity {
     private String currUserId;
     private String chatUserAvatarId;
     private RecyclerView rvMessages;
+    private LinearLayout llSafetyGuide;
+
+    // Google banner ad
+    private FrameLayout ad_view_container;
+    private AdView adView;
+
+    // Progress Dialog
+    private ProgressDialog progressDialog;
 
     private UserProfileDataPref prefs;
 
@@ -54,12 +71,62 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         init();
+        loadAd();
         setupToolbar();
         setupChatChannel();
 
     }
 
+    private void loadAd() {
+        ad_view_container.post(new Runnable() {
+            @Override
+            public void run() {
+                loadBanner();
+            }
+        });
+    }
+
+    private void loadBanner() {
+        // Create an ad request.
+        adView = new AdView(this);
+        adView.setAdUnitId(getResources().getString(R.string.AD_UNIT_ID));
+        ad_view_container.removeAllViews();
+        ad_view_container.addView(adView);
+
+        AdSize adSize = getAdSize();
+        adView.setAdSize(adSize);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        // Start loading the ad in the background.
+        adView.loadAd(adRequest);
+    }
+
+    private AdSize getAdSize() {
+        // Determine the screen width (less decorations) to use for the ad width.
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float density = outMetrics.density;
+
+        float adWidthPixels = ad_view_container.getWidth();
+
+        // If the ad hasn't been laid out, default to the full screen width.
+        if (adWidthPixels == 0) {
+            adWidthPixels = outMetrics.widthPixels;
+        }
+
+        int adWidth = (int) (adWidthPixels / density);
+
+        return AdSize.getCurrentOrientationBannerAdSizeWithWidth(this, adWidth);
+    }
+
     private void init() {
+
+        progressDialog = new ProgressDialog(ChatActivity.this);
+
+        llSafetyGuide = findViewById(R.id.llSafetyGuide);
 
         prefs = new UserProfileDataPref(ChatActivity.this);
 
@@ -84,7 +151,7 @@ public class ChatActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         rvMessages.setLayoutManager(linearLayoutManager);
 
-
+        ad_view_container = findViewById(R.id.ad_view_container);
     }
 
     private void setupToolbar() {
@@ -99,6 +166,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setupChatChannel(){
+        progressDialog.showProgressDialog();
 
         ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
             @Override
@@ -107,6 +175,13 @@ public class ChatActivity extends AppCompatActivity {
                 ChatMethods.getMessages(channelId, new GetMessagesFromChannel() {
                     @Override
                     public void onCallback(ArrayList<Message> list) {
+                        progressDialog.hideProgressDialog();
+
+                        if(!list.isEmpty()){
+                            llSafetyGuide.setVisibility(View.GONE);
+                        }else{
+                            llSafetyGuide.setVisibility(View.VISIBLE);
+                        }
 
                         messagesAdapter = new MessagesAdapter(ChatActivity.this,list);
                         rvMessages.setAdapter(messagesAdapter);
@@ -156,6 +231,30 @@ public class ChatActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @Override
+    public void onPause() {
+        if (adView != null) {
+            adView.pause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adView != null) {
+            adView.resume();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (adView != null) {
+            adView.destroy();
+        }
+        super.onDestroy();
     }
 
 }

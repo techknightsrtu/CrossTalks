@@ -59,6 +59,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
             public void onCallback(User user) {
                 holder.ivUserAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(user.getAvatarId())));
                 holder.tvUserName.setText(Avatar.nameList.get(Integer.parseInt(user.getAvatarId())));
+                holder.svChatLoading.setVisibility(View.GONE);
+                holder.rlChatLoaded.setVisibility(View.VISIBLE);
             }
         });
 

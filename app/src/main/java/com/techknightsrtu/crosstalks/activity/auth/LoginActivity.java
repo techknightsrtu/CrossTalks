@@ -27,6 +27,7 @@ import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.NoAppAccessActivity;
 import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.ProgressDialog;
 import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 import com.techknightsrtu.crosstalks.helper.Utility;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.DoesUserExist;
@@ -49,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
+    //Progress Dialog
+    private ProgressDialog progressDialog;
 
     // Widgets
     private TextView tvAppName;
@@ -84,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
         tvAppName = findViewById(R.id.tvAppName);
         parentLayout = findViewById(android.R.id.content);
 
-
+        progressDialog = new ProgressDialog(LoginActivity.this);
 
     }
 
@@ -101,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void signInWithGoogle(View view) {
 
+        progressDialog.showProgressDialog();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
 
@@ -128,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
 
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
+                progressDialog.hideProgressDialog();
                 Log.w(TAG, "Google sign in failed", e);
                 // ...
             }
@@ -160,6 +165,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         } else {
                             // If sign in fails, display a message to the user.
+                            progressDialog.hideProgressDialog();
                             Log.w(TAG, "signInWithCredentialForFirebase:failure", task.getException());
                             Snackbar.make(parentLayout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                         }
@@ -174,6 +180,8 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseMethods.checkIfUserExist(userId, new DoesUserExist() {
             @Override
             public void onCallback(boolean exist) {
+                progressDialog.hideProgressDialog();
+
                 if(!exist){
 
                     //send user to gender activity

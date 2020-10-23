@@ -12,7 +12,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.MobileAds;
 import com.techknightsrtu.crosstalks.R;
+import com.techknightsrtu.crosstalks.activity.SplashActivity;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.MyFragmentPagerAdapter;
 import com.techknightsrtu.crosstalks.activity.profile.ProfileActivity;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.ChatAdapter;

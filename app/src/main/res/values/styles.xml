@@ -8,7 +8,9 @@
         <item name="android:statusBarColor">@color/screenBackground</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowDisablePreview">true</item>
         <item name="homeAsUpIndicator">@drawable/ic_round_arrow_back_24</item>
+        <item name="colorControlHighlight">#74E42024</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

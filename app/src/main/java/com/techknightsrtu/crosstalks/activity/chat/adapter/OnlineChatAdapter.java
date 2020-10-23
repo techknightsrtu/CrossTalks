@@ -46,9 +46,14 @@ public class OnlineChatAdapter extends RecyclerView.Adapter<OnlineChatViewHolder
 
         String userId = onlineUsersList.get(position);
 
+        holder.svChatLoading.setVisibility(View.VISIBLE);
+        holder.rlChatLoaded.setVisibility(View.GONE);
+
         FirebaseMethods.getOnlyUserData(userId, new GetOnlyUserData() {
             @Override
             public void onCallback(User user) {
+                holder.svChatLoading.setVisibility(View.GONE);
+                holder.rlChatLoaded.setVisibility(View.VISIBLE);
 
                 holder.ivUserAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(user.getAvatarId())));
                 holder.tvUserName.setText(Avatar.nameList.get(Integer.parseInt(user.getAvatarId())));

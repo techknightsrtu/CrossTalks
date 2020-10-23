@@ -20,9 +20,8 @@ public class SelectGenderActivity extends AppCompatActivity {
     private static final String TAG = "SelectGenderActivity";
 
     // Widgets
-    private TextView tvGreetings, tvGenderInfo;
+    private TextView tvGreetings, tvGenderInfo, tvRegister;
     private ImageView ivMale, ivFemale;
-    private Button btRegister;
 
     //LocalData
     UserProfileDataPref prefs;
@@ -36,7 +35,7 @@ public class SelectGenderActivity extends AppCompatActivity {
 
         setupGreetingsAndGenderInfo();
 
-        btRegister.setOnClickListener(new View.OnClickListener() {
+        tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String gender = "";
@@ -114,7 +113,7 @@ public class SelectGenderActivity extends AppCompatActivity {
         ivFemale = findViewById(R.id.ivFemale);
 
         // Button
-        btRegister = findViewById(R.id.btRegister);
+        tvRegister = findViewById(R.id.tvRegister);
 
         prefs = new UserProfileDataPref(SelectGenderActivity.this);
     }

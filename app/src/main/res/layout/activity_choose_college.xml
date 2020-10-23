@@ -18,6 +18,39 @@
         android:layout_marginTop="48dp"
         android:fontFamily="@font/mont_semibold"/>
 
+    <ImageView
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvChooseCollege"
+        android:layout_above="@id/lCollegeName"
+        android:src="@drawable/ic_choose_college_illu"
+        android:layout_centerHorizontal="true"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lCollegeName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select your college"
+        android:layout_centerInParent="true"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        android:layout_margin="16dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+
+        <AutoCompleteTextView
+            android:id="@+id/atvCollegeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:textSize="14sp"
+            android:maxLines="3"
+            android:textColor="@color/white"
+            android:fontFamily="@font/mont_light"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Spinner
         android:id="@+id/spCollege"
         android:layout_width="match_parent"
@@ -27,6 +60,7 @@
         android:backgroundTint="@color/white"
         android:paddingLeft="8dp"
         android:gravity="center"
+        android:visibility="gone"
         android:popupBackground="@android:color/white"
         android:scrollbars="none"
         android:spinnerMode="dropdown" />
@@ -45,7 +79,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="College Not Listed"
+            android:text="Not a College/School Student"
             android:textColor="@color/colorPrimary"
             android:fontFamily="@font/mont_regular"
             android:drawableStart="@drawable/ic_round_error_outline_24_red"
@@ -54,12 +88,15 @@
 
     </LinearLayout>
 
-    <Button
+    <TextView
         android:id="@+id/btSelectCollege"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="Next"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:padding="16dp"
         android:fontFamily="@font/mont_regular"
         android:textAllCaps="false"
         android:onClick="selectCollege"

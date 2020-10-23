@@ -30,8 +30,10 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
 
-
     implementation 'com.google.android.material:material:1.2.1'
+
+    // Import for Shimmer Loading Effect
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
@@ -51,6 +53,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
 
 
+    implementation 'com.google.firebase:firebase-ads'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

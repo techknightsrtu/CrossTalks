@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
@@ -29,8 +32,10 @@ public class ChooseCollegeActivity extends AppCompatActivity {
     private Context mContext = ChooseCollegeActivity.this;
 
     private TextView tvChooseCollege;
-    private Spinner spCollege;
+    private AutoCompleteTextView atvCollegeName;
     private UserProfileDataPref prefs;
+
+    private ArrayList<String> colleges;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +54,14 @@ public class ChooseCollegeActivity extends AppCompatActivity {
             @Override
             public void onCallback(Map<String, String> collegesList) {
 
-                ArrayList<String> colleges = new ArrayList<>(collegesList.values());
+                colleges = new ArrayList<>(collegesList.values());
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext,
                         R.layout.spinner_item, colleges);
 
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-                spCollege.setAdapter(adapter);
+                atvCollegeName.setAdapter(adapter);
 
                 //Save College Id's data to local cache
                 prefs.setCollegeIdSet(collegesList.keySet());
@@ -71,8 +76,8 @@ public class ChooseCollegeActivity extends AppCompatActivity {
     }
 
     private void init() {
+        atvCollegeName = findViewById(R.id.atvCollegeName);
         tvChooseCollege = findViewById(R.id.tvChooseCollege);
-        spCollege = findViewById(R.id.spCollege);
         prefs = new UserProfileDataPref(ChooseCollegeActivity.this);
     }
 
@@ -89,24 +94,28 @@ public class ChooseCollegeActivity extends AppCompatActivity {
 
     public void selectCollege(View view){
 
-
         //Handle user with college
-        String collegeName = spCollege.getSelectedItem().toString();
-        int position = spCollege.getSelectedItemPosition();
+        String collegeName = atvCollegeName.getText().toString().trim();
 
-        Log.d(TAG, "selectCollege: " + collegeName);
+        if(!collegeName.isEmpty()){
+            int position = colleges.indexOf(collegeName);
 
-        //Extract data from local cache to find out collegeId
-        Set<String> collegeIdSet = prefs.getCollegeIdSet();
-        ArrayList<String> idList = new ArrayList<>(collegeIdSet);
+            Log.d(TAG, "selectCollege: " + collegeName + " : " + position);
 
-        String collegeId = idList.get(position);
+            //Extract data from local cache to find out collegeId
+            Set<String> collegeIdSet = prefs.getCollegeIdSet();
+            ArrayList<String> idList = new ArrayList<>(collegeIdSet);
 
-        //Save user data to local cache
-        prefs.setCollegeId(collegeId);
-        prefs.setCollegeName(collegeName);
+            String collegeId = idList.get(position);
 
-        startActivity(new Intent(ChooseCollegeActivity.this,ChooseAvatarActivity.class));
+            //Save user data to local cache
+            prefs.setCollegeId(collegeId);
+            prefs.setCollegeName(collegeName);
+
+            startActivity(new Intent(ChooseCollegeActivity.this,ChooseAvatarActivity.class));
+        }else {
+            Toast.makeText(mContext, "Please choose or enter your college name.", Toast.LENGTH_SHORT).show();
+        }
 
     }
 

@@ -16,4 +16,8 @@
 
     <color name="ripple_color">#74E42024</color>
 
+    <color name="dark_1">#626262</color>
+    <color name="dark_2">#75626262</color>
+    <color name="dark_3">#50626262</color>
+
 </resources>

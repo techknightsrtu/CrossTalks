@@ -2,8 +2,10 @@ package com.techknightsrtu.crosstalks.activity.chat.viewholder;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.chat.onClickListeners.OnChatButtonClick;
 import com.techknightsrtu.crosstalks.helper.Avatar;
@@ -17,6 +19,8 @@ public class OnlineChatViewHolder extends RecyclerView.ViewHolder {
 
     public TextView tvUserName, tvStartChat;
     public ImageView ivUserAvatar;
+    public ShimmerFrameLayout svChatLoading;
+    public RelativeLayout rlChatLoaded;
 
     private ArrayList<String> onlineUsersList;
 
@@ -31,6 +35,10 @@ public class OnlineChatViewHolder extends RecyclerView.ViewHolder {
         ivUserAvatar = itemView.findViewById(R.id.ivUserAvatar);
         tvUserName = itemView.findViewById(R.id.tvUserName);
         tvStartChat = itemView.findViewById(R.id.tvStartChat);
+
+        rlChatLoaded = itemView.findViewById(R.id.rlChatLoaded);
+
+        svChatLoading = itemView.findViewById(R.id.svChatLoading);
 
         tvStartChat.setOnClickListener(new View.OnClickListener() {
             @Override
