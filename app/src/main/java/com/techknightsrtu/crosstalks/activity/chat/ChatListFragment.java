@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -22,6 +23,8 @@ import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetRecentChats;
 import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -102,7 +105,9 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
                     llEmpty.setVisibility(View.VISIBLE);
                 }
 
-                chatAdapter = new ChatAdapter(getActivity(),recentChatsList,ChatListFragment.this);
+                Collections.reverse(recentChatsList);
+
+                chatAdapter = new ChatAdapter(getActivity(),recentChatsList ,ChatListFragment.this);
                 rvChats.setAdapter(chatAdapter);
 
             }

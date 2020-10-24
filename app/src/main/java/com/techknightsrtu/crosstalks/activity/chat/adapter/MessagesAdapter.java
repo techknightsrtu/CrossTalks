@@ -67,7 +67,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageItemViewHolder>
 
         holder.tvMessage.setText(m.getMessage());
 
-        String timeDate = Utility.getTimeFromTimestamp(m.getTimestamp()) + Utility.getDateFromTimestamp(m.getTimestamp());
+        String timeDate = Utility.getTimeFromTimestamp(m.getTimestamp()) + ", " + Utility.getDateFromTimestamp(m.getTimestamp());
         holder.tvTimeStamp.setText(timeDate);
 
         setAnimation(holder.tvMessage, position);

@@ -6,6 +6,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -156,12 +157,20 @@ public class LoginActivity extends AppCompatActivity {
 
                             Log.d("User : ", userId);
 
-
-
                             //Save to local data
                             prefs.setUserId(userId);
 
-                            ifUserExist(userId);
+                            progressDialog.hideProgressDialog();
+
+                            if(task.getResult().getAdditionalUserInfo().isNewUser()){
+                                //send user to gender activity
+                                startActivity(new Intent(LoginActivity.this,SelectGenderActivity.class));
+                            }else{
+                                Log.d(TAG, "onCallback: LOGIN SUCCESS");
+                                saveUserDataLocallyAndProceed(userId);
+                            }
+
+//                            ifUserExist(userId);
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -175,48 +184,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void ifUserExist(final String userId){
-
-        FirebaseMethods.checkIfUserExist(userId, new DoesUserExist() {
-            @Override
-            public void onCallback(boolean exist) {
-                progressDialog.hideProgressDialog();
-
-                if(!exist){
-
-                    //send user to gender activity
-                    startActivity(new Intent(LoginActivity.this,SelectGenderActivity.class));
-
-                }else{
-
-                    Log.d(TAG, "onCallback: LOGIN SUCCESS");
-                    saveUserDataLocally(userId);
-
-                    FirebaseMessaging
-                            .getInstance()
-                            .getToken()
-                            .addOnSuccessListener(new OnSuccessListener<String>() {
-                        @Override
-                        public void onSuccess(String token) {
-                            FirebaseCloudMessagingService.addTokenToFirebase(token);
-
-                            Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
-                            finish();
-
-                        }
-                    });
-
-                }
-            }
-        });
-
-    }
+//    private void ifUserExist(final String userId){
+//
+//        FirebaseMethods.checkIfUserExist(userId, new DoesUserExist() {
+//            @Override
+//            public void onCallback(boolean exist) {
+//
+//
+//                if(!exist){
+//
+//
+//
+//                }else{
+//
+//                }
+//            }
+//        });
+//
+//    }
 
 
-    private void saveUserDataLocally(String userId){
+    private void saveUserDataLocallyAndProceed(String userId){
 
         FirebaseMethods.getUserData(userId, new GetUserData() {
             @Override
@@ -233,6 +221,23 @@ public class LoginActivity extends AppCompatActivity {
                 prefs.setCollegeId(user.getCollegeId());
                 prefs.setJoiningDate(user.getJoiningDate());
                 prefs.setCollegeName(collegeName);
+
+                FirebaseMessaging
+                        .getInstance()
+                        .getToken()
+                        .addOnSuccessListener(new OnSuccessListener<String>() {
+                            @Override
+                            public void onSuccess(String token) {
+                                FirebaseCloudMessagingService.addTokenToFirebase(token);
+
+                                Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(i);
+                                finish();
+
+                            }
+                        });
 
             }
         });

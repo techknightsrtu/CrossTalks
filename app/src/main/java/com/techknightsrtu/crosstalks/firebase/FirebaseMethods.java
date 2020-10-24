@@ -291,23 +291,34 @@ public class FirebaseMethods {
 
         FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
-        db.collection("users")
-                .document(getUserId())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot ds) {
+        if(isUserSignedIn()){
+            db.collection("users")
+                    .document(getUserId())
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot ds) {
 
-                        User user = ds.toObject(User.class);
+                            User user = ds.toObject(User.class);
 
-                        getRegistrationToken.onCallback(user.getTokens());
+                            getRegistrationToken.onCallback(user.getTokens());
 
-                    }
-                });
+                        }
+                    });
+        }
 
     }
 
 
+    public static void setUserOnlineStatus(String status){
+
+        FirebaseFirestore db  = FirebaseFirestore.getInstance();
+
+        db.collection("users")
+                .document(getUserId())
+                .update("onlineStatus",status);
+
+    }
 
 }
 

@@ -3,9 +3,12 @@ package com.techknightsrtu.crosstalks.firebase;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,6 +33,17 @@ public class ChatMethods {
 
     private static final String TAG = "ChatMethods";
 
+    public static void setChannelLastActiveStatus(String timestamp, String sender, String receiver){
+        final DocumentReference currentUserDocRef = FirebaseFirestore.getInstance().collection("users").document(sender);
+
+        Map<String,Object> mp = new HashMap<>();
+        mp.put("containsChats","true");
+        mp.put("lastActive",timestamp);
+
+        currentUserDocRef.collection("engagedChatChannels")
+                .document(receiver).update(mp);
+
+    }
 
     public static void getOrCreateChatChannel(final String sender, final String receiver, final GetChatChannel getChatChannel){
 
@@ -59,6 +73,8 @@ public class ChatMethods {
 
                              Map<String,String> mp = new HashMap<>();
                              mp.put("channelId",ch.getChannelId());
+                             mp.put("containsChats","false");
+                             mp.put("lastActive",Utility.getCurrentTimestamp());
 
                              currentUserDocRef
                                      .collection("engagedChatChannels")
@@ -171,7 +187,9 @@ public class ChatMethods {
                 .document(userId)
                 .collection("engagedChatChannels");
 
-        collRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        collRef.whereEqualTo("containsChats","true")
+                .orderBy("lastActive")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
