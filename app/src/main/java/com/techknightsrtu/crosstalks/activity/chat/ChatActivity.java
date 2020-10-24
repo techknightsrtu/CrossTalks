@@ -201,7 +201,11 @@ public class ChatActivity extends AppCompatActivity {
                             String senderAvatarName = Avatar.nameList.get(Integer.parseInt(prefs.getAvatarId()));
                             String senderAvatarId = prefs.getAvatarId();
 
-                            Message m = new Message(Utility.getCurrentTimestamp(),
+                            String timestamp = Utility.getCurrentTimestamp();
+
+                            ChatMethods.setChannelLastActiveStatus(timestamp,currUserId,chatUserId);
+
+                            Message m = new Message(timestamp,
                                     currUserId,senderAvatarName,senderAvatarId,
                                     chatUserId,etWriteMessage.getText().toString().trim(),
                                     MessageType.TEXT);

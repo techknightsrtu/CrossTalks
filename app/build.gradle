@@ -52,6 +52,8 @@ dependencies {
     //Firebase Cloud Messaging
     implementation 'com.google.firebase:firebase-messaging'
 
+    //Firebase In-App Messaging
+    implementation 'com.google.firebase:firebase-inappmessaging-display'
 
     implementation 'com.google.firebase:firebase-ads'
     testImplementation 'junit:junit:4.12'

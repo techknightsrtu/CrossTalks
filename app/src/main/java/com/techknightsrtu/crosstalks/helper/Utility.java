@@ -60,7 +60,7 @@ public class Utility {
 
             Date date = sdf.parse(ts);
 
-            SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm:ss a");
+            SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm a");
             sdfTime.setTimeZone(java.util.TimeZone.getTimeZone("IST"));
 
             timeFromTimestamp = sdfTime.format(date);
@@ -69,21 +69,9 @@ public class Utility {
             e.printStackTrace();
         }
 
-        return timeFromTimestamp;
+        return timeFromTimestamp.toUpperCase();
 
     }
 
-
-    public static boolean isAppAccessAllowed(){
-
-        int from = 2300;
-        int to = 2300;
-        Date date = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        int t = c.get(Calendar.HOUR_OF_DAY) * 100 + c.get(Calendar.MINUTE);
-        return true;
-        //return to > from && t >= from && t <= to || to < from && (t >= from || t <= to);
-    }
 
 }

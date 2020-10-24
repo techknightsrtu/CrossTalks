@@ -6,6 +6,7 @@ public class ChatChannel {
     private String channelId;
     private List<String> userIds;
 
+
     public ChatChannel(List<String> userIds) {
         this.userIds = userIds;
     }
