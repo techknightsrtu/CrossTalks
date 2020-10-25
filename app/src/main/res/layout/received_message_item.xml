@@ -35,4 +35,21 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"/>
 
+    <TextView
+        android:id="@+id/tvMsgSeen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTimeStamp"
+        android:text="Seen"
+        android:textSize="10sp"
+        android:visibility="gone"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:paddingStart="16dp"
+        android:textStyle="italic"
+        android:fontFamily="@font/mont_light"
+        android:textColor="@color/gray_text_color"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"/>
+
 </RelativeLayout>
