@@ -9,10 +9,11 @@ public class Message {
     private String receiver;
     private String message;
     private MessageType type;
+    private boolean isSeen;
 
     public Message(String timestamp, String sender,
                    String senderAvatarName, String sendAvatarId,
-                   String receiver, String message, MessageType type) {
+                   String receiver, String message, MessageType type, boolean isSeen) {
         this.timestamp = timestamp;
         this.sender = sender;
         this.senderAvatarName = senderAvatarName;
@@ -20,10 +21,19 @@ public class Message {
         this.receiver = receiver;
         this.message = message;
         this.type = type;
+        this.isSeen = isSeen;
     }
 
     public Message() {
 
+    }
+
+    public boolean getIsSeen() {
+        return isSeen;
+    }
+
+    public void setIsSeen(boolean isSeen) {
+        this.isSeen = isSeen;
     }
 
     public String getMessage() {

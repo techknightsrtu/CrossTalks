@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MessageItemViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView tvMessage, tvTimeStamp;
+    public TextView tvMessage, tvTimeStamp,tvMsgSeen;
 
     public MessageItemViewHolder(@NonNull View itemView) {
         super(itemView);
 
         tvMessage = itemView.findViewById(R.id.tvMessage);
         tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
+        tvMsgSeen = itemView.findViewById(R.id.tvMsgSeen);
     }
 }

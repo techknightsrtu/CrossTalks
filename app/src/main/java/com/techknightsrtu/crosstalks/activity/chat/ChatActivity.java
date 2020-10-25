@@ -189,6 +189,8 @@ public class ChatActivity extends AppCompatActivity {
                     }
                 });
 
+                ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
+
                 btSendMessage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -208,7 +210,7 @@ public class ChatActivity extends AppCompatActivity {
                             Message m = new Message(timestamp,
                                     currUserId,senderAvatarName,senderAvatarId,
                                     chatUserId,etWriteMessage.getText().toString().trim(),
-                                    MessageType.TEXT);
+                                    MessageType.TEXT,false);
 
                             etWriteMessage.setText("");
 

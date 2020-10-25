@@ -84,6 +84,17 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageItemViewHolder>
             }
         });
 
+        if(position == messages.size()-1){
+            if(m.getIsSeen()){
+                holder.tvMsgSeen.setText("Seen");
+            }else{
+                holder.tvMsgSeen.setText("Delivered");
+            }
+
+        }else{
+            holder.tvMsgSeen.setVisibility(View.GONE);
+        }
+
     }
 
     @Override

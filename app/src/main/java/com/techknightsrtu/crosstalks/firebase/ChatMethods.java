@@ -35,6 +35,7 @@ public class ChatMethods {
     private static final String TAG = "ChatMethods";
 
     public static void setChannelLastActiveStatus(String timestamp, String sender, String receiver){
+
         final CollectionReference currentUserDocRef = FirebaseFirestore.getInstance().collection("users");
 
         Map<String,Object> mp = new HashMap<>();
@@ -226,4 +227,38 @@ public class ChatMethods {
         });
 
     }
+
+    public static void updateSeenMessage(String channelId, final String sender, final String receiver){
+
+        final FirebaseFirestore db  = FirebaseFirestore.getInstance();
+
+        db.collection("chatChannels")
+                .document(channelId)
+                .collection("messages")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+
+                        for (DocumentSnapshot ds: value.getDocuments()) {
+
+                            Message m = ds.toObject(Message.class);
+                            if(m.getReceiver().equals(receiver) && m.getSender().equals(sender)){
+                                ds.getReference().update("isSeen",true);
+                            }
+
+                        }
+
+                    }
+                });
+
+
+
+    }
+
 }
