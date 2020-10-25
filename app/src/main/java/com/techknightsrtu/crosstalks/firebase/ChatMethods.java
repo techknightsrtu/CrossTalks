@@ -15,6 +15,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.techknightsrtu.crosstalks.activity.chat.models.ChatChannel;
 import com.techknightsrtu.crosstalks.activity.chat.models.Message;
@@ -228,18 +230,20 @@ public class ChatMethods {
 
     }
 
-    public static void updateSeenMessage(String channelId, final String sender, final String receiver){
+    public static ListenerRegistration updateSeenMessage(String channelId,
+                                                         final String sender,
+                                                         final String receiver){
 
         final FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
-        db.collection("chatChannels")
+        Query q = db.collection("chatChannels")
                 .document(channelId)
-                .collection("messages")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                .collection("messages");
+
+        return q.addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
                                         @Nullable FirebaseFirestoreException e) {
-
                         if (e != null) {
                             Log.w(TAG, "Listen failed.", e);
                             return;
@@ -256,8 +260,6 @@ public class ChatMethods {
 
                     }
                 });
-
-
 
     }
 

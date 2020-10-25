@@ -26,6 +26,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.auth.ChooseCollegeActivity;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.MessagesAdapter;
@@ -51,6 +52,8 @@ public class ChatActivity extends AppCompatActivity {
     private String chatUserAvatarId;
     private RecyclerView rvMessages;
     private LinearLayout llSafetyGuide;
+
+    private ListenerRegistration seenListenerRegistration;
 
     // Google banner ad
     private FrameLayout ad_view_container;
@@ -189,7 +192,7 @@ public class ChatActivity extends AppCompatActivity {
                     }
                 });
 
-                ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
+              seenListenerRegistration =   ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
 
                 btSendMessage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -245,6 +248,8 @@ public class ChatActivity extends AppCompatActivity {
             adView.pause();
         }
         super.onPause();
+
+        seenListenerRegistration.remove();
     }
 
     @Override
