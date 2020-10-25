@@ -18,6 +18,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="AD_UNIT_ID">ca-app-pub-3940256099942544/6300978111</string>
 
+    <string name="reCaptcha_Site_Key">6Len5toZAAAAAPzTdKkIQYRGj06hwEicWu3fCwq2</string>
+    <string name="reCaptcha_Secret_Key">6Len5toZAAAAABxAw_JpRXnaeId_IsuG0ftEV3Na</string>
+
     <string-array name="college_name">
         <item>Select your college ...</item>
         <item>🏢 RTU</item>

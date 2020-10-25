@@ -62,12 +62,29 @@
         android:paddingBottom="12dp"
         android:background="?attr/selectableItemBackground">
 
-        <ImageView
-            android:id="@+id/ivUserAvatar"
+        <RelativeLayout
+            android:id="@+id/rlAvatarLayout"
             android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@drawable/dark_circle_filled"
-            android:layout_alignParentStart="true"/>
+            android:layout_height="64dp">
+
+            <ImageView
+                android:id="@+id/ivUserAvatar"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/dark_circle_filled"
+                android:layout_alignParentStart="true"/>
+
+            <ImageView
+                android:id="@+id/ivOnlineIndicator"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/green_circle"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="4dp"/>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -76,7 +93,7 @@
             android:layout_marginStart="16dp"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/tvLastMessageTime"
-            android:layout_toRightOf="@id/ivUserAvatar">
+            android:layout_toRightOf="@id/rlAvatarLayout">
 
             <TextView
                 android:id="@+id/tvUserName"

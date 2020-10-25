@@ -29,7 +29,7 @@
             android:id="@+id/ivUserAvatar"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/ic_hellcat"/>
+            android:src="@drawable/ic_super_mario"/>
 
         <TextView
             android:layout_width="wrap_content"
