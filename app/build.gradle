@@ -63,4 +63,7 @@ dependencies {
     // EXTERNAL LIBRARIES
     implementation "com.airbnb.android:lottie:3.4.2"
 
+    // reCaptcha
+    implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
+
 }
