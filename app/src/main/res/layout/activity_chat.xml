@@ -28,7 +28,7 @@
             app:contentInsetRight="0dp"
             app:contentInsetStart="0dp"
             app:contentInsetStartWithNavigation="0dp"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary" >
+            style="@style/Widget.MaterialComponents.Toolbar.Primary">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -119,6 +119,7 @@
                 android:clipToPadding="false"
                 android:paddingBottom="8dp"
                 app:reverseLayout="true"
+                android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         </LinearLayout>
@@ -139,7 +140,7 @@
                 android:fontFamily="@font/mont_light"
                 android:padding="8dp"
                 android:textSize="12sp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:background="@color/screenBackground"/>
 
             <LinearLayout
@@ -180,6 +181,15 @@
 
 
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="55dp"
+            android:layout_marginBottom="55dp"
+            android:background="@drawable/cross_talk_chat_activity"
+            android:scaleType="centerCrop"
+            android:elevation="-1dp"/>
 
     </RelativeLayout>
 
