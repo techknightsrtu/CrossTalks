@@ -52,8 +52,28 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/llAdContainer"
+        android:layout_below="@id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:clipChildren="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:elevation="1dp"
+        android:background="@drawable/gray_rounded_rectangle_filled_4dp">
+
+        <FrameLayout
+            android:id="@+id/ad_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
     <androidx.viewpager.widget.ViewPager
-        android:layout_below="@+id/header"
+        android:layout_below="@+id/llAdContainer"
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

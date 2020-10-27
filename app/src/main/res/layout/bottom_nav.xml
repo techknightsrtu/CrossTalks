@@ -6,7 +6,7 @@
     android:layout_centerInParent="true"
     android:layout_marginBottom="15dp"
     android:layout_width="wrap_content"
-    android:layout_height="50dp"
+    android:layout_height="56dp"
     android:orientation="horizontal"
     android:background="@drawable/bg_bottom_navigation"
     android:elevation="8dp"
@@ -24,7 +24,6 @@
         android:layout_marginEnd="24dp"
         android:src="@drawable/ic_chats_selected"/>
 
-
     <ImageView
         android:background="?attr/selectableItemBackgroundBorderless"
         android:id="@+id/ivOnlineIcon"
@@ -35,7 +34,6 @@
         android:layout_height="match_parent"
         android:padding="2dp"
         android:src="@drawable/ic_online_not_selected"/>
-
 
     <ImageView
         android:background="?attr/selectableItemBackgroundBorderless"

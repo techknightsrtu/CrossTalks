@@ -3,6 +3,7 @@ package com.techknightsrtu.crosstalks.activity.profile;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -14,21 +15,27 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.techknightsrtu.crosstalks.BuildConfig;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.SplashActivity;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.helper.Avatar;
+import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
 
     // Widgets
-    private ImageView ivBack;
-    private TextView tvLogOut;
+    private ImageView ivBack, ivUserAvatar;
+    private TextView tvLogOut, tvUserName, tvUserCollegeName, tvShareApp, tvRateUs;
 
     // Google banner ad
     private FrameLayout ad_view_container;
     private AdView adView;
+
+    // User Data Pref
+    private UserProfileDataPref profileDataPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         init();
         loadAd();
+        setupUserProfile();
+    }
+
+    private void setupUserProfile() {
+        ivUserAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(profileDataPref.getAvatarId())));
+        tvUserName.setText(Avatar.nameList.get(Integer.parseInt(profileDataPref.getAvatarId())));
+        tvUserCollegeName.setText(profileDataPref.getCollegeName());
     }
 
     private void loadAd() {
@@ -85,6 +99,39 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void init() {
+        ivUserAvatar = findViewById(R.id.ivUserAvatar);
+
+        tvUserName = findViewById(R.id.tvUserName);
+        tvUserCollegeName = findViewById(R.id.tvUserCollegeName);
+
+        tvShareApp = findViewById(R.id.tvShareApp);
+        tvShareApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "CrossTalks");
+                    String shareMessage= "\nBored in this Quarantine ??? Let's have some fun, Download CrossTalks and chat with your mates anonymously.   \n\n";
+                    shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                    startActivity(Intent.createChooser(shareIntent, "Invite your friends"));
+                } catch(Exception e) {
+                    //e.toString();
+                }
+            }
+        });
+
+        tvRateUs = findViewById(R.id.tvRateUs);
+        tvRateUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String appPackageName = getPackageName();
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+            }
+        });
+
         ad_view_container = findViewById(R.id.ad_view_container);
 
         ivBack = findViewById(R.id.ivBack);
@@ -108,6 +155,8 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        profileDataPref = new UserProfileDataPref(ProfileActivity.this);
     }
 
     @Override

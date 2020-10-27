@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,66 +7,55 @@
     android:background="@color/screenBackground"
     tools:context=".activity.profile.ProfileActivity">
 
-    <ImageView
-        android:id="@+id/ivBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_round_arrow_back_24_red"
-        android:padding="16dp"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackgroundBorderless"/>
-    
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="88dp"
-        android:gravity="center">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_round_arrow_back_24_red"
+            android:padding="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
         <ImageView
             android:id="@+id/ivUserAvatar"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/ic_super_mario"/>
+            android:src="@drawable/ic_super_mario"
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
+            android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User Name"
             android:textColor="@color/white"
             android:fontFamily="@font/mont_semibold"
             android:layout_marginTop="16dp"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
+            android:id="@+id/tvUserCollegeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="College name"
             android:textColor="@color/white"
             android:fontFamily="@font/mont_light"
             android:layout_marginTop="8dp"
-            android:textSize="12sp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_marginTop="32dp"
-            android:background="@color/bg_fill"
-            android:text="Option 1"
-            android:textColor="@color/white"
-            android:foreground="?attr/selectableItemBackground"
-            android:fontFamily="@font/mont_regular"
-            android:clickable="true"
-            android:focusable="true"/>
+            android:textSize="12sp"
+            android:layout_gravity="center_horizontal"/>
 
         <FrameLayout
             android:id="@+id/ad_view_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="32dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -74,40 +63,84 @@
             android:padding="16dp"
             android:layout_marginTop="16dp"
             android:background="@color/bg_fill"
-            android:text="Option 3"
+            android:text="Blocked User's"
+            android:gravity="center_vertical"
+            android:drawableStart="@drawable/ic_round_block_24_red"
+            android:drawablePadding="8dp"
+            android:drawableEnd="@drawable/ic_round_keyboard_arrow_right_24_white"
             android:textColor="@color/white"
             android:foreground="?attr/selectableItemBackground"
             android:fontFamily="@font/mont_regular"
             android:clickable="true"
             android:focusable="true"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/bg_fill"
+            android:text="Feedback"
+            android:gravity="center_vertical"
+            android:drawablePadding="8dp"
+            android:drawableStart="@drawable/ic_baseline_feedback_24_green"
+            android:drawableEnd="@drawable/ic_round_keyboard_arrow_right_24_white"
+            android:textColor="@color/white"
+            android:foreground="?attr/selectableItemBackground"
+            android:fontFamily="@font/mont_regular"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/tvShareApp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/bg_fill"
+            android:text="Invite Your Friend"
+            android:gravity="center_vertical"
+            android:drawablePadding="8dp"
+            android:drawableStart="@drawable/ic_round_share_24_blue"
+            android:drawableEnd="@drawable/ic_round_keyboard_arrow_right_24_white"
+            android:textColor="@color/white"
+            android:foreground="?attr/selectableItemBackground"
+            android:fontFamily="@font/mont_regular"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/tvRateUs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/bg_fill"
+            android:text="Rate Us"
+            android:gravity="center_vertical"
+            android:drawablePadding="8dp"
+            android:drawableStart="@drawable/ic_round_star_rate_24_yellow"
+            android:drawableEnd="@drawable/ic_round_keyboard_arrow_right_24_white"
+            android:textColor="@color/white"
+            android:foreground="?attr/selectableItemBackground"
+            android:fontFamily="@font/mont_regular"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/tvLogOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:text="Logout"
+            android:padding="12dp"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/colorPrimary"
+            android:fontFamily="@font/mont_semibold"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="center_horizontal"/>
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvLogOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:text="Logout"
-        android:padding="12dp"
-        android:textColor="@color/colorPrimary"
-        android:fontFamily="@font/mont_semibold"
-        android:layout_above="@id/tvAppVersion"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="48dp"
-        android:clickable="true"
-        android:focusable="true"/>
-
-    <TextView
-        android:id="@+id/tvAppVersion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:text="CrossTalk app version 0.0.1"
-        android:textColor="@color/gray_text_color"
-        android:fontFamily="@font/mont_regular"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"/>
-
-</RelativeLayout>
+</androidx.core.widget.NestedScrollView>
