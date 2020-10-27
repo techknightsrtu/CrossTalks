@@ -26,6 +26,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.auth.ChooseCollegeActivity;
@@ -53,8 +54,6 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView rvMessages;
     private LinearLayout llSafetyGuide;
 
-
-
     // Google banner ad
     private FrameLayout ad_view_container;
     private AdView adView;
@@ -67,6 +66,8 @@ public class ChatActivity extends AppCompatActivity {
     private MessagesAdapter messagesAdapter;
     private AppCompatButton btSendMessage;
     private EditText etWriteMessage;
+
+    private ValueEventListener chatSeenListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,8 +195,7 @@ public class ChatActivity extends AppCompatActivity {
                     }
                 });
 
-             // seenListenerRegistration =   ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
-
+                chatSeenListener = ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
 
                 btSendMessage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -247,12 +247,21 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     public void onPause() {
+
         if (adView != null) {
             adView.pause();
         }
         super.onPause();
 
-        //seenListenerRegistration.remove();
+        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
+            @Override
+            public void onCallback(String channelId) {
+
+                ChatMethods.removeChatSeenListener(channelId,chatSeenListener);
+
+            }
+        });
+
     }
 
     @Override

@@ -119,24 +119,6 @@ public class ChatMethods {
                     }
                 });
 
-
-//         final DocumentReference currentUserDocRef = FirebaseFirestore.getInstance().collection("users").document(sender);
-//
-//         currentUserDocRef.collection("engagedChatChannels")
-//                 .document(receiver)
-//                 .get()
-//                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                     @Override
-//                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-//
-//                         if(documentSnapshot.contains("channelId")){
-//                             getChatChannel.onCallback(documentSnapshot.get("channelId").toString());
-//                         }
-//
-//                     }
-//                 });
-//
-
     }
 
     public static void sendTextMessage(String channelId, Message message){
@@ -193,24 +175,6 @@ public class ChatMethods {
                     }
                 });
 
-//        DocumentReference chatChannelsRef = FirebaseFirestore.getInstance()
-//                .collection("chatChannels").document(channelId);
-//
-//        chatChannelsRef.collection("messages")
-//                .orderBy("timestamp")
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//
-//                        if (error != null) {
-//                            Log.w(TAG, "Listen failed.", error);
-//                            return;
-//                        }
-//
-//
-//                    }
-//                });
-
     }
 
     public static void getLastMessage(String channelId, final GetLastMessage getLastMessage){
@@ -236,27 +200,6 @@ public class ChatMethods {
 
                     }
                 });
-
-//        final FirebaseFirestore db  = FirebaseFirestore.getInstance();
-//
-//        db.collection("chatChannels")
-//                .document(channelId)
-//                .collection("messages").orderBy("timestamp")
-//                .limitToLast(1)
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//                        if (error != null) {
-//                            Log.w(TAG, "Listen failed.", error);
-//                            return;
-//                        }
-//                        Log.d(TAG, "onEvent:" +
-//                                " Query Size " + value.size() + " Messages :" + value.getDocuments());
-//
-//
-//
-//                    }
-//                });
     }
 
     public static void getRecentChats(String userId, final GetRecentChats getRecentChats){
@@ -300,53 +243,49 @@ public class ChatMethods {
                     }
                 });
 
-//        collRef.whereEqualTo("containsChats","true")
-//                .orderBy("lastActive")
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//
-//                if (error != null) {
-//                    Log.w(TAG, "Listen failed.", error);
-//                    return;
-//                }
-//            }
-//        });
-
     }
 
-    public static ListenerRegistration updateSeenMessage(String channelId,
+    public static ValueEventListener updateSeenMessage(String channelId,
                                                          final String sender,
                                                          final String receiver){
 
-        final FirebaseFirestore db  = FirebaseFirestore.getInstance();
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference()
+                .child("chatChannels")
+                .child(channelId)
+                .child("messages");
 
-        Query q = db.collection("chatChannels")
-                .document(channelId)
-                .collection("messages");
+        return db.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot value) {
 
-        return q.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
+                 for (DataSnapshot ds: value.getChildren()) {
 
-                        for (DocumentSnapshot ds: value.getDocuments()) {
+                     Message m = ds.getValue(Message.class);
+                     if(m.getReceiver().equals(sender) && m.getSender().equals(receiver)){
+                         Map<String,Object> map = new HashMap<>();
+                         map.put("isSeen",true);
+                         ds.getRef().updateChildren(map);
+                     }
+                 }
+             }
+             @Override
+             public void onCancelled(@NonNull DatabaseError error) {
 
-                            Message m = ds.toObject(Message.class);
-                            if(m.getReceiver().equals(receiver) && m.getSender().equals(sender)){
-                                ds.getReference().update("isSeen",true);
-                            }
+             }
+         });
 
-                        }
-
-                    }
-                });
 
     }
 
+    public static void removeChatSeenListener(String channelId,ValueEventListener vl){
+
+         DatabaseReference db = FirebaseDatabase.getInstance().getReference()
+                .child("chatChannels")
+                .child(channelId)
+                .child("messages");
+
+         db.removeEventListener(vl);
+
+    }
 
 }
