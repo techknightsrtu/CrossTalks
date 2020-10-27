@@ -7,10 +7,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/screenBackground</item>
         <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowDisablePreview">true</item>
         <item name="homeAsUpIndicator">@drawable/ic_round_arrow_back_24</item>
         <item name="colorControlHighlight">#74E42024</item>
+        <item name="android:windowBackground">@color/screenBackground</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -21,6 +20,15 @@
     <style name="circularImageView">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:backgroundTint">@color/screenBackground</item>
+        <item name="android:textColor">@color/gray_text_color</item>
+        <item name="android:fontFamily">@font/mont_light</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

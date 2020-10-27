@@ -1,15 +1,20 @@
 package com.techknightsrtu.crosstalks.activity.chat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -110,7 +115,6 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
 
     }
 
-
     @Override
     public void onChatClick(int avatarId, String userId) {
 
@@ -120,4 +124,40 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
         startActivity(i);
 
     }
+
+    @Override
+    public void onChatLongClick(String userId, View v) {
+
+        Context wrapper = new ContextThemeWrapper(getActivity(), R.style.PopupMenu);
+
+        PopupMenu recentChatMenu = new PopupMenu(wrapper, v);
+
+        recentChatMenu.getMenuInflater().inflate(R.menu.recent_chat_item_poupup_menu, recentChatMenu.getMenu());
+
+        recentChatMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                switch (menuItem.getItemId()){
+                    case R.id.deleteChat:
+                        // TODO: write code for deleting a chat here
+                        return true;
+
+                    case R.id.blockChat:
+                        // TODO: write code for blocking a user here
+                        return true;
+
+                    case R.id.reportChat:
+                        // TODO: write code for reporting a user here
+                        return true;
+                }
+
+                return false;
+            }
+        });
+
+        recentChatMenu.show();
+
+    }
+
 }

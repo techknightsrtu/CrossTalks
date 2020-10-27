@@ -45,14 +45,25 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
         rlChatLoaded.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 int avatarId = Avatar.nameList.indexOf(tvUserName.getText().toString());
 
                 Map<String,String> m = recentChatsList.get(getAdapterPosition());
                 String userId = m.get("userId").toString();
 
                 onChatButtonClick.onChatClick(avatarId,userId);
+            }
+        });
 
+        rlChatLoaded.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                Map<String,String> m = recentChatsList.get(getAdapterPosition());
+                String userId = m.get("userId").toString();
+
+                onChatButtonClick.onChatLongClick(userId, tvLastMessageTime);
+
+                return true;
             }
         });
     }
