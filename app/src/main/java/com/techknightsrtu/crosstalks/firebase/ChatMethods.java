@@ -9,6 +9,12 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -38,195 +44,274 @@ public class ChatMethods {
 
     public static void setChannelLastActiveStatus(String timestamp, String sender, String receiver){
 
-        final CollectionReference currentUserDocRef = FirebaseFirestore.getInstance().collection("users");
+        DatabaseReference userChatChannels = FirebaseDatabase.getInstance().getReference()
+                .child("engagedChatChannels");
 
         Map<String,Object> mp = new HashMap<>();
         mp.put("containsChats","true");
         mp.put("lastActive",timestamp);
 
-        currentUserDocRef.document(sender)
-                .collection("engagedChatChannels")
-                .document(receiver)
-                .update(mp);
+        userChatChannels.child(sender)
+                .child(receiver)
+                .updateChildren(mp);
 
-        currentUserDocRef.document(receiver)
-                .collection("engagedChatChannels")
-                .document(sender)
-                .update(mp);
+        userChatChannels.child(receiver)
+                .child(sender)
+                .updateChildren(mp);
 
     }
 
     public static void getOrCreateChatChannel(final String sender, final String receiver, final GetChatChannel getChatChannel){
 
-         final DocumentReference currentUserDocRef = FirebaseFirestore.getInstance().collection("users").document(sender);
+        final DatabaseReference currentUserChatChannels = FirebaseDatabase.getInstance().getReference()
+                .child("engagedChatChannels")
+                .child(sender);
 
-         currentUserDocRef.collection("engagedChatChannels")
-                 .document(receiver)
-                 .get()
-                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                     @Override
-                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+        currentUserChatChannels.child(receiver)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                         if(documentSnapshot.contains("channelId")){
-                             getChatChannel.onCallback(documentSnapshot.get("channelId").toString());
-                         }else{
-                             DocumentReference chatChannelsRef = FirebaseFirestore.getInstance()
-                                     .collection("chatChannels").document();
+                        if(snapshot.hasChild("channelId")){
+                            getChatChannel.onCallback(snapshot.child("channelId").getValue().toString());
+                        }else{
 
-                             ArrayList<String> list = new ArrayList<>();
-                             list.add(sender);
-                             list.add(receiver);
+                            DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
+                                    .child("chatChannels").push();
 
-                             ChatChannel ch = new ChatChannel(list);
-                             ch.setChannelId(chatChannelsRef.getId());
+                            ArrayList<String> list = new ArrayList<>();
+                            list.add(sender);
+                            list.add(receiver);
 
-                             chatChannelsRef.set(ch);
+                            ChatChannel ch = new ChatChannel(list);
+                            ch.setChannelId(chatChannelsRef.getKey());
 
-                             Map<String,String> mp = new HashMap<>();
-                             mp.put("channelId",ch.getChannelId());
-                             mp.put("containsChats","false");
-                             mp.put("lastActive",Utility.getCurrentTimestamp());
+                            Log.d(TAG, "onDataChange: CHANNEL CREATED " + chatChannelsRef.getKey());
 
-                             currentUserDocRef
-                                     .collection("engagedChatChannels")
-                                     .document(receiver)
-                                     .set(mp);
+                            chatChannelsRef.setValue(ch);
 
-                             FirebaseFirestore.getInstance().collection("users")
-                                     .document(receiver)
-                                     .collection("engagedChatChannels")
-                                     .document(sender)
-                                     .set(mp);
+                            Map<String,String> mp = new HashMap<>();
+                            mp.put("channelId",ch.getChannelId());
+                            mp.put("containsChats","false");
+                            mp.put("lastActive",Utility.getCurrentTimestamp());
 
-                             getChatChannel.onCallback(ch.getChannelId());
-                         }
 
-                     }
-                 });
+                            currentUserChatChannels
+                                    .child(receiver)
+                                    .setValue(mp);
 
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("engagedChatChannels")
+                                    .child(receiver)
+                                    .child(sender)
+                                    .setValue(mp);
+
+                            Log.d(TAG, "onDataChange: " + ch.getChannelId());
+
+                            getChatChannel.onCallback(ch.getChannelId());
+
+                        }
+
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+//         final DocumentReference currentUserDocRef = FirebaseFirestore.getInstance().collection("users").document(sender);
+//
+//         currentUserDocRef.collection("engagedChatChannels")
+//                 .document(receiver)
+//                 .get()
+//                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                     @Override
+//                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+//
+//                         if(documentSnapshot.contains("channelId")){
+//                             getChatChannel.onCallback(documentSnapshot.get("channelId").toString());
+//                         }
+//
+//                     }
+//                 });
+//
 
     }
-
 
     public static void sendTextMessage(String channelId, Message message){
 
         Log.d(TAG, "sendTextMessage: " + message.toString());
+        Log.d(TAG, "sendTextMessage: THIS IS CHANNEL " + channelId);
 
+        DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
+                .child("chatChannels").child(channelId).child("messages");
 
-        DocumentReference chatChannelsRef = FirebaseFirestore.getInstance()
-                .collection("chatChannels").document(channelId);
-
-        chatChannelsRef.collection("messages").add(message);
+        chatChannelsRef.push().setValue(message);
 
     }
 
     public static void getMessages(String channelId, final GetMessagesFromChannel getMessagesFromChannel){
 
 
+        Log.d(TAG, "getMessages: Message Call done");
 
-        DocumentReference chatChannelsRef = FirebaseFirestore.getInstance()
-                .collection("chatChannels").document(channelId);
+        DatabaseReference chatChannelRef = FirebaseDatabase.getInstance().getReference()
+                .child("chatChannels").child(channelId).child("messages");
 
-        chatChannelsRef.collection("messages")
-                .orderBy("timestamp")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+        chatChannelRef.keepSynced(true);
+
+        Log.d(TAG, "getMessages: " + channelId);
+
+        chatChannelRef
+                .orderByChild("timestamp")
+                .addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                    public void onDataChange(@NonNull DataSnapshot value) {
 
-                        if (error != null) {
-                            Log.w(TAG, "Listen failed.", error);
-                            return;
-                        }
+                        Log.d(TAG, "onDataChange: Messages Received" + value);
 
                         ArrayList<Message> list = new ArrayList<>();
 
-                        for (DocumentSnapshot ds: value.getDocuments()) {
+                        for (DataSnapshot ds: value.getChildren()) {
 
                             if (ds != null && ds.exists()) {
 
-                                list.add(ds.toObject(Message.class));
+                                Log.d(TAG, "onDataChange: " + ds);
+                                list.add(ds.getValue(Message.class));
 
                             } else {
                                 Log.d(TAG, "Current data: null");
                             }
 
                         }
-
                         getMessagesFromChannel.onCallback(list);
-
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.w(TAG, "Listen failed.");
                     }
                 });
 
+//        DocumentReference chatChannelsRef = FirebaseFirestore.getInstance()
+//                .collection("chatChannels").document(channelId);
+//
+//        chatChannelsRef.collection("messages")
+//                .orderBy("timestamp")
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//
+//                        if (error != null) {
+//                            Log.w(TAG, "Listen failed.", error);
+//                            return;
+//                        }
+//
+//
+//                    }
+//                });
+
     }
-    
 
     public static void getLastMessage(String channelId, final GetLastMessage getLastMessage){
 
-        final FirebaseFirestore db  = FirebaseFirestore.getInstance();
+        DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
+                .child("chatChannels").child(channelId);
 
-        db.collection("chatChannels")
-                .document(channelId)
-                .collection("messages").orderBy("timestamp")
+        chatChannelsRef.keepSynced(true);
+
+        chatChannelsRef.child("messages")
+                .orderByChild("timestamp")
                 .limitToLast(1)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null) {
-                            Log.w(TAG, "Listen failed.", error);
-                            return;
+                    public void onDataChange(@NonNull DataSnapshot value) {
+
+                        for (DataSnapshot ds: value.getChildren()) {
+                            getLastMessage.onCallback(ds.getValue(Message.class));
                         }
-                        Log.d(TAG, "onEvent:" +
-                                " Query Size " + value.size() + " Messages :" + value.getDocuments());
-
-                        if(value.size() == 1){
-
-                            DocumentSnapshot dsMessage = value.getDocuments().get(0);
-                            getLastMessage.onCallback(dsMessage.toObject(Message.class));
-
-                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
                     }
                 });
+
+//        final FirebaseFirestore db  = FirebaseFirestore.getInstance();
+//
+//        db.collection("chatChannels")
+//                .document(channelId)
+//                .collection("messages").orderBy("timestamp")
+//                .limitToLast(1)
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//                        if (error != null) {
+//                            Log.w(TAG, "Listen failed.", error);
+//                            return;
+//                        }
+//                        Log.d(TAG, "onEvent:" +
+//                                " Query Size " + value.size() + " Messages :" + value.getDocuments());
+//
+//
+//
+//                    }
+//                });
     }
 
     public static void getRecentChats(String userId, final GetRecentChats getRecentChats){
 
         final ArrayList<Map<String,String>> recentChatsList = new ArrayList<>();
 
-        final FirebaseFirestore db  = FirebaseFirestore.getInstance();
+        DatabaseReference collRef = FirebaseDatabase.getInstance().getReference()
+                .child("engagedChatChannels").child(userId);
 
-        CollectionReference collRef = db.collection("users")
-                .document(userId)
-                .collection("engagedChatChannels");
+        collRef.keepSynced(true);
 
-        collRef.whereEqualTo("containsChats","true")
-                .orderBy("lastActive")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+        collRef.orderByChild("lastActive")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot value) {
 
-                if (error != null) {
-                    Log.w(TAG, "Listen failed.", error);
-                    return;
-                }
+                        recentChatsList.clear();
 
-                recentChatsList.clear();
-                for(DocumentSnapshot ds : value.getDocuments()){
+                        for(DataSnapshot ds : value.getChildren()){
 
-                    Map<String,String> chatList = new HashMap<>();
-                    chatList.put("userId",ds.getId());
-                    chatList.put("channelId",ds.get("channelId").toString());
+                            if(ds.child("containsChats").getValue().toString().equals("true")){
 
-                    recentChatsList.add(chatList);
+                                Map<String,String> chatList = new HashMap<>();
+                                chatList.put("userId",ds.getKey());
+                                chatList.put("channelId",ds.child("channelId").getValue().toString());
 
-                }
+                                recentChatsList.add(chatList);
 
-                Collections.reverse(recentChatsList);
+                            }
 
-                getRecentChats.onCallback(recentChatsList);
+                        }
 
-            }
-        });
+                        Collections.reverse(recentChatsList);
+
+                        getRecentChats.onCallback(recentChatsList);
+
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+//        collRef.whereEqualTo("containsChats","true")
+//                .orderBy("lastActive")
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//
+//                if (error != null) {
+//                    Log.w(TAG, "Listen failed.", error);
+//                    return;
+//                }
+//            }
+//        });
 
     }
 
@@ -262,5 +347,6 @@ public class ChatMethods {
                 });
 
     }
+
 
 }

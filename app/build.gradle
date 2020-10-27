@@ -48,6 +48,7 @@ dependencies {
     //Firebase Firestore
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.firebase:firebase-database'
 
     //Firebase Cloud Messaging
     implementation 'com.google.firebase:firebase-messaging'

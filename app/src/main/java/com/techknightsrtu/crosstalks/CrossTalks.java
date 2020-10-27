@@ -8,6 +8,8 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 public class CrossTalks extends Application {
 
     private static final String TAG = "CrossTalks";
@@ -17,6 +19,8 @@ public class CrossTalks extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         Log.d(TAG, "onCreate: APPLICATION IS RUNNING");
 

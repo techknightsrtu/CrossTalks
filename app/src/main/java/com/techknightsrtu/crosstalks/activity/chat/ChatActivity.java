@@ -53,7 +53,7 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView rvMessages;
     private LinearLayout llSafetyGuide;
 
-    private ListenerRegistration seenListenerRegistration;
+
 
     // Google banner ad
     private FrameLayout ad_view_container;
@@ -175,6 +175,8 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onCallback(final String channelId) {
 
+                Log.d(TAG, "onCallback: THIS IS CHAT CHANNEL" + channelId);
+
                 ChatMethods.getMessages(channelId, new GetMessagesFromChannel() {
                     @Override
                     public void onCallback(ArrayList<Message> list) {
@@ -192,7 +194,8 @@ public class ChatActivity extends AppCompatActivity {
                     }
                 });
 
-              seenListenerRegistration =   ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
+             // seenListenerRegistration =   ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
+
 
                 btSendMessage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -249,7 +252,7 @@ public class ChatActivity extends AppCompatActivity {
         }
         super.onPause();
 
-        seenListenerRegistration.remove();
+        //seenListenerRegistration.remove();
     }
 
     @Override
