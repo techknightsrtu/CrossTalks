@@ -64,6 +64,7 @@ public class ChatActivity extends AppCompatActivity {
     private UserProfileDataPref prefs;
 
     private MessagesAdapter messagesAdapter;
+    private LinearLayoutManager linearLayoutManager;
     private AppCompatButton btSendMessage;
     private EditText etWriteMessage;
 
@@ -151,7 +152,8 @@ public class ChatActivity extends AppCompatActivity {
 
         rvMessages = findViewById(R.id.rvMessages);
         rvMessages.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+
+        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setStackFromEnd(true);
         rvMessages.setLayoutManager(linearLayoutManager);
 
@@ -177,25 +179,6 @@ public class ChatActivity extends AppCompatActivity {
             public void onCallback(final String channelId) {
 
                 Log.d(TAG, "onCallback: THIS IS CHAT CHANNEL" + channelId);
-
-                ChatMethods.getMessages(channelId, new GetMessagesFromChannel() {
-                    @Override
-                    public void onCallback(ArrayList<Message> list) {
-                        progressDialog.hideProgressDialog();
-
-                        if(!list.isEmpty()){
-                            llSafetyGuide.setVisibility(View.GONE);
-                        }else{
-                            llSafetyGuide.setVisibility(View.VISIBLE);
-                        }
-
-                        messagesAdapter = new MessagesAdapter(ChatActivity.this,list);
-                        rvMessages.setAdapter(messagesAdapter);
-
-                    }
-                });
-
-                chatSeenListener = ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
 
                 btSendMessage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -223,15 +206,58 @@ public class ChatActivity extends AppCompatActivity {
                             ChatMethods.sendTextMessage(channelId,m);
                         }
 
-                        rvMessages.scrollToPosition(messagesAdapter.getItemCount()-1);
                     }
                 });
 
             }
         });
 
+
+
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
+            @Override
+            public void onCallback(String channelId) {
+
+                messagesAdapter = ChatMethods.setupFirebaseChatsAdapter(channelId);
+
+                progressDialog.hideProgressDialog();
+                if(messagesAdapter.getItemCount() == 0){
+                    llSafetyGuide.setVisibility(View.GONE);
+                }else{
+                    llSafetyGuide.setVisibility(View.VISIBLE);
+                }
+
+                messagesAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                    @Override
+                    public void onItemRangeInserted(int positionStart, int itemCount) {
+                        super.onItemRangeInserted(positionStart, itemCount);
+                        int friendlyMessageCount = messagesAdapter.getItemCount();
+                        int lastVisiblePosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+
+                        if (lastVisiblePosition == -1 ||
+                                (positionStart >= (friendlyMessageCount - 1) &&
+                                        lastVisiblePosition == (positionStart - 1))) {
+
+                            linearLayoutManager.scrollToPosition(positionStart);
+
+                        }
+                    }
+                });
+
+                rvMessages.setAdapter(messagesAdapter);
+
+                messagesAdapter.startListening();
+
+                chatSeenListener = ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
+            }
+        });
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -251,7 +277,10 @@ public class ChatActivity extends AppCompatActivity {
         if (adView != null) {
             adView.pause();
         }
+        messagesAdapter.stopListening();
         super.onPause();
+
+        FirebaseMethods.setUserOnlineStatus("Offline");
 
         ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
             @Override
@@ -270,6 +299,8 @@ public class ChatActivity extends AppCompatActivity {
         if (adView != null) {
             adView.resume();
         }
+        messagesAdapter.startListening();
+        FirebaseMethods.setUserOnlineStatus("Online");
     }
 
     @Override

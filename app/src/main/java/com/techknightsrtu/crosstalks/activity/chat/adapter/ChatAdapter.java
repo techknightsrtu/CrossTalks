@@ -5,7 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.techknightsrtu.crosstalks.R;
+import com.techknightsrtu.crosstalks.activity.chat.models.EngagedChatChannel;
 import com.techknightsrtu.crosstalks.activity.chat.models.Message;
 import com.techknightsrtu.crosstalks.activity.chat.onClickListeners.OnChatButtonClick;
 import com.techknightsrtu.crosstalks.activity.chat.viewholder.ChatViewHolder;
@@ -13,6 +16,7 @@ import com.techknightsrtu.crosstalks.firebase.ChatMethods;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetLastMessage;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetOnlyUserData;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserOnlineStatus;
 import com.techknightsrtu.crosstalks.helper.Avatar;
 import com.techknightsrtu.crosstalks.helper.Utility;
 import com.techknightsrtu.crosstalks.models.User;
@@ -24,35 +28,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
+public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,ChatViewHolder> {
 
-    private Activity activity;
-    private ArrayList<Map<String,String>> recentChatsList;
 
-    private OnChatButtonClick onChatButtonClick;
+    private final OnChatButtonClick onChatButtonClick;
 
-    public ChatAdapter(Activity activity, ArrayList<Map<String,String>> recentChatsList, OnChatButtonClick onChatButtonClick) {
-        this.activity = activity;
-        this.recentChatsList = recentChatsList;
+    /**
+     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
+     * {@link FirebaseRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public ChatAdapter(@NonNull FirebaseRecyclerOptions<EngagedChatChannel> options,
+                       OnChatButtonClick onChatButtonClick) {
+        super(options);
         this.onChatButtonClick = onChatButtonClick;
     }
+
 
     @NonNull
     @Override
     public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(activity);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.chat_item, parent, false);
 
-        return new ChatViewHolder(view,recentChatsList,onChatButtonClick);
+        return new ChatViewHolder(view);
     }
 
+
     @Override
-    public void onBindViewHolder(@NonNull final ChatViewHolder holder, int position) {
+    protected void onBindViewHolder(@NonNull final ChatViewHolder holder, int position,
+                                    @NonNull EngagedChatChannel model) {
 
-       Map<String,String> m = recentChatsList.get(position);
-
-       String userId = m.get("userId").toString();
-       String channelId = m.get("channelId").toString();
+        final String userId = getRef(position).getKey();
+        String channelId = model.getChannelId();
 
         FirebaseMethods.getOnlyUserData(userId, new GetOnlyUserData() {
             @Override
@@ -61,6 +70,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
                 holder.tvUserName.setText(Avatar.nameList.get(Integer.parseInt(user.getAvatarId())));
                 holder.svChatLoading.setVisibility(View.GONE);
                 holder.rlChatLoaded.setVisibility(View.VISIBLE);
+            }
+        });
+
+        FirebaseMethods.getUserOnlineStatus(userId, new GetUserOnlineStatus() {
+            @Override
+            public void onCallback(String status) {
+                if(status != null && status.equals("Online")){
+                    holder.ivOnlineIndicator.setVisibility(View.VISIBLE);
+                }else{
+                    holder.ivOnlineIndicator.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -75,11 +95,24 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
             }
         });
 
-    }
+        holder.rlChatLoaded.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int avatarId = Avatar.nameList.indexOf(holder.tvUserName.getText().toString());
 
-    @Override
-    public int getItemCount() {
-        return recentChatsList.size();
+                onChatButtonClick.onChatClick(avatarId,userId);
+            }
+        });
+
+        holder.rlChatLoaded.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                onChatButtonClick.onChatLongClick(userId, holder.tvLastMessageTime);
+
+                return true;
+            }
+        });
     }
 
 }

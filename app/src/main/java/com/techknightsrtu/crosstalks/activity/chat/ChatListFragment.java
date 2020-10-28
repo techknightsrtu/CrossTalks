@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.ContextThemeWrapper;
@@ -96,23 +97,39 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
         rvChats.setVisibility(View.GONE);
         llEmpty.setVisibility(View.VISIBLE);
 
-        ChatMethods.getRecentChats(prefs.getUserId(), new GetRecentChats() {
-            @Override
-            public void onCallback(ArrayList<Map<String, String>> recentChatsList) {
+        chatAdapter = ChatMethods.setupFirebaseRecentChatsAdapter(prefs.getUserId(),
+                ChatListFragment.this);
 
-                if(!recentChatsList.isEmpty()){
-                    rvChats.setVisibility(View.VISIBLE);
-                    llEmpty.setVisibility(View.GONE);
-                }else {
-                    llEmpty.setVisibility(View.VISIBLE);
-                }
+        if(chatAdapter.getItemCount() == 0){
+            rvChats.setVisibility(View.VISIBLE);
+            llEmpty.setVisibility(View.GONE);
+        }else {
+            llEmpty.setVisibility(View.VISIBLE);
+        }
 
-                chatAdapter = new ChatAdapter(getActivity(),recentChatsList ,ChatListFragment.this);
-                rvChats.setAdapter(chatAdapter);
+        rvChats.setAdapter(chatAdapter);
+        chatAdapter.startListening();
 
-            }
-        });
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+       setupRecentChats();
+
+    }
+
+    @Override
+    public void onPause() {
+        chatAdapter.stopListening();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        chatAdapter.startListening();
     }
 
     @Override

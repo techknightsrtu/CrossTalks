@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.chat.models.Message;
 import com.techknightsrtu.crosstalks.activity.chat.viewholder.MessageItemViewHolder;
@@ -18,29 +20,32 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class MessagesAdapter extends RecyclerView.Adapter<MessageItemViewHolder> {
+public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItemViewHolder> {
 
 
     public static final int MSG_TYPE_RECEIVED = 0;
     public static final int MSG_TYPE_SENT = 1;
 
     public int MSG_TYPE;
-    private int lastPosition = -1;
 
-    private List<Message> messages;
+    int lastPosition = -1;
 
-    private Activity activity;
-
-    public MessagesAdapter(Activity activity, List<Message> messages) {
-        this.activity = activity;
-        this.messages = messages;
+    /**
+     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
+     * {@link FirebaseRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public MessagesAdapter(@NonNull FirebaseRecyclerOptions<Message> options) {
+        super(options);
     }
+
 
     @NonNull
     @Override
     public MessageItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater inflater = LayoutInflater.from(activity);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         if(viewType == MSG_TYPE_SENT){
 
@@ -60,10 +65,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageItemViewHolder>
 
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull final MessageItemViewHolder holder, int position) {
 
-        Message m = messages.get(position);
+    @Override
+    protected void onBindViewHolder(@NonNull final MessageItemViewHolder holder, int position, @NonNull Message m) {
+
 
         holder.tvMessage.setText(m.getMessage());
 
@@ -84,7 +89,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageItemViewHolder>
             }
         });
 
-        if(position == messages.size()-1){
+        if(position == getItemCount()-1){
             if(m.getIsSeen()){
                 holder.tvMsgSeen.setText("Seen");
             }else{
@@ -97,15 +102,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageItemViewHolder>
 
     }
 
-    @Override
-    public int getItemCount() {
-        return messages.size();
-    }
 
     @Override
     public int getItemViewType(int position) {
 
-        if(messages.get(position).getSender().equals(FirebaseMethods.getUserId())){
+        if(getItem(position).getSender().equals(FirebaseMethods.getUserId())){
                 return MSG_TYPE_SENT;
         }else{
                 return MSG_TYPE_RECEIVED;
@@ -116,10 +117,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageItemViewHolder>
         if (position > lastPosition)
         {
             if(MSG_TYPE == MSG_TYPE_SENT){
-                Animation expandIn = AnimationUtils.loadAnimation(activity, R.anim.send_msg_anim);
+                Animation expandIn = AnimationUtils.loadAnimation(viewToAnimate.getContext(), R.anim.send_msg_anim);
                 viewToAnimate.startAnimation(expandIn);
             }else if(MSG_TYPE == MSG_TYPE_RECEIVED){
-                Animation expandIn = AnimationUtils.loadAnimation(activity, R.anim.recieve_msg_anim);
+                Animation expandIn = AnimationUtils.loadAnimation(viewToAnimate.getContext(), R.anim.recieve_msg_anim);
                 viewToAnimate.startAnimation(expandIn);
             }
 

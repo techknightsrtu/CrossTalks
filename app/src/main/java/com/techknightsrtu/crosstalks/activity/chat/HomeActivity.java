@@ -19,12 +19,14 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.database.FirebaseDatabase;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.SplashActivity;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.MyFragmentPagerAdapter;
 import com.techknightsrtu.crosstalks.activity.profile.ProfileActivity;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.ChatAdapter;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.StoriesAdapter;
+import com.techknightsrtu.crosstalks.firebase.ChatMethods;
 import com.techknightsrtu.crosstalks.helper.Avatar;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
@@ -47,6 +49,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         init();
         setupBottomNavigationBar();
@@ -183,13 +187,13 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        FirebaseMethods.setUserOnlineStatus(true,prefs.getCollegeId());
+        FirebaseMethods.setUserOnlineStatus("Online");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        FirebaseMethods.setUserOnlineStatus(false,prefs.getCollegeId());
+        FirebaseMethods.setUserOnlineStatus("Offline");
     }
 
 }

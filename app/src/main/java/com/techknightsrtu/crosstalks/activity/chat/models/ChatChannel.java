@@ -3,6 +3,7 @@ package com.techknightsrtu.crosstalks.activity.chat.models;
 import java.util.List;
 
 public class ChatChannel {
+
     private String channelId;
     private List<String> userIds;
 

@@ -9,6 +9,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -24,6 +29,7 @@ import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetCurrentFCMTo
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetOnlyUserData;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetRegistrationToken;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserData;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserOnlineStatus;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.OnlineUsersFromCollege;
 import com.techknightsrtu.crosstalks.models.User;
 
@@ -53,50 +59,35 @@ public class FirebaseMethods {
         mAuth.signOut();
     }
 
+    public static void setUserOnlineStatus(String status){
 
-    public static void checkIfUserExist(String userId, final DoesUserExist doesUserExist){
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("onlineStatus")
+                .child(getUserId());
 
-        FirebaseFirestore db  = FirebaseFirestore.getInstance();
+        Map<String,Object> map = new HashMap<>();
+        map.put("status",status);
 
-        db.collection("users")
-                .whereEqualTo("userId",userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                        if (task.isSuccessful()) {
-
-                            if(task.getResult().isEmpty()){
-                                doesUserExist.onCallback(false);
-                            }else{
-                                doesUserExist.onCallback(true);
-                            }
-
-                        }else{
-                            Log.d(TAG, "onComplete: Something went wrong" + task.getResult());
-                        }
-
-                    }
-                });
+        db.setValue(map);
 
     }
 
-    public static void setUserOnlineStatus(boolean status, String collegeId){
+    public static void getUserOnlineStatus(String userId, final GetUserOnlineStatus getUserOnlineStatus){
 
-        if(isUserSignedIn()){
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("onlineStatus")
+                .child(userId);
 
-            Map<String,Boolean> userStatus = new HashMap<>();
-            userStatus.put("status",status);
-
-            FirebaseFirestore db  = FirebaseFirestore.getInstance();
-
-            db.collection("onlineUsers")
-                    .document(collegeId)
-                    .collection("users")
-                    .document(getUserId()).set(userStatus);
-
-        }
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.hasChild("status")){
+                    String status = snapshot.child("status").getValue().toString();
+                    getUserOnlineStatus.onCallback(status);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
     }
 
@@ -265,7 +256,6 @@ public class FirebaseMethods {
 
     }
 
-
     // REGION : Firebase Cloud Messaging
 
     public static void getCurrentToken(final GetCurrentFCMToken getCurrentFCMToken){
@@ -310,15 +300,7 @@ public class FirebaseMethods {
     }
 
 
-    public static void setUserOnlineStatus(String status){
 
-        FirebaseFirestore db  = FirebaseFirestore.getInstance();
-
-        db.collection("users")
-                .document(getUserId())
-                .update("onlineStatus",status);
-
-    }
 
 }
 
