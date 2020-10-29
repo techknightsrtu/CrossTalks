@@ -1,43 +1,27 @@
 package com.techknightsrtu.crosstalks.firebase;
 
-import android.util.AttributeSet;
+
 import android.util.Log;
-import android.view.ViewGroup;
+
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ChildEventListener;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.ChatAdapter;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.MessagesAdapter;
 import com.techknightsrtu.crosstalks.activity.chat.models.ChatChannel;
 import com.techknightsrtu.crosstalks.activity.chat.models.EngagedChatChannel;
 import com.techknightsrtu.crosstalks.activity.chat.models.Message;
 import com.techknightsrtu.crosstalks.activity.chat.onClickListeners.OnChatButtonClick;
-import com.techknightsrtu.crosstalks.activity.chat.viewholder.MessageItemViewHolder;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetLastMessage;
-import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetMessagesFromChannel;
-import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetRecentChats;
 import com.techknightsrtu.crosstalks.helper.Utility;
 
 import java.util.ArrayList;
@@ -166,49 +150,6 @@ public class ChatMethods {
                 });
     }
 
-    public static void getRecentChats(String userId, final GetRecentChats getRecentChats){
-
-        final ArrayList<Map<String,String>> recentChatsList = new ArrayList<>();
-
-        DatabaseReference collRef = FirebaseDatabase.getInstance().getReference()
-                .child("engagedChatChannels").child(userId);
-
-        collRef.keepSynced(true);
-
-        collRef.orderByChild("lastActive")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot value) {
-
-                        recentChatsList.clear();
-
-                        for(DataSnapshot ds : value.getChildren()){
-
-                            if(ds.child("containsChats").getValue().toString().equals("true")){
-
-                                Map<String,String> chatList = new HashMap<>();
-                                chatList.put("userId",ds.getKey());
-                                chatList.put("channelId",ds.child("channelId").getValue().toString());
-
-                                recentChatsList.add(chatList);
-
-                            }
-
-                        }
-
-                        Collections.reverse(recentChatsList);
-
-                        getRecentChats.onCallback(recentChatsList);
-
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-    }
-
     public static ValueEventListener updateSeenMessage(String channelId,
                                                          final String sender,
                                                          final String receiver){
@@ -288,4 +229,5 @@ public class ChatMethods {
         return new ChatAdapter(options,onChatButtonClick);
 
     }
+
 }

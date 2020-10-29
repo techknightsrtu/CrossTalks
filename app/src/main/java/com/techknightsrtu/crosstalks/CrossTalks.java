@@ -20,7 +20,7 @@ public class CrossTalks extends Application {
     public void onCreate() {
         super.onCreate();
 
-
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         Log.d(TAG, "onCreate: APPLICATION IS RUNNING");
 

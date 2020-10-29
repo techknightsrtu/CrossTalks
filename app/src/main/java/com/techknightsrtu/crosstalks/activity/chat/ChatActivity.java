@@ -272,12 +272,18 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        messagesAdapter.stopListening();
+        super.onStop();
+    }
+
+    @Override
     public void onPause() {
 
         if (adView != null) {
             adView.pause();
         }
-        messagesAdapter.stopListening();
+
         super.onPause();
 
         FirebaseMethods.setUserOnlineStatus("Offline");
@@ -299,7 +305,6 @@ public class ChatActivity extends AppCompatActivity {
         if (adView != null) {
             adView.resume();
         }
-        messagesAdapter.startListening();
         FirebaseMethods.setUserOnlineStatus("Online");
     }
 

@@ -89,16 +89,20 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
 
         llEmpty = mView.findViewById(R.id.llEmpty);
 
+        rvChats.setVisibility(View.GONE);
+        llEmpty.setVisibility(View.VISIBLE);
+
 
     }
 
     private void setupRecentChats(){
 
-        rvChats.setVisibility(View.GONE);
-        llEmpty.setVisibility(View.VISIBLE);
 
         chatAdapter = ChatMethods.setupFirebaseRecentChatsAdapter(prefs.getUserId(),
                 ChatListFragment.this);
+
+        rvChats.setAdapter(chatAdapter);
+
 
         if(chatAdapter.getItemCount() == 0){
             rvChats.setVisibility(View.VISIBLE);
@@ -107,8 +111,6 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
             llEmpty.setVisibility(View.VISIBLE);
         }
 
-        rvChats.setAdapter(chatAdapter);
-        chatAdapter.startListening();
 
     }
 
@@ -117,20 +119,15 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
         super.onStart();
 
        setupRecentChats();
-
+       chatAdapter.startListening();
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
         chatAdapter.stopListening();
-        super.onPause();
+        super.onStop();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        chatAdapter.startListening();
-    }
 
     @Override
     public void onChatClick(int avatarId, String userId) {

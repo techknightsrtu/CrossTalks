@@ -23,6 +23,7 @@ android {
 }
 
 dependencies {
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
@@ -30,42 +31,32 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
 
-    implementation 'com.google.android.material:material:1.2.1'
-
-    // Import for Shimmer Loading Effect
-    implementation 'com.facebook.shimmer:shimmer:0.5.0'
-
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:25.12.0')
+    implementation platform('com.google.firebase:firebase-bom:26.0.0')
 
-    //Firebase Analytics
+    //Firebase
     implementation 'com.google.firebase:firebase-analytics'
-
-    //Firebase Auth
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-inappmessaging-display'
+    implementation 'com.google.firebase:firebase-ads'
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
-
-    //Firebase Firestore
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-
     // FirebaseUI for Firebase Realtime Database
-    implementation 'com.firebaseui:firebase-ui-database:6.2.0'
+    implementation 'com.firebaseui:firebase-ui-database:6.3.0'
 
-    //Firebase Cloud Messaging
-    implementation 'com.google.firebase:firebase-messaging'
-
-    //Firebase In-App Messaging
-    implementation 'com.google.firebase:firebase-inappmessaging-display'
-
-    implementation 'com.google.firebase:firebase-ads'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     // EXTERNAL LIBRARIES
     implementation "com.airbnb.android:lottie:3.4.2"
+
+    //Shimmer Loading Effect
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // reCaptcha
     implementation 'com.google.android.gms:play-services-safetynet:17.0.0'

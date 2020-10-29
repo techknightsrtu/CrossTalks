@@ -1,6 +1,7 @@
 package com.techknightsrtu.crosstalks.activity.chat.adapter;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ import java.util.Map;
 public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,ChatViewHolder> {
 
 
+    private static final String TAG = "ChatAdapter";
+    
     private final OnChatButtonClick onChatButtonClick;
 
     /**
@@ -60,12 +63,17 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
     protected void onBindViewHolder(@NonNull final ChatViewHolder holder, int position,
                                     @NonNull EngagedChatChannel model) {
 
+        Log.d(TAG, "onBindViewHolder: " + model.getChannelId());
+
         final String userId = getRef(position).getKey();
         String channelId = model.getChannelId();
 
         FirebaseMethods.getOnlyUserData(userId, new GetOnlyUserData() {
             @Override
             public void onCallback(User user) {
+
+                Log.d(TAG, "onBindViewHolder: " + user.toString());
+
                 holder.ivUserAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(user.getAvatarId())));
                 holder.tvUserName.setText(Avatar.nameList.get(Integer.parseInt(user.getAvatarId())));
                 holder.svChatLoading.setVisibility(View.GONE);
@@ -76,6 +84,9 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
         FirebaseMethods.getUserOnlineStatus(userId, new GetUserOnlineStatus() {
             @Override
             public void onCallback(String status) {
+
+                Log.d(TAG, "onBindViewHolder: " + status);
+
                 if(status != null && status.equals("Online")){
                     holder.ivOnlineIndicator.setVisibility(View.VISIBLE);
                 }else{
@@ -91,6 +102,13 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
                 if(lastMessage != null){
                     holder.tvLastMessage.setText(lastMessage.getMessage());
                     holder.tvLastMessageTime.setText(Utility.getTimeFromTimestamp(lastMessage.getTimestamp()));
+
+                    if(lastMessage.getIsSeen()){
+                        //TODO: Set visibility of the seen Message
+                    }else{
+                        //TODO: Set visibility of unseen Message
+                    }
+
                 }
             }
         });
