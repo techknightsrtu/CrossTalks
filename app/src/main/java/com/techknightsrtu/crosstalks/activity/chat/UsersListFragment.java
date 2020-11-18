@@ -83,7 +83,8 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
 
                 Log.d(TAG, "onCallback: " + onlineUsersList);
 
-                onlineChatAdapter = new OnlineChatAdapter(getActivity(),onlineUsersList,UsersListFragment.this);
+                onlineChatAdapter = new OnlineChatAdapter(getActivity(),
+                        onlineUsersList,UsersListFragment.this);
                 rvOnlineUsers.setAdapter(onlineChatAdapter);
 
                 onlineChatAdapter.notifyDataSetChanged();

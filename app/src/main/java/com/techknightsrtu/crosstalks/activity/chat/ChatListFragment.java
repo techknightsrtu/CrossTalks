@@ -87,6 +87,11 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
         prefs = new UserProfileDataPref(getActivity());
         rvChats = mView.findViewById(R.id.rvChats);
 
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+        rvChats.setLayoutManager(mLayoutManager);
+
         llEmpty = mView.findViewById(R.id.llEmpty);
 
         rvChats.setVisibility(View.GONE);

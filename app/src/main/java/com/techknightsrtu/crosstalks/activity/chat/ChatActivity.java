@@ -37,6 +37,7 @@ import com.techknightsrtu.crosstalks.firebase.ChatMethods;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetMessagesFromChannel;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserOnlineStatus;
 import com.techknightsrtu.crosstalks.helper.Avatar;
 import com.techknightsrtu.crosstalks.helper.ProgressDialog;
 import com.techknightsrtu.crosstalks.helper.Utility;
@@ -67,6 +68,7 @@ public class ChatActivity extends AppCompatActivity {
     private LinearLayoutManager linearLayoutManager;
     private AppCompatButton btSendMessage;
     private EditText etWriteMessage;
+    private ImageView ivOnlineIndicator;
 
     private ValueEventListener chatSeenListener;
 
@@ -147,6 +149,7 @@ public class ChatActivity extends AppCompatActivity {
         ivChatAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(chatUserAvatarId)));
 
         etWriteMessage = findViewById(R.id.etWriteMessage);
+        ivOnlineIndicator = findViewById(R.id.ivOnlineIndicator);
 
         btSendMessage = findViewById(R.id.btSendMessage);
 
@@ -173,6 +176,20 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setupChatChannel(){
         progressDialog.showProgressDialog();
+
+        FirebaseMethods.getUserOnlineStatus(chatUserId, new GetUserOnlineStatus() {
+            @Override
+            public void onCallback(String status) {
+
+                Log.d(TAG, "onBindViewHolder: " + status);
+
+                if(status != null && status.equals("Online")){
+                    ivOnlineIndicator.setVisibility(View.VISIBLE);
+                }else{
+                    ivOnlineIndicator.setVisibility(View.GONE);
+                }
+            }
+        });
 
         ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
             @Override
@@ -219,6 +236,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
 
         ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
             @Override

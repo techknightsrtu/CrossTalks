@@ -55,6 +55,9 @@ public class FirebaseMethods {
     }
 
     public static void signOut(){
+
+        removeCurrentTokenFromDatabase();
+
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
     }
@@ -297,6 +300,27 @@ public class FirebaseMethods {
                         }
                     });
         }
+
+    }
+
+    private static void removeCurrentTokenFromDatabase(){
+
+        getRegistrationTokens(new GetRegistrationToken() {
+            @Override
+            public void onCallback(final List<String> tokens) {
+
+                getCurrentToken(new GetCurrentFCMToken() {
+                    @Override
+                    public void onCallback(String currToken) {
+
+                        tokens.remove(currToken);
+
+                        setRegistrationToken(tokens);
+                    }
+                });
+
+            }
+        });
 
     }
 
