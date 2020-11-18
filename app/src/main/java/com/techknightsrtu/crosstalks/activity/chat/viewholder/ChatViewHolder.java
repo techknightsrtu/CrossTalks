@@ -38,6 +38,5 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
         svChatLoading = itemView.findViewById(R.id.svChatLoading);
         rlChatLoaded = itemView.findViewById(R.id.rlChatLoaded);
 
-
     }
 }

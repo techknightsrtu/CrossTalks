@@ -62,8 +62,6 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
 
         init();
 
-        setupOnlineUsers();
-
         return mView;
     }
 
@@ -77,20 +75,23 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
 
     private void setupOnlineUsers(){
 
-        FirebaseMethods.getOnlineUserFromCollege(prefs.getCollegeId(), new OnlineUsersFromCollege() {
-            @Override
-            public void onCallback(ArrayList<String> onlineUsersList) {
+        onlineChatAdapter = FirebaseMethods.setupOnlineChatsAdapter(prefs.getCollegeId(),UsersListFragment.this);
+        rvOnlineUsers.setAdapter(onlineChatAdapter);
+        onlineChatAdapter.notifyDataSetChanged();
 
-                Log.d(TAG, "onCallback: " + onlineUsersList);
+    }
 
-                onlineChatAdapter = new OnlineChatAdapter(getActivity(),
-                        onlineUsersList,UsersListFragment.this);
-                rvOnlineUsers.setAdapter(onlineChatAdapter);
+    @Override
+    public void onStart() {
+        super.onStart();
+        setupOnlineUsers();
+        onlineChatAdapter.startListening();
+    }
 
-                onlineChatAdapter.notifyDataSetChanged();
-            }
-        });
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        onlineChatAdapter.stopListening();
     }
 
     @Override

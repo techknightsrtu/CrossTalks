@@ -4,6 +4,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,8 +22,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.techknightsrtu.crosstalks.activity.chat.adapter.MessagesAdapter;
+import com.techknightsrtu.crosstalks.activity.chat.adapter.OnlineChatAdapter;
+import com.techknightsrtu.crosstalks.activity.chat.models.Message;
+import com.techknightsrtu.crosstalks.activity.chat.onClickListeners.OnChatButtonClick;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.CreateNewUser;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.DoesUserExist;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetCollegeList;
@@ -259,6 +266,25 @@ public class FirebaseMethods {
                 });
 
     }
+
+    public static OnlineChatAdapter setupOnlineChatsAdapter(String collegeId, OnChatButtonClick onChatButtonClick){
+
+        final FirebaseFirestore db  = FirebaseFirestore.getInstance();
+
+        CollectionReference collRef = db.collection("users");
+
+
+        Query q = collRef.whereEqualTo("collegeId",collegeId);
+
+        FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
+                .setQuery(q,User.class)
+                .build();
+
+        return new OnlineChatAdapter(options,onChatButtonClick);
+
+    }
+
+
 
     // REGION : Firebase Cloud Messaging
 
