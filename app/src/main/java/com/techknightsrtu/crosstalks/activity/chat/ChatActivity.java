@@ -38,6 +38,7 @@ import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetMessagesFromChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserOnlineStatus;
+import com.techknightsrtu.crosstalks.google_admob.GoogleAdMob;
 import com.techknightsrtu.crosstalks.helper.Avatar;
 import com.techknightsrtu.crosstalks.helper.ProgressDialog;
 import com.techknightsrtu.crosstalks.helper.Utility;
@@ -57,7 +58,6 @@ public class ChatActivity extends AppCompatActivity {
 
     // Google banner ad
     private FrameLayout ad_view_container;
-    private AdView adView;
 
     // Progress Dialog
     private ProgressDialog progressDialog;
@@ -78,55 +78,14 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         init();
-        loadAd();
+
+        // For Loading Ads
+        GoogleAdMob googleAdMob = new GoogleAdMob(ChatActivity.this, ad_view_container);
+        googleAdMob.loadAd();
+
         setupToolbar();
         setupChatChannel();
 
-    }
-
-    private void loadAd() {
-        ad_view_container.post(new Runnable() {
-            @Override
-            public void run() {
-                loadBanner();
-            }
-        });
-    }
-
-    private void loadBanner() {
-        // Create an ad request.
-        adView = new AdView(this);
-        adView.setAdUnitId(getResources().getString(R.string.AD_UNIT_ID));
-        ad_view_container.removeAllViews();
-        ad_view_container.addView(adView);
-
-        AdSize adSize = getAdSize();
-        adView.setAdSize(adSize);
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-
-        // Start loading the ad in the background.
-        adView.loadAd(adRequest);
-    }
-
-    private AdSize getAdSize() {
-        // Determine the screen width (less decorations) to use for the ad width.
-        Display display = getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-
-        float density = outMetrics.density;
-
-        float adWidthPixels = ad_view_container.getWidth();
-
-        // If the ad hasn't been laid out, default to the full screen width.
-        if (adWidthPixels == 0) {
-            adWidthPixels = outMetrics.widthPixels;
-        }
-
-        int adWidth = (int) (adWidthPixels / density);
-
-        return AdSize.getCurrentOrientationBannerAdSizeWithWidth(this, adWidth);
     }
 
     private void init() {
@@ -297,11 +256,6 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     public void onPause() {
-
-        if (adView != null) {
-            adView.pause();
-        }
-
         super.onPause();
 
         FirebaseMethods.setUserOnlineStatus("Offline");
@@ -320,17 +274,11 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (adView != null) {
-            adView.resume();
-        }
         FirebaseMethods.setUserOnlineStatus("Online");
     }
 
     @Override
     public void onDestroy() {
-        if (adView != null) {
-            adView.destroy();
-        }
         super.onDestroy();
     }
 
