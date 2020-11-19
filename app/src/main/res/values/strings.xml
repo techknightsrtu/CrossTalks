@@ -12,6 +12,9 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
+    <string name="choose_sex">Choose your <font color="red">Sex</font></string>
+    <string name="choose_college">Choose your <font color="red">College</font></string>
+
     <!--   <string name="default_web_client_id">949619346808-o2bmc6utocgo71hh7n1hb4tu6fnethpg.apps.googleusercontent.com</string>-->
 
     <string name="hello_blank_fragment">Hello blank fragment</string>

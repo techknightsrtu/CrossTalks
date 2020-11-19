@@ -40,7 +40,7 @@ public class OnlineChatViewHolder extends RecyclerView.ViewHolder {
 
         svChatLoading = itemView.findViewById(R.id.svChatLoading);
 
-        tvStartChat.setOnClickListener(new View.OnClickListener() {
+        rlChatLoaded.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

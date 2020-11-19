@@ -186,9 +186,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="55dp"
-            android:layout_marginBottom="55dp"
             android:background="@drawable/cross_talk_chat_activity"
-            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             android:elevation="-1dp"/>
 
     </RelativeLayout>

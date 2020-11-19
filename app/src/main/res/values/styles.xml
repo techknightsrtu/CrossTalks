@@ -12,6 +12,13 @@
         <item name="android:windowBackground">@color/screenBackground</item>
     </style>
 
+    <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -27,7 +34,6 @@
         <item name="android:textColor">@color/gray_text_color</item>
         <item name="android:fontFamily">@font/mont_light</item>
         <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:paddingEnd">16dp</item>
         <item name="android:textSize">14sp</item>
     </style>
 

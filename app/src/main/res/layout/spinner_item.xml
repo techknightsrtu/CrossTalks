@@ -4,5 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="left"
-    android:padding="12dp"
+    android:padding="16dp"
+    android:textSize="16sp"
+    android:drawableStart="@drawable/ic_baseline_location_on_24"
+    android:drawablePadding="8dp"
+    android:textColor="@color/white"
     android:fontFamily="@font/mont_light"/>

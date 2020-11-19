@@ -22,6 +22,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.FirebaseDatabase;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.SplashActivity;
+import com.techknightsrtu.crosstalks.activity.auth.RegistrationActivity;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.MyFragmentPagerAdapter;
 import com.techknightsrtu.crosstalks.activity.profile.ProfileActivity;
 import com.techknightsrtu.crosstalks.activity.chat.adapter.ChatAdapter;
@@ -152,5 +153,4 @@ public class HomeActivity extends AppCompatActivity {
         super.onPause();
         FirebaseMethods.setUserOnlineStatus("Offline");
     }
-
 }

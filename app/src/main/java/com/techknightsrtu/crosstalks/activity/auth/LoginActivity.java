@@ -164,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             if(task.getResult().getAdditionalUserInfo().isNewUser()){
                                 //send user to gender activity
-                                startActivity(new Intent(LoginActivity.this,SelectGenderActivity.class));
+                                startActivity(new Intent(LoginActivity.this,RegistrationActivity.class));
                             }else{
                                 Log.d(TAG, "onCallback: LOGIN SUCCESS");
                                 saveUserDataLocallyAndProceed(userId);

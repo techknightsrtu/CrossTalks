@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_marginBottom="24dp">
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp">
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/svChatLoading"
@@ -48,64 +49,74 @@
 
     </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <RelativeLayout
-        android:id="@+id/rlChatLoaded"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone">
-
+        android:backgroundTint="@color/bg_fill"
+        app:cardCornerRadius="8dp"
+        android:clickable="true"
+        android:focusable="true">
         <RelativeLayout
-            android:id="@+id/rlAvatarLayout"
-            android:layout_width="64dp"
-            android:layout_height="64dp">
-            <ImageView
-                android:id="@+id/ivUserAvatar"
+            android:id="@+id/rlChatLoaded"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackground">
+
+            <RelativeLayout
+                android:id="@+id/rlAvatarLayout"
                 android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/dark_circle_filled"/>
+                android:layout_height="64dp">
+                <ImageView
+                    android:id="@+id/ivUserAvatar"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/dark_circle_filled"/>
 
-            <ImageView
-                android:id="@+id/ivOnlineIndicator"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/green_circle"
-                android:layout_alignParentBottom="true"
+                <ImageView
+                    android:id="@+id/ivOnlineIndicator"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/green_circle"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="4dp"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:fontFamily="@font/mont_regular"
+                android:text="User name"
+                android:layout_toRightOf="@id/rlAvatarLayout"
+                android:layout_toLeftOf="@+id/tvStartChat"
+                android:layout_marginStart="16dp"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:id="@+id/tvStartChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:fontFamily="@font/mont_regular"
+                android:text="Chat"
+                android:drawableStart="@drawable/ic_chat_white"
+                android:drawablePadding="8dp"
+                android:background="@drawable/blue_fill_rounded"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingStart="12sp"
+                android:paddingEnd="12sp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_alignParentEnd="true"
-                android:layout_margin="4dp"/>
+                android:layout_centerVertical="true"/>
         </RelativeLayout>
-
-        <TextView
-            android:id="@+id/tvUserName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:fontFamily="@font/mont_regular"
-            android:text="User name"
-            android:layout_toRightOf="@id/rlAvatarLayout"
-            android:layout_toLeftOf="@+id/tvStartChat"
-            android:layout_marginStart="16dp"
-            android:layout_centerVertical="true"/>
-
-        <TextView
-            android:id="@+id/tvStartChat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:fontFamily="@font/mont_regular"
-            android:text="Chat"
-            android:drawableStart="@drawable/ic_chat_white"
-            android:drawablePadding="8dp"
-            android:background="@drawable/blue_fill_rounded"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingStart="12sp"
-            android:paddingEnd="12sp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
-    </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>
