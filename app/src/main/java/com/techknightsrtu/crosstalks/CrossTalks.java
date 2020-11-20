@@ -3,6 +3,8 @@ package com.techknightsrtu.crosstalks;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 
@@ -14,8 +16,6 @@ public class CrossTalks extends Application {
 
     private static final String TAG = "CrossTalks";
 
-    public static final String CHANNEL_CHAT_NOTIFICATIONS = "channel_chat_notifications";
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -24,26 +24,33 @@ public class CrossTalks extends Application {
 
         Log.d(TAG, "onCreate: APPLICATION IS RUNNING");
 
+        NotificationManager mNotifyManager = (NotificationManager)
+                getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                createChannel();
+                createChannel(mNotifyManager);
         }
 
-
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void createChannel( ){
+    private void createChannel( NotificationManager notificationManager){
 
-        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        String id  = getString(R.string.chats_notification_channel_id);
+        String name = getString(R.string.chats_notification_channel_name);
+        String description = "This channel sends notifications related to chat conversations";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
 
-        NotificationChannel chatNotificationChannel = new NotificationChannel(CHANNEL_CHAT_NOTIFICATIONS,
-                "Chats Channel", NotificationManager.IMPORTANCE_HIGH);
+        NotificationChannel mChannel = new NotificationChannel(id, name, importance);
+        mChannel.setDescription(description);
+        mChannel.enableLights(true);
+        mChannel.setLightColor(Color.BLUE);
+        notificationManager.createNotificationChannel(mChannel);
 
-        chatNotificationChannel.setDescription("This channel sends notifications related to chat conversations");
-
-        manager.createNotificationChannel(chatNotificationChannel);
     }
+
+
+
 
 
 

@@ -25,7 +25,6 @@ import java.util.ArrayList;
 
 public class OnlineChatAdapter extends FirestoreRecyclerAdapter<User,OnlineChatViewHolder> {
 
-
     private static final String TAG = "OnlineChatAdapter";
 
     private final OnChatButtonClick onChatButtonClick;

@@ -309,7 +309,7 @@ public class RegistrationActivity extends AppCompatActivity {
         ListView lvCollege = ChooseCollegeView.findViewById(R.id.lvCollege);
         TextView tvNoCollegeFound = ChooseCollegeView.findViewById(R.id.tvNoCollegeFound);
 
-        ArrayAdapter adapter = new ArrayAdapter(
+        final ArrayAdapter adapter = new ArrayAdapter(
                 RegistrationActivity.this,
                 R.layout.spinner_item,
                 colleges
@@ -317,6 +317,20 @@ public class RegistrationActivity extends AppCompatActivity {
 
         lvCollege.setAdapter(adapter);
         lvCollege.setVisibility(View.VISIBLE);
+
+        etCollegeSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                adapter.getFilter().filter(s.toString());
+            }
+        });
 
         ChooseCollegeView.setBackgroundColor(Color.TRANSPARENT);
         final Dialog dialog = new BottomSheetDialog(RegistrationActivity.this, R.style.DialogStyle);

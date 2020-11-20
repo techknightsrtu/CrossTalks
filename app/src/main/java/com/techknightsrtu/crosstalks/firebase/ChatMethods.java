@@ -2,6 +2,7 @@ package com.techknightsrtu.crosstalks.firebase;
 
 
 import android.util.Log;
+import android.widget.LinearLayout;
 
 
 import androidx.annotation.NonNull;
@@ -25,9 +26,7 @@ import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetLastMessage;
 import com.techknightsrtu.crosstalks.helper.Utility;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ChatMethods {
@@ -212,7 +211,7 @@ public class ChatMethods {
 
     }
 
-    public static ChatAdapter setupFirebaseRecentChatsAdapter(String userId, OnChatButtonClick onChatButtonClick){
+    public static ChatAdapter setupFirebaseRecentChatsAdapter(String userId, OnChatButtonClick onChatButtonClick, LinearLayout llEmptyView){
 
         DatabaseReference userChatChannels = FirebaseDatabase.getInstance().getReference()
                 .child("engagedChatChannels").child(userId);
@@ -226,7 +225,7 @@ public class ChatMethods {
                 .setQuery(q,EngagedChatChannel.class)
                 .build();
 
-        return new ChatAdapter(options,onChatButtonClick);
+        return new ChatAdapter(options,onChatButtonClick, llEmptyView);
 
     }
 

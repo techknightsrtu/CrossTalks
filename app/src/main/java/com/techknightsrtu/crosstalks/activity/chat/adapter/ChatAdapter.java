@@ -1,10 +1,10 @@
 package com.techknightsrtu.crosstalks.activity.chat.adapter;
 
-import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -25,27 +25,26 @@ import com.techknightsrtu.crosstalks.models.User;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,ChatViewHolder> {
 
 
     private static final String TAG = "ChatAdapter";
     
     private final OnChatButtonClick onChatButtonClick;
+    private final LinearLayout llEmptyView;
 
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
      * {@link FirebaseRecyclerOptions} for configuration options.
      *
      * @param options
+     * @param llEmpty
      */
     public ChatAdapter(@NonNull FirebaseRecyclerOptions<EngagedChatChannel> options,
-                       OnChatButtonClick onChatButtonClick) {
+                       OnChatButtonClick onChatButtonClick, LinearLayout llEmpty) {
         super(options);
         this.onChatButtonClick = onChatButtonClick;
+        this.llEmptyView = llEmpty;
     }
 
 
@@ -133,4 +132,8 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
         });
     }
 
+    @Override
+    public void onDataChanged() {
+        llEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
+    }
 }

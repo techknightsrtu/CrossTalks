@@ -72,7 +72,6 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
         // Inflate the layout for this fragment
         mView =  inflater.inflate(R.layout.fragment_chat_list, container, false);
         init();
-        setupRecentChats();
 
         return mView;
     }
@@ -104,10 +103,11 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
 
 
         chatAdapter = ChatMethods.setupFirebaseRecentChatsAdapter(prefs.getUserId(),
-                ChatListFragment.this);
+                ChatListFragment.this,llEmpty);
 
         rvChats.setAdapter(chatAdapter);
 
+        chatAdapter.onDataChanged();
 
         if(chatAdapter.getItemCount() == 0){
             rvChats.setVisibility(View.VISIBLE);
@@ -115,7 +115,6 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
         }else {
             llEmpty.setVisibility(View.VISIBLE);
         }
-
 
     }
 

@@ -24,10 +24,8 @@
     <string name="reCaptcha_Site_Key">6Len5toZAAAAAPzTdKkIQYRGj06hwEicWu3fCwq2</string>
     <string name="reCaptcha_Secret_Key">6Len5toZAAAAABxAw_JpRXnaeId_IsuG0ftEV3Na</string>
 
-    <string-array name="college_name">
-        <item>Select your college ...</item>
-        <item>🏢 RTU</item>
-        <item>🏢 CIT</item>
-    </string-array>
+    <string name="chats_notification_channel_id">chat_id</string>
+    <string name="chats_notification_channel_name">Chats</string>
+
 
 </resources>
