@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -43,6 +44,7 @@ public class CrossTalks extends Application {
 
         NotificationChannel mChannel = new NotificationChannel(id, name, importance);
         mChannel.setDescription(description);
+        mChannel.setVibrationPattern(new long[] { 0, 100, 50});
         mChannel.enableLights(true);
         mChannel.setLightColor(Color.BLUE);
         notificationManager.createNotificationChannel(mChannel);

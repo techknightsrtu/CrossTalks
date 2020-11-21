@@ -23,6 +23,7 @@ import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.chat.ChatActivity;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetRegistrationToken;
+import com.techknightsrtu.crosstalks.notifications.NotificationHelper;
 
 import java.util.List;
 
@@ -33,47 +34,21 @@ public class FirebaseCloudMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
 
-        if (remoteMessage.getNotification() != null){
 
             Log.d(TAG, "onMessageReceived: FCM Message received" + remoteMessage.getData());
 
-            String title = remoteMessage.getNotification().getTitle();
-            String body = remoteMessage.getNotification().getBody();
+            String senderName = remoteMessage.getData().get("sender");
+            String body = remoteMessage.getData().get("message");
 
-            String avatarId = remoteMessage.getData().get("avatarId").toString();
+            String title = senderName + " sent you message";
+
+            String avatarId = remoteMessage.getData().get("avatarId");
             String userId = remoteMessage.getData().get("userId");
 
             Context mActivity = getApplicationContext();
 
-            // Create an Intent for the activity you want to start
-            Intent resultIntent = new Intent(this, ChatActivity.class);
-            resultIntent.putExtra("avatarId",avatarId);
-            resultIntent.putExtra("userId",userId);
-            resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            NotificationHelper.handleChatNotification(mActivity,title,body,avatarId,userId);
 
-            PendingIntent contentIntent = PendingIntent
-                    .getActivity(FirebaseCloudMessagingService.this,
-                            0,
-                            resultIntent,
-                            PendingIntent.FLAG_CANCEL_CURRENT);
-
-            NotificationManager mNotifyManager = (NotificationManager)
-                    mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mActivity, getString(R.string.chats_notification_channel_id))
-                    .setSmallIcon(R.mipmap.ic_launcher_round)
-                    .setContentIntent(contentIntent)
-                    .setColor(ContextCompat.getColor(mActivity, R.color.red))
-                    .setContentTitle(title).setContentText(body);
-
-            Notification n = mBuilder.build();
-
-            n.defaults |= Notification.DEFAULT_ALL;
-            mNotifyManager.notify(1, n);
-
-            Log.d(TAG, "onMessageReceived: FOREGROUND NOTIFICATIONS WORKING");
-
-        }
 
     }
 

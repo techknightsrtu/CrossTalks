@@ -1,5 +1,10 @@
 package com.techknightsrtu.crosstalks.activity.chat.adapter;
 
+import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,14 +104,19 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
             public void onCallback(Message lastMessage) {
 
                 if(lastMessage != null){
-                    holder.tvLastMessage.setText(lastMessage.getMessage());
-                    holder.tvLastMessageTime.setText(Utility.getTimeFromTimestamp(lastMessage.getTimestamp()));
 
-                    if(lastMessage.getIsSeen()){
-                        //TODO: Set visibility of the seen Message
-                    }else{
-                        //TODO: Set visibility of unseen Message
-                    }
+                    holder.tvLastMessageTime.setText(Utility.getTimeFromTimestamp(lastMessage.getTimestamp()));
+                    holder.tvLastMessage.setEllipsize(TextUtils.TruncateAt.END);
+                    holder.tvLastMessage.setMaxLines(1);
+
+                    if(lastMessage.getSender().equals(userId) && !lastMessage.getIsSeen())
+                        holder.tvLastMessage.setTypeface(holder.tvLastMessage.getTypeface(), Typeface.BOLD_ITALIC);
+                    else
+                        holder.tvLastMessage.setTypeface(holder.tvLastMessage.getTypeface(), Typeface.NORMAL);
+
+                    String msg = lastMessage.getMessage();
+                    msg.replace(" ", "\u00A0");
+                    holder.tvLastMessage.setText(msg);
 
                 }
             }
