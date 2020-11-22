@@ -12,6 +12,7 @@
         android:background="@drawable/recieved_message_bg_fill_round"
         android:text="This is a demoefeegegegegegegegegeg message"
         android:padding="12dp"
+        android:autoLink="all"
         android:textColor="@color/white"
         android:fontFamily="@font/mont_light"
         android:layout_alignParentStart="true"

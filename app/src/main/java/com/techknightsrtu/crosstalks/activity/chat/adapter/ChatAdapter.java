@@ -1,6 +1,9 @@
 package com.techknightsrtu.crosstalks.activity.chat.adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.fonts.FontFamily;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -28,6 +31,7 @@ import com.techknightsrtu.crosstalks.helper.Utility;
 import com.techknightsrtu.crosstalks.models.User;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,ChatViewHolder> {
@@ -37,6 +41,8 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
     
     private final OnChatButtonClick onChatButtonClick;
     private final LinearLayout llEmptyView;
+
+    private Context context;
 
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
@@ -58,6 +64,8 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
     public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.chat_item, parent, false);
+
+        context = parent.getContext();
 
         return new ChatViewHolder(view);
     }
@@ -114,10 +122,16 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
                     holder.tvLastMessage.setEllipsize(TextUtils.TruncateAt.END);
                     holder.tvLastMessage.setMaxLines(1);
 
-                    if(lastMessage.getSender().equals(userId) && !lastMessage.getIsSeen())
-                        holder.tvLastMessage.setTypeface(holder.tvLastMessage.getTypeface(), Typeface.BOLD_ITALIC);
-                    else
+                    if(lastMessage.getSender().equals(userId) && !lastMessage.getIsSeen()){
+                        Typeface typeface = ResourcesCompat.getFont(context, R.font.mont_semibold);
+                        holder.tvLastMessage.setTypeface(typeface);
+                        holder.tvLastMessage.setTextColor(context.getResources().getColor(R.color.last_seen_msg_color));
+                    }
+                    else {
+                        Typeface typeface = ResourcesCompat.getFont(context, R.font.mont_light);
                         holder.tvLastMessage.setTypeface(holder.tvLastMessage.getTypeface(), Typeface.NORMAL);
+                        holder.tvLastMessage.setTextColor(context.getResources().getColor(R.color.gray_text_color));
+                    }
 
                     String msg = lastMessage.getMessage();
                     msg.replace(" ", "\u00A0");

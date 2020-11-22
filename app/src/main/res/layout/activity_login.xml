@@ -18,7 +18,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="48dp"
             android:textColor="@color/white"
-            android:fontFamily="@font/mont_semibold"
+            android:fontFamily="@font/mansalva_regular"
             android:textSize="28sp"/>
 
         <com.airbnb.lottie.LottieAnimationView

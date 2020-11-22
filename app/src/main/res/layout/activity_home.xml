@@ -24,7 +24,7 @@
                 android:id="@+id/tvAppFirstName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/mont_semibold"
+                android:fontFamily="@font/mansalva_regular"
                 android:text="Cross"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
@@ -33,7 +33,7 @@
                 android:id="@+id/tvAppLastName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/mont_semibold"
+                android:fontFamily="@font/mansalva_regular"
                 android:text="Talks"
                 android:textColor="@color/red"
                 android:textSize="20sp" />
