@@ -240,9 +240,6 @@ public class ChatActivity extends AppCompatActivity {
 
                 chatSeenListener = ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
 
-            }else{
-
-                   llSafetyGuide.setVisibility(View.VISIBLE);
             }
         });
     }
