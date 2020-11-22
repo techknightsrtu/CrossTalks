@@ -74,16 +74,13 @@ public class OnlineChatAdapter extends FirestoreRecyclerAdapter<User,OnlineChatV
                 }
             });
 
-            FirebaseMethods.getUserOnlineStatus(userId, new GetUserOnlineStatus() {
-                @Override
-                public void onCallback(String status, String typingStatus) {
-                    Log.d(TAG, "onBindViewHolder: " + status);
+            FirebaseMethods.getUserOnlineStatus(userId, status -> {
+                Log.d(TAG, "onBindViewHolder: " + status);
 
-                    if(status != null && status.equals("Online")){
-                        holder.ivOnlineIndicator.setVisibility(View.VISIBLE);
-                    }else{
-                        holder.ivOnlineIndicator.setVisibility(View.GONE);
-                    }
+                if(status != null && status.equals("Online")){
+                    holder.ivOnlineIndicator.setVisibility(View.VISIBLE);
+                }else{
+                    holder.ivOnlineIndicator.setVisibility(View.GONE);
                 }
             });
         }

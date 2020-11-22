@@ -91,9 +91,8 @@ public class FirebaseMethods {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.hasChild("status") && snapshot.hasChild("typingStatus") ){
                     String status = snapshot.child("status").getValue().toString();
-                    String typingStatus = snapshot.child("typingStatus").getValue().toString();
                     Log.d(TAG, "onDataChange:  ONLINE STATUS" +  status);
-                    getUserOnlineStatus.onCallback(status,typingStatus);
+                    getUserOnlineStatus.onCallback(status);
                 }
             }
             @Override
@@ -111,28 +110,20 @@ public class FirebaseMethods {
 
         db.collection("colleges")
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                .addOnSuccessListener(queryDocumentSnapshots -> {
 
-                        for(DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()){
+                    for(DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()){
 
-                            String key = ds.getId();
-                            String collegeName = (String) ds.get("collegeName");
+                        String key = ds.getId();
+                        String collegeName = (String) ds.get("collegeName");
 
-                            colleges.put(key,collegeName);
-
-                        }
-
-                        callback.onCallback(colleges);
+                        colleges.put(key,collegeName);
 
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onComplete: Something went wrong" + e.getMessage());
-            }
-        });
+
+                    callback.onCallback(colleges);
+
+                }).addOnFailureListener(e -> Log.d(TAG, "onComplete: Something went wrong" + e.getMessage()));
 
     }
 

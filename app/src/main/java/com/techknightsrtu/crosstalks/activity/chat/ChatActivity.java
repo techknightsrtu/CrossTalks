@@ -30,6 +30,7 @@ import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.DoesChatChannelExist;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserOnlineStatus;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserTypingStatus;
 import com.techknightsrtu.crosstalks.google_admob.GoogleAdMob;
 import com.techknightsrtu.crosstalks.helper.Avatar;
 import com.techknightsrtu.crosstalks.helper.ProgressDialog;
@@ -129,7 +130,7 @@ public class ChatActivity extends AppCompatActivity {
 
         progressDialog.showProgressDialog();
 
-        FirebaseMethods.getUserOnlineStatus(chatUserId, (status, typingStatus) -> {
+        FirebaseMethods.getUserOnlineStatus(chatUserId, (status) -> {
 
             Log.d(TAG, "onBindViewHolder: " + status);
 
@@ -140,61 +141,64 @@ public class ChatActivity extends AppCompatActivity {
                 ivOnlineIndicator.setVisibility(View.GONE);
             }
 
-            //TODO: Setup user typing status visibility
-            //If User is not typing, typingStatus == "no_action",
-            //If User is typing, typingStatus == "typing...",
 
 
         });
 
-        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
-            @Override
-            public void onCallback(final String channelId) {
 
-                Log.d(TAG, "onCallback: THIS IS CHAT CHANNEL" + channelId);
 
-                btSendMessage.setOnClickListener(view -> {
+        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, channelId -> {
 
-                    Animation animateButton = AnimationUtils.loadAnimation(ChatActivity.this, R.anim.send_msg_button_anim);
-                    btSendMessage.startAnimation(animateButton);
+            Log.d(TAG, "onCallback: THIS IS CHAT CHANNEL" + channelId);
 
-                    if(!etWriteMessage.getText().toString().trim().isEmpty()){
+            ChatMethods.getUserTypingStatus(channelId, chatUserId, typingStatus -> {
 
-                        String senderAvatarName = Avatar.nameList.get(Integer.parseInt(prefs.getAvatarId()));
-                        String senderAvatarId = prefs.getAvatarId();
+                //TODO: Setup user typing status visibility
+                //If User is not typing, typingStatus == false,
+                //If User is typing, typingStatus == true,
 
-                        String timestamp = Utility.getCurrentTimestamp();
 
-                        ChatMethods.setChannelLastActiveStatus(timestamp,currUserId,chatUserId);
+            });
 
-                        Message m = new Message(timestamp,
-                                currUserId,senderAvatarName,senderAvatarId,
-                                chatUserId,etWriteMessage.getText().toString().trim(),
-                                MessageType.TEXT,false);
+            etWriteMessage.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    ChatMethods.setUserTypingStatus(channelId,charSequence.length() > 0);
+                }
+                @Override
+                public void afterTextChanged(Editable editable) {
+                }
+            });
 
-                        etWriteMessage.setText("");
+            btSendMessage.setOnClickListener(view -> {
 
-                        ChatMethods.sendTextMessage(channelId,m);
-                    }
+                Animation animateButton = AnimationUtils.loadAnimation(ChatActivity.this, R.anim.send_msg_button_anim);
+                btSendMessage.startAnimation(animateButton);
 
-                });
+                if(!etWriteMessage.getText().toString().trim().isEmpty()){
 
-            }
-        });
+                    String senderAvatarName = Avatar.nameList.get(Integer.parseInt(prefs.getAvatarId()));
+                    String senderAvatarId = prefs.getAvatarId();
 
-        etWriteMessage.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                ChatMethods.setUserTypingStatus("no_action");
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                ChatMethods.setUserTypingStatus("typing...");
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                ChatMethods.setUserTypingStatus("no_action");
-            }
+                    String timestamp = Utility.getCurrentTimestamp();
+
+                    ChatMethods.setChannelLastActiveStatus(timestamp,currUserId,chatUserId);
+
+                    Message m = new Message(timestamp,
+                            currUserId,senderAvatarName,senderAvatarId,
+                            chatUserId,etWriteMessage.getText().toString().trim(),
+                            MessageType.TEXT,false);
+
+                    etWriteMessage.setText("");
+
+                    ChatMethods.sendTextMessage(channelId,m);
+                }
+
+            });
+
         });
 
     }

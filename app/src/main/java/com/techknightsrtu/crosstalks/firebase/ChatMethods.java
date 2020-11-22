@@ -22,6 +22,7 @@ import com.techknightsrtu.crosstalks.activity.chat.models.Message;
 import com.techknightsrtu.crosstalks.activity.chat.onClickListeners.OnChatButtonClick;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetLastMessage;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserTypingStatus;
 import com.techknightsrtu.crosstalks.helper.Utility;
 
 import java.util.ArrayList;
@@ -195,17 +196,41 @@ public class ChatMethods {
     }
 
 
-
-    public static void setUserTypingStatus(String typingStatus){
+    public static void setUserTypingStatus(String channelId, boolean typingStatus){
 
         final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
-        db.child("onlineStatus")
+        db.child("chatChannels")
+                .child(channelId)
                 .child(FirebaseMethods.getUserId())
                 .child("typingStatus")
                 .setValue(typingStatus);
 
     }
+
+    public static void getUserTypingStatus(String channelId, String chatUserId,
+                                           GetUserTypingStatus getUserTypingStatus){
+
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+
+        db.child("chatChannels")
+                .child(channelId)
+                .child(chatUserId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.hasChild("typingStatus")){
+                            boolean typingStatus = Boolean.parseBoolean(snapshot.child("typingStatus").getValue().toString());
+                            getUserTypingStatus.onCallback(typingStatus);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+    }
+
+
 
 
     public static ValueEventListener updateSeenMessage(String channelId,

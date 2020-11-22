@@ -90,7 +90,7 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
             holder.rlChatLoaded.setVisibility(View.VISIBLE);
         });
 
-        FirebaseMethods.getUserOnlineStatus(userId, (status, typingStatus) -> {
+        FirebaseMethods.getUserOnlineStatus(userId, (status) -> {
 
             Log.d(TAG, "onBindViewHolder: " + status);
 
@@ -100,9 +100,6 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
                 holder.ivOnlineIndicator.setVisibility(View.GONE);
             }
 
-            if(typingStatus.equals("typing...")){
-                holder.tvLastMessageTime.setText(typingStatus);
-            }
 
         });
 
