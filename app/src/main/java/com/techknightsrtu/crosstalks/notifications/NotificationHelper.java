@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.icu.util.Measure;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
@@ -16,12 +18,13 @@ import com.techknightsrtu.crosstalks.activity.chat.ChatActivity;
 public class NotificationHelper {
 
     public static void handleChatNotification(Context context,
-                                              String title,
-                                              String body,
-                                              String avatarId,
-                                              String userId){
-
-        NotificationManager mNotifyManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                                       String title,
+                                       String body,
+                                       String avatarId,
+                                       String userId,
+                                       Bitmap largeIcon){
+        NotificationManager mNotifyManager = (NotificationManager)
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Create an Intent for the activity you want to start
         Intent resultIntent = new Intent(context, ChatActivity.class);
@@ -35,29 +38,23 @@ public class NotificationHelper {
                         resultIntent,
                         PendingIntent.FLAG_CANCEL_CURRENT);
 
-        androidx.core.app.RemoteInput remoteInput = new RemoteInput.Builder("key_text_reply")
-                .setLabel("Write your reply")
-                .build();
-
-        Intent replyIntent = new Intent(context, NotificationChatReplyReceiver.class);
-        PendingIntent replyPendingIntent = PendingIntent.getBroadcast(context,
-                0,replyIntent,0);
-
         NotificationCompat.Action replyAction = new NotificationCompat.Action.Builder(
                 R.drawable.send_button_bg,
-                "Reply",
-                replyPendingIntent
-        ).addRemoteInput(remoteInput).build();
-
-        NotificationCompat.MessagingStyle messagingStyle = new NotificationCompat.MessagingStyle("Me");
-
+                "Go to Conversation",
+                contentIntent
+        ).build();
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, context.getString(R.string.chats_notification_channel_id))
                 .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setContentTitle(title)
+                .setContentText(body)
                 .setContentIntent(contentIntent)
                 .setColor(ContextCompat.getColor(context, R.color.red))
-                .setContentTitle(title)
-                .setContentText(body);
+                .setLargeIcon(largeIcon)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .addAction(replyAction);
 
         Notification n = mBuilder.build();
 

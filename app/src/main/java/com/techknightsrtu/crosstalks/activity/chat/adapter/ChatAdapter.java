@@ -105,7 +105,12 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
 
                 if(lastMessage != null){
 
-                    holder.tvLastMessageTime.setText(Utility.getTimeFromTimestamp(lastMessage.getTimestamp()));
+                    if(Utility.isYesterday(lastMessage.getTimestamp())){
+                        holder.tvLastMessageTime.setText(Utility.getDateFromTimestamp(lastMessage.getTimestamp()));
+                    }else{
+                        holder.tvLastMessageTime.setText(Utility.getTimeFromTimestamp(lastMessage.getTimestamp()));
+                    }
+
                     holder.tvLastMessage.setEllipsize(TextUtils.TruncateAt.END);
                     holder.tvLastMessage.setMaxLines(1);
 

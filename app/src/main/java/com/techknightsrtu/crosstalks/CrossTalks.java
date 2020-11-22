@@ -46,13 +46,9 @@ public class CrossTalks extends Application {
         mChannel.setDescription(description);
         mChannel.setVibrationPattern(new long[] { 0, 100, 50});
         mChannel.enableLights(true);
-        mChannel.setLightColor(Color.BLUE);
         notificationManager.createNotificationChannel(mChannel);
 
     }
-
-
-
 
 
 

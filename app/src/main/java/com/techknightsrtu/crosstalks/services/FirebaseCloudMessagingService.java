@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
@@ -23,6 +25,7 @@ import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.chat.ChatActivity;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetRegistrationToken;
+import com.techknightsrtu.crosstalks.helper.Avatar;
 import com.techknightsrtu.crosstalks.notifications.NotificationHelper;
 
 import java.util.List;
@@ -37,18 +40,20 @@ public class FirebaseCloudMessagingService extends FirebaseMessagingService {
 
             Log.d(TAG, "onMessageReceived: FCM Message received" + remoteMessage.getData());
 
-            String senderName = remoteMessage.getData().get("sender");
+            String title = remoteMessage.getData().get("sender");
             String body = remoteMessage.getData().get("message");
-
-            String title = senderName + " sent you message";
 
             String avatarId = remoteMessage.getData().get("avatarId");
             String userId = remoteMessage.getData().get("userId");
 
+            Bitmap largeIcon = BitmapFactory.decodeResource(
+                    getResources(),
+                    Avatar.avatarList.get(Integer.parseInt(avatarId)));
+
             Context mActivity = getApplicationContext();
 
-            NotificationHelper.handleChatNotification(mActivity,title,body,avatarId,userId);
-
+            if(!ChatActivity.isVisible)
+                NotificationHelper.handleChatNotification(mActivity,title,body,avatarId,userId,largeIcon);
 
     }
 

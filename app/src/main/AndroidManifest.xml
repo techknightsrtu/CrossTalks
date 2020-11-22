@@ -62,7 +62,6 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".notifications.NotificationChatReplyReceiver"/>
     </application>
 
     <uses-permission android:name="android.permission.VIBRATE" />

@@ -1,5 +1,7 @@
 package com.techknightsrtu.crosstalks.helper;
 
+import android.text.format.DateUtils;
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,21 +31,28 @@ public class Utility {
 
         String dateFromTimestamp = "";
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("IST"));
+        if(!isYesterday(ts)){
 
-        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sdf.setTimeZone(TimeZone.getTimeZone("IST"));
 
-            Date date = sdf.parse(ts);
+            try {
 
-            SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
-            sdfDate.setTimeZone(java.util.TimeZone.getTimeZone("IST"));
+                Date date = sdf.parse(ts);
 
-            dateFromTimestamp = sdfDate.format(date);
+                SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+                sdfDate.setTimeZone(java.util.TimeZone.getTimeZone("IST"));
+                dateFromTimestamp = sdfDate.format(date);
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }else{
+            dateFromTimestamp = "Yesterday";
         }
+
 
          return dateFromTimestamp;
     }
@@ -71,6 +80,26 @@ public class Utility {
 
         return timeFromTimestamp.toUpperCase();
 
+    }
+
+    public static boolean isYesterday(String timestamp) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("IST"));
+
+        Date d;
+        boolean isYesterday = false;
+        try {
+
+            d = sdf.parse(timestamp);
+
+            isYesterday = DateUtils.isToday(d.getTime() + DateUtils.DAY_IN_MILLIS);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return isYesterday;
     }
 
 

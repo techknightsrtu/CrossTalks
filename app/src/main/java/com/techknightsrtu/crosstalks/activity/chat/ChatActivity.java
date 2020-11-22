@@ -36,6 +36,8 @@ import com.techknightsrtu.crosstalks.helper.local.UserProfileDataPref;
 public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
+
+    public static boolean isVisible = false;
     
     private String chatUserId;
     private String currUserId;
@@ -182,6 +184,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        isVisible = true;
 
         ChatMethods.checkAndGetChatChannelIfExist(currUserId, chatUserId,(exist, channelId) -> {
 
@@ -215,6 +218,7 @@ public class ChatActivity extends AppCompatActivity {
                 chatSeenListener = ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
 
             }else{
+
                    llSafetyGuide.setVisibility(View.VISIBLE);
             }
 
@@ -236,7 +240,7 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-
+        isVisible = false;
         if(messagesAdapter != null)
             messagesAdapter.stopListening();
 
@@ -246,7 +250,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-
+        isVisible = false;
         FirebaseMethods.setUserOnlineStatus("Offline");
 
         ChatMethods.checkAndGetChatChannelIfExist(currUserId, chatUserId, (exist, channelId) -> {
@@ -260,12 +264,14 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        isVisible = true;
         FirebaseMethods.setUserOnlineStatus("Online");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isVisible = false;
     }
 
 }

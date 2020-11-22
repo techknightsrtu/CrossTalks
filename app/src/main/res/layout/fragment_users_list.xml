@@ -15,7 +15,7 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ONLINE USERS"
+            android:text="USERS"
             android:textSize="16sp"
             android:fontFamily="@font/mont_bold"
             android:textColor="@color/white"

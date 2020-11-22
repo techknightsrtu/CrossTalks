@@ -206,8 +206,8 @@ public class ChatMethods {
                 .child("chatChannels").child(channelId);
 
         chatChannelsRef.child("messages")
-                .orderByChild("receiver")
-                .equalTo(FirebaseMethods.getUserId())
+                .orderByChild("isSeen")
+                .equalTo("false")
                 .limitToLast(10);
 
 
