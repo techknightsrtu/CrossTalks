@@ -27,7 +27,7 @@
                 android:fontFamily="@font/mansalva_regular"
                 android:text="Cross"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/tvAppLastName"
@@ -36,7 +36,7 @@
                 android:fontFamily="@font/mansalva_regular"
                 android:text="Talks"
                 android:textColor="@color/red"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
 
         </LinearLayout>
 

@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -124,20 +126,25 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setupChatChannel(){
+
         progressDialog.showProgressDialog();
 
-        FirebaseMethods.getUserOnlineStatus(chatUserId, new GetUserOnlineStatus() {
-            @Override
-            public void onCallback(String status) {
+        FirebaseMethods.getUserOnlineStatus(chatUserId, (status, typingStatus) -> {
 
-                Log.d(TAG, "onBindViewHolder: " + status);
+            Log.d(TAG, "onBindViewHolder: " + status);
 
-                if(status != null && status.equals("Online")){
-                    ivOnlineIndicator.setVisibility(View.VISIBLE);
-                }else{
-                    ivOnlineIndicator.setVisibility(View.GONE);
-                }
+
+            if(status != null && status.equals("Online")){
+                ivOnlineIndicator.setVisibility(View.VISIBLE);
+            }else{
+                ivOnlineIndicator.setVisibility(View.GONE);
             }
+
+            //TODO: Setup user typing status visibility
+            //If User is not typing, typingStatus == "no_action",
+            //If User is typing, typingStatus == "typing...",
+
+
         });
 
         ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
@@ -146,39 +153,49 @@ public class ChatActivity extends AppCompatActivity {
 
                 Log.d(TAG, "onCallback: THIS IS CHAT CHANNEL" + channelId);
 
-                btSendMessage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                btSendMessage.setOnClickListener(view -> {
 
-                        Animation animateButton = AnimationUtils.loadAnimation(ChatActivity.this, R.anim.send_msg_button_anim);
-                        btSendMessage.startAnimation(animateButton);
+                    Animation animateButton = AnimationUtils.loadAnimation(ChatActivity.this, R.anim.send_msg_button_anim);
+                    btSendMessage.startAnimation(animateButton);
 
-                        if(!etWriteMessage.getText().toString().trim().isEmpty()){
+                    if(!etWriteMessage.getText().toString().trim().isEmpty()){
 
-                            String senderAvatarName = Avatar.nameList.get(Integer.parseInt(prefs.getAvatarId()));
-                            String senderAvatarId = prefs.getAvatarId();
+                        String senderAvatarName = Avatar.nameList.get(Integer.parseInt(prefs.getAvatarId()));
+                        String senderAvatarId = prefs.getAvatarId();
 
-                            String timestamp = Utility.getCurrentTimestamp();
+                        String timestamp = Utility.getCurrentTimestamp();
 
-                            ChatMethods.setChannelLastActiveStatus(timestamp,currUserId,chatUserId);
+                        ChatMethods.setChannelLastActiveStatus(timestamp,currUserId,chatUserId);
 
-                            Message m = new Message(timestamp,
-                                    currUserId,senderAvatarName,senderAvatarId,
-                                    chatUserId,etWriteMessage.getText().toString().trim(),
-                                    MessageType.TEXT,false);
+                        Message m = new Message(timestamp,
+                                currUserId,senderAvatarName,senderAvatarId,
+                                chatUserId,etWriteMessage.getText().toString().trim(),
+                                MessageType.TEXT,false);
 
-                            etWriteMessage.setText("");
+                        etWriteMessage.setText("");
 
-                            ChatMethods.sendTextMessage(channelId,m);
-                        }
-
+                        ChatMethods.sendTextMessage(channelId,m);
                     }
+
                 });
 
             }
         });
 
-
+        etWriteMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                ChatMethods.setUserTypingStatus("no_action");
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                ChatMethods.setUserTypingStatus("typing...");
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                ChatMethods.setUserTypingStatus("no_action");
+            }
+        });
 
     }
 
@@ -254,14 +271,7 @@ public class ChatActivity extends AppCompatActivity {
         isVisible = false;
         FirebaseMethods.setUserOnlineStatus("Offline");
 
-        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
-            @Override
-            public void onCallback(String channelId) {
-
-                ChatMethods.removeChatSeenListener(channelId,chatSeenListener);
-
-            }
-        });
+        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, channelId -> ChatMethods.removeChatSeenListener(channelId,chatSeenListener));
 
     }
 
@@ -276,6 +286,8 @@ public class ChatActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         isVisible = false;
+
+        ChatMethods.deleteChatChannelIfNoChat(currUserId, chatUserId);
     }
 
 }

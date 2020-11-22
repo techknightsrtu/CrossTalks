@@ -1,5 +1,5 @@
 package com.techknightsrtu.crosstalks.firebase.callbackInterfaces;
 
 public interface GetUserOnlineStatus {
-    void onCallback(String status);
+    void onCallback(String status, String typingStatus);
 }

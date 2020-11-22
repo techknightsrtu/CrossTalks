@@ -89,10 +89,11 @@ public class FirebaseMethods {
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.hasChild("status")){
+                if(snapshot.hasChild("status") && snapshot.hasChild("typingStatus") ){
                     String status = snapshot.child("status").getValue().toString();
+                    String typingStatus = snapshot.child("typingStatus").getValue().toString();
                     Log.d(TAG, "onDataChange:  ONLINE STATUS" +  status);
-                    getUserOnlineStatus.onCallback(status);
+                    getUserOnlineStatus.onCallback(status,typingStatus);
                 }
             }
             @Override

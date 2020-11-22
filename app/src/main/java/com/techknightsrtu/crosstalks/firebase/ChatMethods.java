@@ -111,6 +111,52 @@ public class ChatMethods {
 
     }
 
+    public static void deleteChatChannelIfNoChat(String sender, String receiver){
+
+        final DatabaseReference currentUserChatChannels = FirebaseDatabase.getInstance().getReference()
+                .child("engagedChatChannels")
+                .child(sender);
+
+        currentUserChatChannels.child(receiver)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        if(snapshot.hasChild("channelId")){
+
+                            String channelId = snapshot.child("channelId").getValue().toString();
+                            String containsChat = snapshot.child("containsChats").getValue().toString();
+
+                            if(!Boolean.parseBoolean(containsChat)){
+
+                                DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
+                                        .child("chatChannels").child(channelId);
+
+                                chatChannelsRef.setValue("");
+
+                                currentUserChatChannels
+                                        .child(receiver)
+                                        .setValue("");
+
+                                FirebaseDatabase.getInstance().getReference()
+                                        .child("engagedChatChannels")
+                                        .child(receiver)
+                                        .child(sender)
+                                        .setValue("");
+
+                            }
+
+                        }
+
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+    }
+
     public static void sendTextMessage(String channelId, Message message){
 
         Log.d(TAG, "sendTextMessage: " + message.toString());
@@ -147,6 +193,20 @@ public class ChatMethods {
                     }
                 });
     }
+
+
+
+    public static void setUserTypingStatus(String typingStatus){
+
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+
+        db.child("onlineStatus")
+                .child(FirebaseMethods.getUserId())
+                .child("typingStatus")
+                .setValue(typingStatus);
+
+    }
+
 
     public static ValueEventListener updateSeenMessage(String channelId,
                                                          final String sender,

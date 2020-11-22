@@ -80,84 +80,74 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
         final String userId = getRef(position).getKey();
         String channelId = model.getChannelId();
 
-        FirebaseMethods.getOnlyUserData(userId, new GetOnlyUserData() {
-            @Override
-            public void onCallback(User user) {
+        FirebaseMethods.getOnlyUserData(userId, user -> {
 
-                Log.d(TAG, "onBindViewHolder: " + user.toString());
+            Log.d(TAG, "onBindViewHolder: " + user.toString());
 
-                holder.ivUserAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(user.getAvatarId())));
-                holder.tvUserName.setText(Avatar.nameList.get(Integer.parseInt(user.getAvatarId())));
-                holder.svChatLoading.setVisibility(View.GONE);
-                holder.rlChatLoaded.setVisibility(View.VISIBLE);
-            }
+            holder.ivUserAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(user.getAvatarId())));
+            holder.tvUserName.setText(Avatar.nameList.get(Integer.parseInt(user.getAvatarId())));
+            holder.svChatLoading.setVisibility(View.GONE);
+            holder.rlChatLoaded.setVisibility(View.VISIBLE);
         });
 
-        FirebaseMethods.getUserOnlineStatus(userId, new GetUserOnlineStatus() {
-            @Override
-            public void onCallback(String status) {
+        FirebaseMethods.getUserOnlineStatus(userId, (status, typingStatus) -> {
 
-                Log.d(TAG, "onBindViewHolder: " + status);
+            Log.d(TAG, "onBindViewHolder: " + status);
 
-                if(status != null && status.equals("Online")){
-                    holder.ivOnlineIndicator.setVisibility(View.VISIBLE);
+            if(status != null && status.equals("Online")){
+                holder.ivOnlineIndicator.setVisibility(View.VISIBLE);
+            }else{
+                holder.ivOnlineIndicator.setVisibility(View.GONE);
+            }
+
+            if(typingStatus.equals("typing...")){
+                holder.tvLastMessageTime.setText(typingStatus);
+            }
+
+        });
+
+        ChatMethods.getLastMessage(channelId, lastMessage -> {
+
+            if(lastMessage != null){
+
+                if(Utility.isYesterday(lastMessage.getTimestamp())){
+                    holder.tvLastMessageTime.setText(Utility.getDateFromTimestamp(lastMessage.getTimestamp()));
                 }else{
-                    holder.ivOnlineIndicator.setVisibility(View.GONE);
+                    holder.tvLastMessageTime.setText(Utility.getTimeFromTimestamp(lastMessage.getTimestamp()));
                 }
-            }
-        });
 
-        ChatMethods.getLastMessage(channelId, new GetLastMessage() {
-            @Override
-            public void onCallback(Message lastMessage) {
+                holder.tvLastMessage.setEllipsize(TextUtils.TruncateAt.END);
+                holder.tvLastMessage.setMaxLines(1);
 
-                if(lastMessage != null){
-
-                    if(Utility.isYesterday(lastMessage.getTimestamp())){
-                        holder.tvLastMessageTime.setText(Utility.getDateFromTimestamp(lastMessage.getTimestamp()));
-                    }else{
-                        holder.tvLastMessageTime.setText(Utility.getTimeFromTimestamp(lastMessage.getTimestamp()));
-                    }
-
-                    holder.tvLastMessage.setEllipsize(TextUtils.TruncateAt.END);
-                    holder.tvLastMessage.setMaxLines(1);
-
-                    if(lastMessage.getSender().equals(userId) && !lastMessage.getIsSeen()){
-                        Typeface typeface = ResourcesCompat.getFont(context, R.font.mont_semibold);
-                        holder.tvLastMessage.setTypeface(typeface);
-                        holder.tvLastMessage.setTextColor(context.getResources().getColor(R.color.last_seen_msg_color));
-                    }
-                    else {
-                        Typeface typeface = ResourcesCompat.getFont(context, R.font.mont_light);
-                        holder.tvLastMessage.setTypeface(holder.tvLastMessage.getTypeface(), Typeface.NORMAL);
-                        holder.tvLastMessage.setTextColor(context.getResources().getColor(R.color.gray_text_color));
-                    }
-
-                    String msg = lastMessage.getMessage();
-                    msg.replace(" ", "\u00A0");
-                    holder.tvLastMessage.setText(msg);
-
+                if(lastMessage.getSender().equals(userId) && !lastMessage.getIsSeen()){
+                    Typeface typeface = ResourcesCompat.getFont(context, R.font.mont_semibold);
+                    holder.tvLastMessage.setTypeface(typeface);
+                    holder.tvLastMessage.setTextColor(context.getResources().getColor(R.color.last_seen_msg_color));
                 }
+                else {
+                    Typeface typeface = ResourcesCompat.getFont(context, R.font.mont_light);
+                    holder.tvLastMessage.setTypeface(holder.tvLastMessage.getTypeface(), Typeface.NORMAL);
+                    holder.tvLastMessage.setTextColor(context.getResources().getColor(R.color.gray_text_color));
+                }
+
+                String msg = lastMessage.getMessage();
+                msg.replace(" ", "\u00A0");
+                holder.tvLastMessage.setText(msg);
+
             }
         });
 
-        holder.rlChatLoaded.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int avatarId = Avatar.nameList.indexOf(holder.tvUserName.getText().toString());
+        holder.rlChatLoaded.setOnClickListener(view -> {
+            int avatarId = Avatar.nameList.indexOf(holder.tvUserName.getText().toString());
 
-                onChatButtonClick.onChatClick(avatarId,userId);
-            }
+            onChatButtonClick.onChatClick(avatarId,userId);
         });
 
-        holder.rlChatLoaded.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
+        holder.rlChatLoaded.setOnLongClickListener(view -> {
 
-                onChatButtonClick.onChatLongClick(userId, holder.tvLastMessageTime);
+            onChatButtonClick.onChatLongClick(userId, holder.tvLastMessageTime);
 
-                return true;
-            }
+            return true;
         });
     }
 

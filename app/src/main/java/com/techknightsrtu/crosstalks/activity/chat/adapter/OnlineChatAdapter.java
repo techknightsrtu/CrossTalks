@@ -76,8 +76,7 @@ public class OnlineChatAdapter extends FirestoreRecyclerAdapter<User,OnlineChatV
 
             FirebaseMethods.getUserOnlineStatus(userId, new GetUserOnlineStatus() {
                 @Override
-                public void onCallback(String status) {
-
+                public void onCallback(String status, String typingStatus) {
                     Log.d(TAG, "onBindViewHolder: " + status);
 
                     if(status != null && status.equals("Online")){
