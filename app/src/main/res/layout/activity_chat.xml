@@ -131,6 +131,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_alignParentBottom="true">
+            <include layout="@layout/typing_indicator_item"/>
 
             <TextView
                 android:id="@+id/tvTyping"

@@ -47,7 +47,7 @@ public class ChatActivity extends AppCompatActivity {
     private String currUserId;
     private String chatUserAvatarId;
     private RecyclerView rvMessages;
-    private LinearLayout llSafetyGuide;
+    private LinearLayout llSafetyGuide, llTypingIndicator;
 
     // Google banner ad
     private FrameLayout ad_view_container;
@@ -86,6 +86,7 @@ public class ChatActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(ChatActivity.this);
 
         llSafetyGuide = findViewById(R.id.llSafetyGuide);
+        llTypingIndicator = findViewById(R.id.llTypingIndicator);
 
         prefs = new UserProfileDataPref(ChatActivity.this);
 
@@ -156,6 +157,12 @@ public class ChatActivity extends AppCompatActivity {
                 //TODO: Setup user typing status visibility
                 //If User is not typing, typingStatus == false,
                 //If User is typing, typingStatus == true,
+
+                if(typingStatus){
+                    llTypingIndicator.setVisibility(View.VISIBLE);
+                }else{
+                    llTypingIndicator.setVisibility(View.GONE);
+                }
 
 
             });

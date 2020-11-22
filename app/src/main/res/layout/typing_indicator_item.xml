@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:id="@+id/llTypingIndicator"
+    android:orientation="vertical"
+    android:background="@drawable/blue_fill_rounded"
+    android:visibility="gone"
+    android:padding="8dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginBottom="8dp">
 
     <com.airbnb.lottie.LottieAnimationView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="24dp"
+        android:adjustViewBounds="true"
         app:lottie_rawRes="@raw/typing_indicator"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        android:padding="16dp"/>
+        android:background="@android:color/transparent"/>
 
 </LinearLayout>
