@@ -26,6 +26,7 @@ import com.techknightsrtu.crosstalks.activity.chat.models.MessageType;
 import com.techknightsrtu.crosstalks.firebase.ChatMethods;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.DoesChatChannelExist;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserOnlineStatus;
 import com.techknightsrtu.crosstalks.google_admob.GoogleAdMob;
 import com.techknightsrtu.crosstalks.helper.Avatar;
@@ -38,7 +39,7 @@ public class ChatActivity extends AppCompatActivity {
     private static final String TAG = "ChatActivity";
 
     public static boolean isVisible = false;
-    
+
     private String chatUserId;
     private String currUserId;
     private String chatUserAvatarId;
@@ -139,44 +140,44 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        btSendMessage.setOnClickListener(view -> {
+        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
+            @Override
+            public void onCallback(final String channelId) {
 
-            Animation animateButton = AnimationUtils.loadAnimation(ChatActivity.this, R.anim.send_msg_button_anim);
-            btSendMessage.startAnimation(animateButton);
+                Log.d(TAG, "onCallback: THIS IS CHAT CHANNEL" + channelId);
 
+                btSendMessage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-            ChatMethods.checkAndGetChatChannelIfExist(currUserId, chatUserId, (exist, channelId) -> {
+                        Animation animateButton = AnimationUtils.loadAnimation(ChatActivity.this, R.anim.send_msg_button_anim);
+                        btSendMessage.startAnimation(animateButton);
 
-                if(!exist){
-                    channelId = ChatMethods.createChatChannel(currUserId,chatUserId);
-                }
+                        if(!etWriteMessage.getText().toString().trim().isEmpty()){
 
-                if(!etWriteMessage.getText().toString().trim().isEmpty()){
+                            String senderAvatarName = Avatar.nameList.get(Integer.parseInt(prefs.getAvatarId()));
+                            String senderAvatarId = prefs.getAvatarId();
 
-                    String senderAvatarName = Avatar.nameList.get(Integer.parseInt(prefs.getAvatarId()));
-                    String senderAvatarId = prefs.getAvatarId();
+                            String timestamp = Utility.getCurrentTimestamp();
 
-                    String timestamp = Utility.getCurrentTimestamp();
+                            ChatMethods.setChannelLastActiveStatus(timestamp,currUserId,chatUserId);
 
-                    ChatMethods.setChannelLastActiveStatus(timestamp,currUserId,chatUserId);
+                            Message m = new Message(timestamp,
+                                    currUserId,senderAvatarName,senderAvatarId,
+                                    chatUserId,etWriteMessage.getText().toString().trim(),
+                                    MessageType.TEXT,false);
 
-                    Message m = new Message(timestamp,
-                            currUserId,senderAvatarName,senderAvatarId,
-                            chatUserId,etWriteMessage.getText().toString().trim(),
-                            MessageType.TEXT,false);
+                            etWriteMessage.setText("");
 
-                    etWriteMessage.setText("");
+                            ChatMethods.sendTextMessage(channelId,m);
+                        }
 
-                    ChatMethods.sendTextMessage(channelId,m);
-                }
+                    }
+                });
 
-            });
-
-
-
-
-
+            }
         });
+
 
 
     }
@@ -184,15 +185,20 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        isVisible = true;
 
-        ChatMethods.checkAndGetChatChannelIfExist(currUserId, chatUserId,(exist, channelId) -> {
+        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
+            @Override
+            public void onCallback(String channelId) {
 
-            progressDialog.hideProgressDialog();
-            if(exist){
-
-                llSafetyGuide.setVisibility(View.GONE);
                 messagesAdapter = ChatMethods.setupFirebaseChatsAdapter(channelId);
+
+                progressDialog.hideProgressDialog();
+
+                if(messagesAdapter.getItemCount() == 0){
+                    llSafetyGuide.setVisibility(View.GONE);
+                }else{
+                    llSafetyGuide.setVisibility(View.VISIBLE);
+                }
 
                 messagesAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                     @Override
@@ -221,9 +227,7 @@ public class ChatActivity extends AppCompatActivity {
 
                    llSafetyGuide.setVisibility(View.VISIBLE);
             }
-
         });
-
     }
 
     @Override
@@ -241,9 +245,6 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         isVisible = false;
-        if(messagesAdapter != null)
-            messagesAdapter.stopListening();
-
         super.onStop();
     }
 
@@ -253,9 +254,12 @@ public class ChatActivity extends AppCompatActivity {
         isVisible = false;
         FirebaseMethods.setUserOnlineStatus("Offline");
 
-        ChatMethods.checkAndGetChatChannelIfExist(currUserId, chatUserId, (exist, channelId) -> {
-            if(exist){
+        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
+            @Override
+            public void onCallback(String channelId) {
+
                 ChatMethods.removeChatSeenListener(channelId,chatSeenListener);
+
             }
         });
 
