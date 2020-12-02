@@ -44,6 +44,16 @@ public class UserChatAdapter extends FirestoreRecyclerAdapter<User, UserChatView
 
         String userId = model.getUserId();
 
+        FirebaseMethods.getUserOnlineStatus(userId, status -> {
+            Log.d(TAG, "onBindViewHolder: " + status);
+
+            if(status != null && status.equals("Online")){
+                holder.ivOnlineIndicator.setVisibility(View.VISIBLE);
+            }else{
+                holder.ivOnlineIndicator.setVisibility(View.GONE);
+            }
+        });
+
         if(userId.equals(FirebaseMethods.getUserId()))
         {
 
@@ -69,15 +79,6 @@ public class UserChatAdapter extends FirestoreRecyclerAdapter<User, UserChatView
                 }
             });
 
-            FirebaseMethods.getUserOnlineStatus(userId, status -> {
-                Log.d(TAG, "onBindViewHolder: " + status);
-
-                if(status != null && status.equals("Online")){
-                    holder.ivOnlineIndicator.setVisibility(View.VISIBLE);
-                }else{
-                    holder.ivOnlineIndicator.setVisibility(View.GONE);
-                }
-            });
         }
 
 

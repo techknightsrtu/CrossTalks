@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.techknightsrtu.crosstalks.R;
+import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 
 public class CrossTalks extends Application {
 
@@ -23,6 +24,7 @@ public class CrossTalks extends Application {
         super.onCreate();
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseMethods.setUserOnlineStatus("Online");
 
         Log.d(TAG, "onCreate: APPLICATION IS RUNNING");
 
@@ -51,6 +53,9 @@ public class CrossTalks extends Application {
 
     }
 
-
-
+    @Override
+    public void onTerminate() {
+        FirebaseMethods.setUserOnlineStatus("Offline");
+        super.onTerminate();
+    }
 }
