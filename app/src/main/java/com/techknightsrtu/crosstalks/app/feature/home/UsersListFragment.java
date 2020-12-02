@@ -100,7 +100,8 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
     }
 
     @Override
-    public void onChatLongClick(String userId, View v) {
+    public void onChatLongClick(String userId, String channelId, View v) {
 
     }
+
 }

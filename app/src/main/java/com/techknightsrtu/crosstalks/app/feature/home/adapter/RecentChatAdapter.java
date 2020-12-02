@@ -131,7 +131,7 @@ public class RecentChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChanne
 
         holder.rlChatLoaded.setOnLongClickListener(view -> {
 
-            onChatButtonClick.onChatLongClick(userId, holder.tvLastMessageTime);
+            onChatButtonClick.onChatLongClick(userId, channelId, holder.tvLastMessageTime);
 
             return true;
         });

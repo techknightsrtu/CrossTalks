@@ -139,7 +139,7 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
     }
 
     @Override
-    public void onChatLongClick(String userId, View v) {
+    public void onChatLongClick(String userId, String channelId, View v) {
 
         Context wrapper = new ContextThemeWrapper(getActivity(), R.style.PopupMenu);
 
@@ -153,6 +153,7 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
 
                 case R.id.deleteChat:
 
+                    ChatMethods.removeCurrentUserFromChatChannel(channelId,userId);
                     return true;
 
                 case R.id.blockChat:
@@ -171,5 +172,8 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
         recentChatMenu.show();
 
     }
+
+
+
 
 }

@@ -36,7 +36,6 @@ public class BlockUserActivity extends AppCompatActivity implements OnUnblockBut
         init();
         setupToolbar();
 
-
     }
 
     private void init() {
@@ -93,6 +92,7 @@ public class BlockUserActivity extends AppCompatActivity implements OnUnblockBut
             llEmpty.setVisibility(View.GONE);
         }else {
             llEmpty.setVisibility(View.VISIBLE);
+            rvBlockedChats.setVisibility(View.GONE);
         }
 
     }
