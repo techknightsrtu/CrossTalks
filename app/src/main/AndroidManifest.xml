@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".app.feature.profile.BlockUserActivity"></activity>
+        <activity android:name=".app.feature.profile.FeedbackActivity"></activity>
+        <activity android:name=".app.feature.profile.BlockUserActivity" />
         <activity android:name=".app.feature.auth.RegistrationActivity" />
         <activity android:name=".app.SplashActivity">
             <intent-filter>
@@ -58,9 +59,9 @@
             </intent-filter>
         </service>
     </application>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 </manifest>

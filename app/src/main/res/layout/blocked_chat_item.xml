@@ -53,7 +53,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/bg_fill"
+        android:backgroundTint="@color/screenBackground"
         app:cardCornerRadius="8dp"
         android:clickable="true"
         android:focusable="true">
@@ -61,7 +61,7 @@
             android:id="@+id/rlChatLoaded"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             android:padding="8dp"
             android:background="?attr/selectableItemBackground">
 
@@ -82,8 +82,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_toRightOf="@id/rlAvatarLayout"
-                android:layout_toLeftOf="@+id/rvBlockedChats"
+                android:layout_toLeftOf="@+id/tvUnblockChat"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
                 android:layout_centerVertical="true">
                 <TextView
                     android:id="@+id/tvUserName"
@@ -99,6 +100,7 @@
                     android:textColor="@color/gray_text_color"
                     android:fontFamily="@font/mont_light"
                     android:text="User name"
+                    android:textSize="12sp"
                     android:layout_marginTop="4dp"/>
             </LinearLayout>
 
@@ -118,7 +120,6 @@
                 android:paddingEnd="12sp"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"/>
         </RelativeLayout>

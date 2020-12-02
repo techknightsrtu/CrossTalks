@@ -38,6 +38,7 @@ import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.CreateNewUser;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.DoesUserExist;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetCollegeList;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetCurrentFCMToken;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetFeedbackFormUrl;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetOnlyUserData;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetRegistrationToken;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserData;
@@ -354,6 +355,23 @@ public class FirebaseMethods {
                     });
         }
 
+    }
+
+    public static void getFeedbackFormUrl(final GetFeedbackFormUrl getFeedbackFormUrl){
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("form_url");
+
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String url = snapshot.getValue().toString();
+                    Log.d(TAG, "onDataChange:  FEEDBACK FORM URL" +  url);
+                    getFeedbackFormUrl.onCallback(url);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
 }

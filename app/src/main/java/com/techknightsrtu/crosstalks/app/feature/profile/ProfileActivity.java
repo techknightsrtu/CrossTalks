@@ -146,4 +146,8 @@ public class ProfileActivity extends AppCompatActivity {
     public void BlockedUsers(View view) {
         startActivity(new Intent(ProfileActivity.this, BlockUserActivity.class));
     }
+
+    public void Feedback(View view) {
+        startActivity(new Intent(ProfileActivity.this, FeedbackActivity.class));
+    }
 }
