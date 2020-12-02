@@ -143,4 +143,7 @@ public class ProfileActivity extends AppCompatActivity {
         FirebaseMethods.setUserOnlineStatus("Online");
     }
 
+    public void BlockedUsers(View view) {
+        startActivity(new Intent(ProfileActivity.this, BlockUserActivity.class));
+    }
 }

@@ -106,7 +106,8 @@
             android:foreground="?attr/selectableItemBackground"
             android:fontFamily="@font/mont_regular"
             android:clickable="true"
-            android:focusable="true"/>
+            android:focusable="true"
+            android:onClick="BlockedUsers"/>
 
         <TextView
             android:layout_width="match_parent"
