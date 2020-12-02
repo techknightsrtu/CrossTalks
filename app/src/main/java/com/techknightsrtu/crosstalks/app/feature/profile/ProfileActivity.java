@@ -124,16 +124,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public void onPause() {
+        FirebaseMethods.setUserOnlineStatus("Offline");
         super.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        FirebaseMethods.setUserOnlineStatus("Online");
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 }

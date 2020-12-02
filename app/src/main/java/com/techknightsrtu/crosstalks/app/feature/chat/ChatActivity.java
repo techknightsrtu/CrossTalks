@@ -258,14 +258,12 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         messagesAdapter.stopListening();
-        FirebaseMethods.setUserOnlineStatus("Offline");
         isVisible = false;
         super.onStop();
     }
 
     @Override
     public void onPause() {
-        super.onPause();
         isVisible = false;
         FirebaseMethods.setUserOnlineStatus("Offline");
 
@@ -273,6 +271,8 @@ public class ChatActivity extends AppCompatActivity {
             ChatMethods.removeChatSeenListener(channelId,chatSeenListener);
             ChatMethods.setUserTypingStatus(channelId,false);
         });
+
+        super.onPause();
 
     }
 
@@ -285,9 +285,8 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         isVisible = false;
-        FirebaseMethods.setUserOnlineStatus("Offline");
+        super.onDestroy();
 
        // ChatMethods.deleteChatChannelIfNoChat(currUserId, chatUserId);
     }

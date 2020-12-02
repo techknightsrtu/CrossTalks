@@ -90,7 +90,6 @@ public class RecentChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChanne
                 holder.ivOnlineIndicator.setVisibility(View.GONE);
             }
 
-
         });
 
         ChatMethods.getLastMessage(channelId, lastMessage -> {
