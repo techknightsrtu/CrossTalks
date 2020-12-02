@@ -149,6 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredentialForFirebase:success");
@@ -160,17 +161,25 @@ public class LoginActivity extends AppCompatActivity {
                             //Save to local data
                             prefs.setUserId(userId);
 
-                            progressDialog.hideProgressDialog();
-
                             if(task.getResult().getAdditionalUserInfo().isNewUser()){
+                                progressDialog.hideProgressDialog();
                                 //send user to gender activity
                                 startActivity(new Intent(LoginActivity.this,RegistrationActivity.class));
                             }else{
-                                Log.d(TAG, "onCallback: LOGIN SUCCESS");
-                                saveUserDataLocallyAndProceed(userId);
-                            }
 
-//                            ifUserExist(userId);
+                                FirebaseMethods.checkIfUserExist(userId, exist -> {
+                                    progressDialog.hideProgressDialog();
+                                    if(exist){
+                                        Log.d(TAG, "onCallback: LOGIN SUCCESS");
+                                        saveUserDataLocallyAndProceed(userId);
+                                    }else{
+                                        //send user to gender activity
+                                        startActivity(new Intent(LoginActivity.this,RegistrationActivity.class));
+                                    }
+
+                                });
+
+                            }
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -182,26 +191,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
-//    private void ifUserExist(final String userId){
-//
-//        FirebaseMethods.checkIfUserExist(userId, new DoesUserExist() {
-//            @Override
-//            public void onCallback(boolean exist) {
-//
-//
-//                if(!exist){
-//
-//
-//
-//                }else{
-//
-//                }
-//            }
-//        });
-//
-//    }
 
 
     private void saveUserDataLocallyAndProceed(String userId){

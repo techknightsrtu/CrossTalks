@@ -92,7 +92,7 @@ public class ChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel,Chat
 
         FirebaseMethods.getUserOnlineStatus(userId, (status) -> {
 
-            Log.d(TAG, "onBindViewHolder: " + status);
+            Log.d(TAG, "onBindViewHolderStatus: " + status);
 
             if(status != null && status.equals("Online")){
                 holder.ivOnlineIndicator.setVisibility(View.VISIBLE);

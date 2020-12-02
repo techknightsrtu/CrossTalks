@@ -143,6 +143,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseMethods.setUserOnlineStatus("Online");
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         FirebaseMethods.setUserOnlineStatus("Online");
@@ -152,5 +158,18 @@ public class HomeActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         FirebaseMethods.setUserOnlineStatus("Offline");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FirebaseMethods.setUserOnlineStatus("Offline");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FirebaseMethods.setUserOnlineStatus("Offline");
+
     }
 }

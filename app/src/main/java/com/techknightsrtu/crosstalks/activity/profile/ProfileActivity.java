@@ -30,7 +30,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     // Widgets
     private ImageView ivBack, ivUserAvatar;
-    private TextView tvLogOut, tvUserName, tvUserCollegeName, tvShareApp, tvRateUs;
+    private TextView tvLogOut, tvUserName,tvUserOriginalName, tvUserCollegeName, tvShareApp, tvRateUs;
 
     // Google banner ad
     private FrameLayout ad_view_container;
@@ -55,6 +55,8 @@ public class ProfileActivity extends AppCompatActivity {
     private void setupUserProfile() {
         ivUserAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(profileDataPref.getAvatarId())));
         tvUserName.setText(Avatar.nameList.get(Integer.parseInt(profileDataPref.getAvatarId())));
+        String name = "(" + profileDataPref.getOriginalName() + ")";
+        tvUserOriginalName.setText(name);
         tvUserCollegeName.setText(profileDataPref.getCollegeName());
     }
 
@@ -62,6 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
         ivUserAvatar = findViewById(R.id.ivUserAvatar);
 
         tvUserName = findViewById(R.id.tvUserName);
+        tvUserOriginalName = findViewById(R.id.tvUserOriginalName);
         tvUserCollegeName = findViewById(R.id.tvUserCollegeName);
 
         tvShareApp = findViewById(R.id.tvShareApp);

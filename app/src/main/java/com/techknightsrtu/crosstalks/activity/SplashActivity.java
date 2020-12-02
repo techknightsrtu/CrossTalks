@@ -13,6 +13,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.activity.auth.LoginActivity;
+import com.techknightsrtu.crosstalks.activity.auth.RegistrationActivity;
 import com.techknightsrtu.crosstalks.activity.chat.HomeActivity;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 
@@ -42,11 +43,24 @@ public class SplashActivity extends AppCompatActivity {
 
                 if(FirebaseMethods.isUserSignedIn()){
 
-                    Intent i = new Intent(SplashActivity.this, HomeActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
-                    finish();
+                    FirebaseMethods.checkIfUserExist(FirebaseMethods.getUserId(), exist -> {
+
+                        if(exist){
+
+                            Log.d(TAG, "onCallback: LOGIN SUCCESS");
+                            Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                            finish();
+
+                        }else{
+                            //send user to gender activity
+                            startActivity(new Intent(SplashActivity.this, RegistrationActivity.class));
+                        }
+
+                    });
+
 
                 }else{
 

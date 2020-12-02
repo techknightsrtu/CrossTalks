@@ -55,6 +55,33 @@ public class FirebaseMethods {
         return mAuth.getUid();
     }
 
+    public static void checkIfUserExist(String userId, final DoesUserExist doesUserExist){
+
+        FirebaseFirestore db  = FirebaseFirestore.getInstance();
+
+        db.collection("users")
+                .whereEqualTo("userId",userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        if (task.isSuccessful()) {
+
+                            if(task.getResult().isEmpty()){
+                                doesUserExist.onCallback(false);
+                            }else{
+                                doesUserExist.onCallback(true);
+                            }
+
+                        }else{
+                            Log.d(TAG, "onComplete: Something went wrong" + task.getResult());
+                        }
+                    }
+                });
+
+    }
+
     public static boolean isUserSignedIn(){
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         String userId = mAuth.getUid();

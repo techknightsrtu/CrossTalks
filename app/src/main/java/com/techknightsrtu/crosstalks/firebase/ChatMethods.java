@@ -133,17 +133,17 @@ public class ChatMethods {
                                 DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
                                         .child("chatChannels").child(channelId);
 
-                                chatChannelsRef.setValue("");
+                                chatChannelsRef.removeValue();
 
                                 currentUserChatChannels
                                         .child(receiver)
-                                        .setValue("");
+                                        .removeValue();
 
                                 FirebaseDatabase.getInstance().getReference()
                                         .child("engagedChatChannels")
                                         .child(receiver)
                                         .child(sender)
-                                        .setValue("");
+                                        .removeValue();
 
                             }
 

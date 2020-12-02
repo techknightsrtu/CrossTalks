@@ -135,17 +135,13 @@ public class ChatActivity extends AppCompatActivity {
 
             Log.d(TAG, "onBindViewHolder: " + status);
 
-
             if(status != null && status.equals("Online")){
                 ivOnlineIndicator.setVisibility(View.VISIBLE);
             }else{
                 ivOnlineIndicator.setVisibility(View.GONE);
             }
 
-
-
         });
-
 
 
         ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, channelId -> {
@@ -154,16 +150,11 @@ public class ChatActivity extends AppCompatActivity {
 
             ChatMethods.getUserTypingStatus(channelId, chatUserId, typingStatus -> {
 
-                //TODO: Setup user typing status visibility
-                //If User is not typing, typingStatus == false,
-                //If User is typing, typingStatus == true,
-
                 if(typingStatus){
                     llTypingIndicator.setVisibility(View.VISIBLE);
                 }else{
                     llTypingIndicator.setVisibility(View.GONE);
                 }
-
 
             });
 
@@ -180,29 +171,34 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
 
+            Animation animateButton = AnimationUtils.loadAnimation(ChatActivity.this, R.anim.send_msg_button_anim);
+
             btSendMessage.setOnClickListener(view -> {
 
-                Animation animateButton = AnimationUtils.loadAnimation(ChatActivity.this, R.anim.send_msg_button_anim);
-                btSendMessage.startAnimation(animateButton);
+                    btSendMessage.startAnimation(animateButton);
 
-                if(!etWriteMessage.getText().toString().trim().isEmpty()){
+                    if(!etWriteMessage.getText().toString().trim().isEmpty()){
 
-                    String senderAvatarName = Avatar.nameList.get(Integer.parseInt(prefs.getAvatarId()));
-                    String senderAvatarId = prefs.getAvatarId();
+                        new Thread(() -> {
 
-                    String timestamp = Utility.getCurrentTimestamp();
+                        String senderAvatarName = Avatar.nameList.get(Integer.parseInt(prefs.getAvatarId()));
+                        String senderAvatarId = prefs.getAvatarId();
 
-                    ChatMethods.setChannelLastActiveStatus(timestamp,currUserId,chatUserId);
+                        String timestamp = Utility.getCurrentTimestamp();
 
-                    Message m = new Message(timestamp,
-                            currUserId,senderAvatarName,senderAvatarId,
-                            chatUserId,etWriteMessage.getText().toString().trim(),
-                            MessageType.TEXT,false);
+                        ChatMethods.setChannelLastActiveStatus(timestamp,currUserId,chatUserId);
 
-                    etWriteMessage.setText("");
+                        Message m = new Message(timestamp,
+                                currUserId,senderAvatarName,senderAvatarId,
+                                chatUserId,etWriteMessage.getText().toString().trim(),
+                                MessageType.TEXT,false);
 
-                    ChatMethods.sendTextMessage(channelId,m);
-                }
+                        ChatMethods.sendTextMessage(channelId,m);
+
+                        }).start();
+
+                        etWriteMessage.setText("");
+                    }
 
             });
 
@@ -214,45 +210,46 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
-            @Override
-            public void onCallback(String channelId) {
+        FirebaseMethods.setUserOnlineStatus("Online");
+        progressDialog.hideProgressDialog();
 
-                messagesAdapter = ChatMethods.setupFirebaseChatsAdapter(channelId);
+            ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
+                @Override
+                public void onCallback(String channelId) {
 
-                progressDialog.hideProgressDialog();
+                    messagesAdapter = ChatMethods.setupFirebaseChatsAdapter(channelId);
 
-                if(messagesAdapter.getItemCount() == 0){
-                    llSafetyGuide.setVisibility(View.GONE);
-                }else{
-                    llSafetyGuide.setVisibility(View.VISIBLE);
-                }
-
-                messagesAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                    @Override
-                    public void onItemRangeInserted(int positionStart, int itemCount) {
-                        super.onItemRangeInserted(positionStart, itemCount);
-                        int friendlyMessageCount = messagesAdapter.getItemCount();
-                        int lastVisiblePosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-
-                        if (lastVisiblePosition == -1 ||
-                                (positionStart >= (friendlyMessageCount - 1) &&
-                                        lastVisiblePosition == (positionStart - 1))) {
-
-                            linearLayoutManager.scrollToPosition(positionStart);
-
+                        if(messagesAdapter.getItemCount() == 0){
+                            llSafetyGuide.setVisibility(View.GONE);
+                        }else{
+                            llSafetyGuide.setVisibility(View.VISIBLE);
                         }
-                    }
-                });
 
-                rvMessages.setAdapter(messagesAdapter);
+                        rvMessages.setAdapter(messagesAdapter);
 
-                messagesAdapter.startListening();
+                        messagesAdapter.startListening();
 
-                chatSeenListener = ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
+                        messagesAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                            @Override
+                            public void onItemRangeInserted(int positionStart, int itemCount) {
+                                super.onItemRangeInserted(positionStart, itemCount);
+                                int friendlyMessageCount = messagesAdapter.getItemCount();
+                                int lastVisiblePosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
 
-            }
-        });
+                                if (lastVisiblePosition == -1 ||
+                                        (positionStart >= (friendlyMessageCount - 1) &&
+                                                lastVisiblePosition == (positionStart - 1))) {
+
+                                    linearLayoutManager.scrollToPosition(positionStart);
+
+                                }
+                            }
+                        });
+
+                    chatSeenListener = ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
+                }
+            });
+
     }
 
     @Override
@@ -279,7 +276,10 @@ public class ChatActivity extends AppCompatActivity {
         isVisible = false;
         FirebaseMethods.setUserOnlineStatus("Offline");
 
-        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, channelId -> ChatMethods.removeChatSeenListener(channelId,chatSeenListener));
+        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, channelId -> {
+            ChatMethods.removeChatSeenListener(channelId,chatSeenListener);
+            ChatMethods.setUserTypingStatus(channelId,false);
+        });
 
     }
 
@@ -294,8 +294,9 @@ public class ChatActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         isVisible = false;
+        FirebaseMethods.setUserOnlineStatus("Offline");
 
-        ChatMethods.deleteChatChannelIfNoChat(currUserId, chatUserId);
+       // ChatMethods.deleteChatChannelIfNoChat(currUserId, chatUserId);
     }
 
 }
