@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llTypingIndicator"
     android:orientation="vertical"
-    android:background="@drawable/blue_fill_rounded"
+    android:background="@drawable/sended_message_bg_fill_round"
     android:visibility="gone"
     android:padding="8dp"
     android:layout_marginStart="16dp"

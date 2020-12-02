@@ -1,6 +1,7 @@
 package com.techknightsrtu.crosstalks.app.feature.profile;
 
 import androidx.appcompat.app.AppCompatActivity;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.techknightsrtu.crosstalks.BuildConfig;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.SplashActivity;
@@ -24,6 +26,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     // Widgets
     private ImageView ivBack, ivUserAvatar;
+    private CircleImageView ivUserRealAvatar;
     private TextView tvLogOut, tvUserName,tvUserOriginalName, tvUserCollegeName, tvShareApp, tvRateUs;
 
     // Google banner ad
@@ -49,6 +52,11 @@ public class ProfileActivity extends AppCompatActivity {
     private void setupUserProfile() {
         ivUserAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(profileDataPref.getAvatarId())));
         tvUserName.setText(Avatar.nameList.get(Integer.parseInt(profileDataPref.getAvatarId())));
+
+        Glide.with(ProfileActivity.this)
+                .load(profileDataPref.getPhotoUrl())
+                .into(ivUserRealAvatar);
+
         String name = "(" + profileDataPref.getOriginalName() + ")";
         tvUserOriginalName.setText(name);
         tvUserCollegeName.setText(profileDataPref.getCollegeName());
@@ -56,6 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void init() {
         ivUserAvatar = findViewById(R.id.ivUserAvatar);
+        ivUserRealAvatar = findViewById(R.id.ivUserRealAvatar);
 
         tvUserName = findViewById(R.id.tvUserName);
         tvUserOriginalName = findViewById(R.id.tvUserOriginalName);

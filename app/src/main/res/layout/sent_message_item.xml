@@ -9,7 +9,7 @@
         android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/red_bg_fill_round_message"
+        android:background="@drawable/start_new_chat_button"
         android:text="This is a demoefeegegegegegegegegeg message"
         android:padding="12dp"
         android:autoLink="all"
