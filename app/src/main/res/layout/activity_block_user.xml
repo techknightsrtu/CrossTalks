@@ -92,6 +92,7 @@
         android:paddingBottom="71dp"
         android:clipToPadding="false"
         android:layout_marginTop="55dp"
+        android:padding="12dp"
         android:overScrollMode="never"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:visibility="visible"/>

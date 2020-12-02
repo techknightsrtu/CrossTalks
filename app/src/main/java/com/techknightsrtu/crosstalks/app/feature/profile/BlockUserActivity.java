@@ -36,7 +36,6 @@ public class BlockUserActivity extends AppCompatActivity implements OnUnblockBut
         init();
         setupToolbar();
 
-
     }
 
     private void init() {
