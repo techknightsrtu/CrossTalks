@@ -80,12 +80,16 @@ public class FirebaseCloudMessagingService extends FirebaseMessagingService {
             @Override
             public void onCallback(List<String> tokens) {
 
-                if(!tokens.isEmpty() && !tokens.contains(newToken)){
+                if(tokens.isEmpty()){
+                    tokens.add(newToken);
+                    FirebaseMethods.setRegistrationToken(tokens);
+
+                }else if(!tokens.contains(newToken)){
                     tokens.add(newToken);
 
                     FirebaseMethods.setRegistrationToken(tokens);
-
                 }
+
             }
         });
 

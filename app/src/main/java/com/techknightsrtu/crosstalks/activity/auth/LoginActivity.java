@@ -106,6 +106,8 @@ public class LoginActivity extends AppCompatActivity {
     public void signInWithGoogle(View view) {
 
         progressDialog.showProgressDialog();
+        mGoogleSignInClient.signOut();
+
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
 
@@ -217,6 +219,7 @@ public class LoginActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<String>() {
                             @Override
                             public void onSuccess(String token) {
+
                                 FirebaseCloudMessagingService.addTokenToFirebase(token);
 
                                 Intent i = new Intent(LoginActivity.this, HomeActivity.class);

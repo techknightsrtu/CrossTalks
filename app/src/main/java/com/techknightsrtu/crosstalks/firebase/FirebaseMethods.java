@@ -90,10 +90,21 @@ public class FirebaseMethods {
 
     public static void signOut(){
 
-        removeCurrentTokenFromDatabase();
+        //Delete Token from Database
+        getRegistrationTokens(tokens -> getCurrentToken(currToken -> {
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
+            tokens.remove(currToken);
+
+            setRegistrationToken(tokens);
+
+            Log.d(TAG, "signOut: " + tokens);
+
+            //Signing Out
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            mAuth.signOut();
+
+        }));
+
     }
 
     public static void setUserOnlineStatus(String status){
@@ -347,30 +358,6 @@ public class FirebaseMethods {
         }
 
     }
-
-    private static void removeCurrentTokenFromDatabase(){
-
-        getRegistrationTokens(new GetRegistrationToken() {
-            @Override
-            public void onCallback(final List<String> tokens) {
-
-                getCurrentToken(new GetCurrentFCMToken() {
-                    @Override
-                    public void onCallback(String currToken) {
-
-                        tokens.remove(currToken);
-
-                        setRegistrationToken(tokens);
-                    }
-                });
-
-            }
-        });
-
-    }
-
-
-
 
 }
 
