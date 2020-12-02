@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class BlockedUserViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView tvUserName, tvUnblockChat;
+    public TextView tvUserName, tvUnblockChat, tvTimestamp;
     public ImageView ivUserAvatar;
     public ShimmerFrameLayout svChatLoading;
     public RelativeLayout rlChatLoaded;
@@ -23,6 +23,7 @@ public class BlockedUserViewHolder extends RecyclerView.ViewHolder {
 
         ivUserAvatar = itemView.findViewById(R.id.ivUserAvatar);
         tvUserName = itemView.findViewById(R.id.tvUserName);
+        tvUserName = itemView.findViewById(R.id.tvTimeStamp);
         tvUnblockChat = itemView.findViewById(R.id.tvUnblockChat);
 
         rlChatLoaded = itemView.findViewById(R.id.rlChatLoaded);

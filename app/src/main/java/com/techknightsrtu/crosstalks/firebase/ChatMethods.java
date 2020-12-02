@@ -276,6 +276,8 @@ public class ChatMethods {
 
     }
 
+
+
     public static void getUnseenMessages(String channelId){
 
         DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
@@ -286,6 +288,25 @@ public class ChatMethods {
                 .equalTo("false")
                 .limitToLast(10);
 
+    }
+
+
+    public static void removeCurrentUserFromChatChannel(String channelId, String chatUser){
+
+        DatabaseReference userChatChannel = FirebaseDatabase.getInstance().getReference()
+                .child("engagedChatChannels").child(FirebaseMethods.getUserId()).child(chatUser);
+        userChatChannel.removeValue();
+
+
+        DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
+                .child("chatChannels").child(channelId);
+
+        chatChannelsRef.child(FirebaseMethods.getUserId()).removeValue();
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("userIds",chatUser);
+
+        chatChannelsRef.updateChildren(map);
 
     }
 

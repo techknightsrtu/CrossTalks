@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.feature.chat.ChatActivity;
@@ -23,6 +24,7 @@ import com.techknightsrtu.crosstalks.app.feature.home.adapter.StoriesAdapter;
 import com.techknightsrtu.crosstalks.app.feature.home.interfaces.OnChatButtonClick;
 import com.techknightsrtu.crosstalks.firebase.ChatMethods;
 import com.techknightsrtu.crosstalks.app.helper.local.UserProfileDataPref;
+import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -95,7 +97,6 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
 
     private void setupRecentChats(){
 
-
         chatAdapter = ChatMethods.setupFirebaseRecentChatsAdapter(prefs.getUserId(),
                 ChatListFragment.this,llEmpty);
 
@@ -146,26 +147,25 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
 
         recentChatMenu.getMenuInflater().inflate(R.menu.recent_chat_item_poupup_menu, recentChatMenu.getMenu());
 
-        recentChatMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
+        recentChatMenu.setOnMenuItemClickListener(menuItem -> {
 
-                switch (menuItem.getItemId()){
-                    case R.id.deleteChat:
-                        // TODO: write code for deleting a chat here
-                        return true;
+            switch (menuItem.getItemId()){
 
-                    case R.id.blockChat:
-                        // TODO: write code for blocking a user here
-                        return true;
+                case R.id.deleteChat:
 
-                    case R.id.reportChat:
-                        // TODO: write code for reporting a user here
-                        return true;
-                }
+                    return true;
 
-                return false;
+                case R.id.blockChat:
+                    FirebaseMethods.blockThisUser(userId);
+                    Toast.makeText(wrapper, "User Blocked", Toast.LENGTH_SHORT).show();
+                    return true;
+
+                case R.id.reportChat:
+                    // TODO: write code for reporting a user here
+                    return true;
             }
+
+            return false;
         });
 
         recentChatMenu.show();

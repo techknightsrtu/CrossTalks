@@ -1,9 +1,13 @@
 package com.techknightsrtu.crosstalks.firebase;
 
 import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,8 +27,13 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.techknightsrtu.crosstalks.app.feature.chat.models.Message;
 import com.techknightsrtu.crosstalks.app.feature.home.adapter.UserChatAdapter;
 import com.techknightsrtu.crosstalks.app.feature.home.interfaces.OnChatButtonClick;
+import com.techknightsrtu.crosstalks.app.feature.profile.adapter.BlockedUserAdapter;
+import com.techknightsrtu.crosstalks.app.feature.profile.interfaces.OnUnblockButtonClick;
+import com.techknightsrtu.crosstalks.app.helper.Utility;
+import com.techknightsrtu.crosstalks.app.models.BlockedUser;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.CreateNewUser;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.DoesUserExist;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetCollegeList;
@@ -33,7 +42,7 @@ import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetOnlyUserData
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetRegistrationToken;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserData;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserOnlineStatus;
-import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.OnlineUsersFromCollege;
+
 import com.techknightsrtu.crosstalks.app.models.User;
 
 import java.util.ArrayList;
@@ -113,6 +122,31 @@ public class FirebaseMethods {
         db.setValue(map);
 
     }
+
+    public static void blockThisUser(String userId){
+
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("blockedUser")
+                .child(getUserId())
+                .child(userId);
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("timestamp", Utility.getCurrentTimestamp());
+
+        db.setValue(map);
+
+    }
+
+    public static void unblockThisUser(String userId){
+
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("blockedUser")
+                .child(getUserId())
+                .child(userId);
+
+        db.removeValue();
+
+    }
+
+
 
     public static void getUserOnlineStatus(String userId, final GetUserOnlineStatus getUserOnlineStatus){
 
@@ -244,60 +278,28 @@ public class FirebaseMethods {
     }
 
 
-    public static void getOnlineUserFromCollege(String collegeId,
-                                                final OnlineUsersFromCollege onlineUsersFromCollege){
+    public static BlockedUserAdapter setupUserBlockListAdapter(OnUnblockButtonClick onUnblockButtonClick, LinearLayout linearLayout){
 
-        final ArrayList<String> onlineUserList = new ArrayList<>();
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("blockedUser")
+                .child(getUserId());
 
-        final FirebaseFirestore db  = FirebaseFirestore.getInstance();
+        db.keepSynced(true);
 
-        CollectionReference collRef = db.collection("users");
+        FirebaseRecyclerOptions<BlockedUser> options = new FirebaseRecyclerOptions.Builder<BlockedUser>()
+                .setQuery(db,BlockedUser.class)
+                .build();
 
-        collRef.whereEqualTo("collegeId",collegeId)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-
-                        if (error != null) {
-                            Log.w(TAG, "Listen failed.", error);
-                            return;
-                        }
-
-                        onlineUserList.clear();
-
-                        for (DocumentSnapshot ds: value.getDocuments()) {
-
-                            if (ds != null && ds.exists()) {
-
-                                Log.d(TAG, "Current data: " + ds.getData());
-
-                                String userId = ds.getId();
-
-                                if(!userId.equals(getUserId())){
-
-                                    Log.d(TAG, "onSuccess: user Id" + userId);
-                                    onlineUserList.add(userId);
-
-                                }
-
-                            } else {
-                                Log.d(TAG, "Current data: null");
-                            }
-
-                        }
-
-                        onlineUsersFromCollege.onCallback(onlineUserList);
-                    }
-                });
+        return new BlockedUserAdapter(options,onUnblockButtonClick,linearLayout);
 
     }
+
+
 
     public static UserChatAdapter setupOnlineChatsAdapter(String collegeId, OnChatButtonClick onChatButtonClick){
 
         final FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
         CollectionReference collRef = db.collection("users");
-
 
         Query q = collRef.whereEqualTo("collegeId",collegeId);
 
