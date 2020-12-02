@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/screenBackground"
     android:orientation="vertical"
-    tools:context=".activity.chat.HomeActivity">
+    tools:context=".app.feature.home.HomeActivity">
 
     <RelativeLayout
         android:id="@+id/header"

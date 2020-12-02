@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/screenBackground"
     android:orientation="vertical"
-    tools:context=".activity.chat.ChatListFragment">
+    tools:context=".app.feature.home.ChatListFragment">
 
 <!--    <RelativeLayout-->
 <!--        android:layout_width="match_parent"-->

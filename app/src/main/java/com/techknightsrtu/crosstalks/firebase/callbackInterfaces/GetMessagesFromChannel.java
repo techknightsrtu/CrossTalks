@@ -1,6 +1,6 @@
 package com.techknightsrtu.crosstalks.firebase.callbackInterfaces;
 
-import com.techknightsrtu.crosstalks.activity.chat.models.Message;
+import com.techknightsrtu.crosstalks.app.feature.chat.models.Message;
 
 import java.util.ArrayList;
 

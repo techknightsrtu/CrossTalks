@@ -1,8 +1,6 @@
 package com.techknightsrtu.crosstalks.firebase.callbackInterfaces;
 
-import com.techknightsrtu.crosstalks.activity.chat.models.Message;
-
-import java.util.ArrayList;
+import com.techknightsrtu.crosstalks.app.feature.chat.models.Message;
 
 public interface GetLastMessage {
     void onCallback(Message lastMessage);

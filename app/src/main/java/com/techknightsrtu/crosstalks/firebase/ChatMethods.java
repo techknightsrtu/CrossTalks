@@ -14,16 +14,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.techknightsrtu.crosstalks.activity.chat.adapter.ChatAdapter;
-import com.techknightsrtu.crosstalks.activity.chat.adapter.MessagesAdapter;
-import com.techknightsrtu.crosstalks.activity.chat.models.ChatChannel;
-import com.techknightsrtu.crosstalks.activity.chat.models.EngagedChatChannel;
-import com.techknightsrtu.crosstalks.activity.chat.models.Message;
-import com.techknightsrtu.crosstalks.activity.chat.onClickListeners.OnChatButtonClick;
+import com.techknightsrtu.crosstalks.app.feature.home.adapter.RecentChatAdapter;
+import com.techknightsrtu.crosstalks.app.feature.chat.adapter.MessagesAdapter;
+import com.techknightsrtu.crosstalks.app.feature.chat.models.ChatChannel;
+import com.techknightsrtu.crosstalks.app.feature.chat.models.EngagedChatChannel;
+import com.techknightsrtu.crosstalks.app.feature.chat.models.Message;
+import com.techknightsrtu.crosstalks.app.feature.home.interfaces.OnChatButtonClick;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetLastMessage;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserTypingStatus;
-import com.techknightsrtu.crosstalks.helper.Utility;
+import com.techknightsrtu.crosstalks.app.helper.Utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -309,7 +309,7 @@ public class ChatMethods {
 
     }
 
-    public static ChatAdapter setupFirebaseRecentChatsAdapter(String userId, OnChatButtonClick onChatButtonClick, LinearLayout llEmptyView){
+    public static RecentChatAdapter setupFirebaseRecentChatsAdapter(String userId, OnChatButtonClick onChatButtonClick, LinearLayout llEmptyView){
 
         DatabaseReference userChatChannels = FirebaseDatabase.getInstance().getReference()
                 .child("engagedChatChannels").child(userId);
@@ -323,7 +323,7 @@ public class ChatMethods {
                 .setQuery(q,EngagedChatChannel.class)
                 .build();
 
-        return new ChatAdapter(options,onChatButtonClick, llEmptyView);
+        return new RecentChatAdapter(options,onChatButtonClick, llEmptyView);
 
     }
 
