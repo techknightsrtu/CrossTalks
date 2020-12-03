@@ -2,6 +2,7 @@ package com.techknightsrtu.crosstalks.app.feature.home;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.DialogCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
@@ -155,6 +156,8 @@ public class HomeActivity extends AppCompatActivity {
         updateDialog.setView(updateDialogView);
         Window window = updateDialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
+
+
 
         updateDialogView.findViewById(R.id.tvUpdateAvailable).setOnClickListener(new View.OnClickListener() {
             @Override

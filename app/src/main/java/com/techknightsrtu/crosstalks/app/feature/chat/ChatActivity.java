@@ -1,5 +1,6 @@
 package com.techknightsrtu.crosstalks.app.feature.chat;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
@@ -11,7 +12,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -134,8 +137,26 @@ public class ChatActivity extends AppCompatActivity {
         //Check if Current User Blocked chat User
         FirebaseMethods.isUserBlocked(currUserId,chatUserId,isBlocked -> {
             // TODO: Show Dialog Box
-
-
+            if(isBlocked){
+//                LayoutInflater factory = LayoutInflater.from(ChatActivity.this);
+//                final View blockedUserDialogView = factory.inflate(R.layout.blocked_user_dialog, null);
+//                final AlertDialog blockedUserDialog = new AlertDialog.Builder(ChatActivity.this).create();
+//                blockedUserDialog.setView(blockedUserDialogView);
+//
+//                Window window = blockedUserDialog.getWindow();
+//                window.setBackgroundDrawableResource(android.R.color.transparent);
+//
+//                blockedUserDialogView.findViewById(R.id.tvUnblockChat).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        FirebaseMethods.unblockThisUser(chatUserId);
+//                        blockedUserDialog.dismiss();
+//                    }
+//                });
+//
+//                blockedUserDialog.show();
+//                blockedUserDialog.setCancelable(false);
+            }
         });
 
         //Check if Chat User Blocked Current User

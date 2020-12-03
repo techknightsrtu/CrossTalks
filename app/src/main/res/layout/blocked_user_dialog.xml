@@ -6,7 +6,7 @@
     android:background="@drawable/gray_fill_rounded_8dp"
     android:gravity="center_horizontal"
     android:paddingTop="32dp"
-    android:paddingBottom="32dp"
+    android:paddingBottom="16dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -31,7 +31,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This user is blocked by you."
+        android:text="You have blocked this user."
         android:padding="16dp"
         android:textColor="@color/white"
         android:fontFamily="@font/mont_light"
