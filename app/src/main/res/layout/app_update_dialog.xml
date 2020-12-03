@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/gray_fill_rounded_8dp"
+    android:gravity="center_horizontal"
+    android:paddingTop="32dp"
+    android:paddingBottom="16dp">
+
+    <RelativeLayout
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:background="@drawable/dark_circle_filled"
+        android:backgroundTint="@color/reddishDark">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_logo"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llAppName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/tvAppFirstName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/mansalva_regular"
+            android:text="Cross"
+            android:textColor="@color/white"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/tvAppLastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/mansalva_regular"
+            android:text="Talks"
+            android:textColor="@color/colorPrimary"
+            android:textSize="32sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvVersionName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="version 1.0.0"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textColor="@color/gray_text_color"
+        android:fontFamily="@font/mont_light"/>
+
+    <TextView
+        android:id="@+id/tvAppUpdated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:drawableStart="@drawable/ic_baseline_check_circle_24_green"
+        android:text="You have latest app."
+        android:gravity="center"
+        android:padding="8dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/green"
+        android:fontFamily="@font/mont_regular"/>
+
+    <TextView
+        android:id="@+id/tvUpdateAvailable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:fontFamily="@font/mont_semibold"
+        android:text="Update App"
+        android:gravity="center"
+        android:drawableStart="@drawable/ic_round_update_24_white"
+        android:drawablePadding="8dp"
+        android:background="@drawable/red_bg_fill_round_send_button"
+        android:backgroundTint="@color/yellow"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginTop="16dp"
+        android:paddingStart="12sp"
+        android:paddingEnd="12sp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"/>
+
+</LinearLayout>

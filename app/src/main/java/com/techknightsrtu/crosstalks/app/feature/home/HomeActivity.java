@@ -1,11 +1,14 @@
 package com.techknightsrtu.crosstalks.app.feature.home;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -145,4 +148,22 @@ public class HomeActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    public void CheckUpdate(View view) {
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View updateDialogView = factory.inflate(R.layout.app_update_dialog, null);
+        final AlertDialog updateDialog = new AlertDialog.Builder(this).create();
+        updateDialog.setView(updateDialogView);
+        Window window = updateDialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+
+        updateDialogView.findViewById(R.id.tvUpdateAvailable).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                updateDialog.dismiss();
+            }
+        });
+
+        updateDialog.show();
+    }
 }

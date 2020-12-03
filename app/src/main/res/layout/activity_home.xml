@@ -20,7 +20,8 @@
             android:layout_height="32dp"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_logo"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+            android:onClick="CheckUpdate"/>
 
         <LinearLayout
             android:layout_width="match_parent"

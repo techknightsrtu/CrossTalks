@@ -61,7 +61,7 @@
             android:id="@+id/rlChatLoaded"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             android:padding="8dp"
             android:background="?attr/selectableItemBackground">
 
