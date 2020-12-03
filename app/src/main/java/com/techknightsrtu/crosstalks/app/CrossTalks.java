@@ -54,8 +54,4 @@ public class CrossTalks extends Application {
 
     }
 
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-    }
 }

@@ -45,6 +45,7 @@ import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserData;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserOnlineStatus;
 
 import com.techknightsrtu.crosstalks.app.models.User;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.IsUserBlocked;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +60,28 @@ public class FirebaseMethods {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         return mAuth.getUid();
     }
+
+    public static void isUserBlocked(String userId, String charUserId, IsUserBlocked isUserBlocked){
+
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("blockedUser")
+                .child(userId)
+                .child(charUserId);
+
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                isUserBlocked.onCallback(snapshot.exists());
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
 
     public static void checkIfUserExist(String userId, final DoesUserExist doesUserExist){
 
@@ -100,13 +123,19 @@ public class FirebaseMethods {
 
             tokens.remove(currToken);
 
-            setRegistrationToken(tokens);
+            FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
-            Log.d(TAG, "signOut: " + tokens);
+            db.collection("users")
+                    .document(getUserId())
+                    .update("tokens",tokens)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "signOut: " + tokens);
 
-            //Signing Out
-            FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            mAuth.signOut();
+                        //Signing Out
+                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                        mAuth.signOut();
+
+                    });
 
         }));
 

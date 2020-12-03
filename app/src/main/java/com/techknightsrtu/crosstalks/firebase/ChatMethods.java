@@ -24,14 +24,36 @@ import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetLastMessage;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserTypingStatus;
 import com.techknightsrtu.crosstalks.app.helper.Utility;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.IsChatDeleted;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ChatMethods {
 
     private static final String TAG = "ChatMethods";
+
+    public static void checkIfChatUserDeletedChat(String channelId, String chatUser, IsChatDeleted isChatDeleted){
+
+        DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
+                .child("chatChannels").child(channelId);
+
+        chatChannelsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                isChatDeleted.onCallback(Objects.equals(snapshot.child("userIds").getValue().toString(), chatUser));
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
 
     public static void setChannelLastActiveStatus(String timestamp, String sender, String receiver){
 

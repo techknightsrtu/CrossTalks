@@ -25,9 +25,11 @@ import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.feature.chat.adapter.MessagesAdapter;
 import com.techknightsrtu.crosstalks.app.feature.chat.models.Message;
 import com.techknightsrtu.crosstalks.app.feature.chat.models.MessageType;
+import com.techknightsrtu.crosstalks.app.feature.home.ChatListFragment;
 import com.techknightsrtu.crosstalks.firebase.ChatMethods;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.IsChatDeleted;
 import com.techknightsrtu.crosstalks.google_admob.GoogleAdMob;
 import com.techknightsrtu.crosstalks.app.helper.constants.Avatar;
 import com.techknightsrtu.crosstalks.app.helper.ProgressDialog;
@@ -123,9 +125,36 @@ public class ChatActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(ContextCompat.getColor(ChatActivity.this,R.color.bg_fill));
     }
 
+    private void checkChatChannelBlockAndDeleteStatus(){
+
+        //Check if Current User Blocked chat User
+        FirebaseMethods.isUserBlocked(chatUserId,chatUserId,isBlocked -> {
+            // TODO: Show Dialog Box
+
+
+        });
+
+        //Check if Chat User Blocked Current User
+        FirebaseMethods.isUserBlocked(chatUserId,chatUserId,isBlocked -> {
+            //TODO : Hide Edit Text
+
+
+        });
+
+    }
+
     private void setupChatChannel(String channelId){
 
         progressDialog.showProgressDialog();
+
+        ChatMethods.checkIfChatUserDeletedChat(channelId, currUserId, new IsChatDeleted() {
+            @Override
+            public void onCallback(boolean isDeleted) {
+                // TODO: Handle if chat User Deleted Chat
+
+
+            }
+        });
 
         FirebaseMethods.getUserOnlineStatus(chatUserId, (status) -> {
 
@@ -198,48 +227,57 @@ public class ChatActivity extends AppCompatActivity {
         progressDialog.hideProgressDialog();
     }
 
+    private void getChatChannelAndSetup(){
+
+        ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
+            @Override
+            public void onCallback(String channelId) {
+
+                setupChatChannel(channelId);
+
+                messagesAdapter = ChatMethods.setupFirebaseChatsAdapter(channelId);
+
+                if(messagesAdapter.getItemCount() == 0){
+                    llSafetyGuide.setVisibility(View.GONE);
+                }else{
+                    llSafetyGuide.setVisibility(View.VISIBLE);
+                }
+
+                rvMessages.setAdapter(messagesAdapter);
+
+                messagesAdapter.startListening();
+
+                messagesAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                    @Override
+                    public void onItemRangeInserted(int positionStart, int itemCount) {
+                        super.onItemRangeInserted(positionStart, itemCount);
+                        int friendlyMessageCount = messagesAdapter.getItemCount();
+                        int lastVisiblePosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+
+                        if (lastVisiblePosition == -1 ||
+                                (positionStart >= (friendlyMessageCount - 1) &&
+                                        lastVisiblePosition == (positionStart - 1))) {
+
+                            linearLayoutManager.scrollToPosition(positionStart);
+
+                        }
+                    }
+                });
+
+                chatSeenListener = ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
+
+
+            }
+        });
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
 
-            ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
-                @Override
-                public void onCallback(String channelId) {
+        checkChatChannelBlockAndDeleteStatus();
 
-                    setupChatChannel(channelId);
-
-                    messagesAdapter = ChatMethods.setupFirebaseChatsAdapter(channelId);
-
-                        if(messagesAdapter.getItemCount() == 0){
-                            llSafetyGuide.setVisibility(View.GONE);
-                        }else{
-                            llSafetyGuide.setVisibility(View.VISIBLE);
-                        }
-
-                        rvMessages.setAdapter(messagesAdapter);
-
-                        messagesAdapter.startListening();
-
-                        messagesAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                            @Override
-                            public void onItemRangeInserted(int positionStart, int itemCount) {
-                                super.onItemRangeInserted(positionStart, itemCount);
-                                int friendlyMessageCount = messagesAdapter.getItemCount();
-                                int lastVisiblePosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-
-                                if (lastVisiblePosition == -1 ||
-                                        (positionStart >= (friendlyMessageCount - 1) &&
-                                                lastVisiblePosition == (positionStart - 1))) {
-
-                                    linearLayoutManager.scrollToPosition(positionStart);
-
-                                }
-                            }
-                        });
-
-                    chatSeenListener = ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
-                }
-            });
+        getChatChannelAndSetup();
 
     }
 
