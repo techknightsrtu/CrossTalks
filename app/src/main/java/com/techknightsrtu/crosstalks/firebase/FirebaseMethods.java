@@ -386,13 +386,13 @@ public class FirebaseMethods {
 
     }
 
-    public static void getFeedbackFormUrl(String urlName, final GetFeedbackFormUrl getFeedbackFormUrl){
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference(urlName);
+    public static void getUrlFromDatabase(String urlName, final GetFeedbackFormUrl getFeedbackFormUrl){
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("urls");
 
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String url = snapshot.getValue().toString();
+                    String url = snapshot.child(urlName).getValue().toString();
                     Log.d(TAG, "onDataChange:  FEEDBACK FORM URL" +  url);
                     getFeedbackFormUrl.onCallback(url);
             }

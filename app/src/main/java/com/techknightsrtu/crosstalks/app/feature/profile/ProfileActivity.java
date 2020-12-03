@@ -157,7 +157,7 @@ public class ProfileActivity extends AppCompatActivity {
     public void Feedback(View view) {
         progressDialog.showProgressDialog();
 
-        FirebaseMethods.getFeedbackFormUrl("form_url", new GetFeedbackFormUrl() {
+        FirebaseMethods.getUrlFromDatabase("feedback_form_url", new GetFeedbackFormUrl() {
             @Override
             public void onCallback(String url) {
                 progressDialog.hideProgressDialog();

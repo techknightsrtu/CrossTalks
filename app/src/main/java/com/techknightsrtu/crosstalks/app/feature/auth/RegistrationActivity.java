@@ -13,7 +13,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -76,7 +80,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private UserProfileDataPref prefs;
 
-    private TextView tvMale, tvFemale, tvAvatarName, tvCollege;
+    private TextView tvMale, tvFemale, tvAvatarName, tvCollege, tvUserAgreement;
     private LinearLayout llMale, llFemale;
     private ImageView ivGenerateNewAvatar, ivAvatarImage;
     private ExtendedFloatingActionButton efRegister;
@@ -222,6 +226,55 @@ public class RegistrationActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(RegistrationActivity.this);
 
+        tvUserAgreement = findViewById(R.id.tvUserAgreement);
+        SpannableString string = new SpannableString(getString(R.string.user_agreement_text));
+
+        ClickableSpan csTermsOfUse = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                progressDialog.showProgressDialog();
+
+                FirebaseMethods.getUrlFromDatabase("terms_and_conditions", new GetFeedbackFormUrl() {
+                    @Override
+                    public void onCallback(String url) {
+                        progressDialog.hideProgressDialog();
+
+                        Intent intent = new Intent(RegistrationActivity.this, WebLinkOpenActivity.class);
+
+                        intent.putExtra("url", url);
+
+                        startActivity(intent);
+                    }
+                });
+            }
+        };
+
+        ClickableSpan csPrivacyPolicy = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                progressDialog.showProgressDialog();
+
+                FirebaseMethods.getUrlFromDatabase("privacy_policy", new GetFeedbackFormUrl() {
+                    @Override
+                    public void onCallback(String url) {
+                        progressDialog.hideProgressDialog();
+
+                        Intent intent = new Intent(RegistrationActivity.this, WebLinkOpenActivity.class);
+
+                        intent.putExtra("url", url);
+
+                        startActivity(intent);
+                    }
+                });
+            }
+        };
+
+        string.setSpan(csTermsOfUse, 32, 44, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        string.setSpan(csPrivacyPolicy, 53, 68, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        tvUserAgreement.setText(string);
+        tvUserAgreement.setMovementMethod(LinkMovementMethod.getInstance());
+
         prefs = new UserProfileDataPref(RegistrationActivity.this);
 
         retrofit = new Retrofit.Builder()
@@ -353,7 +406,7 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 progressDialog.showProgressDialog();
 
-                FirebaseMethods.getFeedbackFormUrl("add_college_url", new GetFeedbackFormUrl() {
+                FirebaseMethods.getUrlFromDatabase("add_college_url", new GetFeedbackFormUrl() {
                     @Override
                     public void onCallback(String url) {
                         progressDialog.hideProgressDialog();

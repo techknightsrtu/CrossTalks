@@ -29,6 +29,7 @@
 
 
     <string name="app_tagline">With ❤️ from <font color="white"><b>Believe ✨</b></font> for <font color="white"><b>Techknights ⚔️</b></font></string>
+    <string name="user_agreement_text">By signing in, you agree to our Terms of Use and our Privacy Policy.</string>
 
 
 </resources>

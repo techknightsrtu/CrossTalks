@@ -166,6 +166,16 @@
                 android:fontFamily="@font/mont_regular"
                 android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_circle_24"/>
 
+            <TextView
+                android:id="@+id/tvUserAgreement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/user_agreement_text"
+                android:textColor="@color/gray_text_color"
+                android:padding="16dp"
+                android:textSize="12sp"
+                android:fontFamily="@font/mont_light"/>
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
