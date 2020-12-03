@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -29,7 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
     // Widgets
     private ImageView ivBack, ivUserAvatar;
     private CircleImageView ivUserRealAvatar;
-    private TextView tvLogOut, tvUserName,tvUserOriginalName, tvUserCollegeName, tvShareApp, tvRateUs;
+    private TextView tvLogOut, tvUserName,tvUserOriginalName, tvUserCollegeName, tvShareApp, tvRateUs, tvVersionName;
 
     // Google banner ad
     private FrameLayout ad_view_container;
@@ -74,6 +76,16 @@ public class ProfileActivity extends AppCompatActivity {
         tvUserName = findViewById(R.id.tvUserName);
         tvUserOriginalName = findViewById(R.id.tvUserOriginalName);
         tvUserCollegeName = findViewById(R.id.tvUserCollegeName);
+        tvVersionName = findViewById(R.id.tvVersionName);
+
+        try {
+            String versionName = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0).versionName;
+            tvVersionName.setText("Version " + versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
         progressDialog = new ProgressDialog(ProfileActivity.this);
 
