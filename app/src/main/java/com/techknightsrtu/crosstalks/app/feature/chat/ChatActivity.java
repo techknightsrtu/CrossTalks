@@ -46,7 +46,7 @@ public class ChatActivity extends AppCompatActivity {
     private String currUserId;
     private String chatUserAvatarId;
     private RecyclerView rvMessages;
-    private LinearLayout llSafetyGuide, llTypingIndicator;
+    private LinearLayout llSafetyGuide, llTypingIndicator, llDialogMessage, llSendMessage;
 
     // Google banner ad
     private FrameLayout ad_view_container;
@@ -60,6 +60,7 @@ public class ChatActivity extends AppCompatActivity {
     private LinearLayoutManager linearLayoutManager;
     private AppCompatButton btSendMessage;
     private EditText etWriteMessage;
+    private TextView tvMessage;
     private ImageView ivOnlineIndicator;
 
     private ValueEventListener chatSeenListener;
@@ -85,6 +86,8 @@ public class ChatActivity extends AppCompatActivity {
 
         llSafetyGuide = findViewById(R.id.llSafetyGuide);
         llTypingIndicator = findViewById(R.id.llTypingIndicator);
+        llDialogMessage = findViewById(R.id.llDialogMessage);
+        llSendMessage = findViewById(R.id.llSendMessage);
 
         prefs = new UserProfileDataPref(ChatActivity.this);
 
@@ -100,6 +103,7 @@ public class ChatActivity extends AppCompatActivity {
         ivChatAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(chatUserAvatarId)));
 
         etWriteMessage = findViewById(R.id.etWriteMessage);
+        tvMessage = findViewById(R.id.tvMessage);
         ivOnlineIndicator = findViewById(R.id.ivOnlineIndicator);
 
         btSendMessage = findViewById(R.id.btSendMessage);
@@ -128,17 +132,19 @@ public class ChatActivity extends AppCompatActivity {
     private void checkChatChannelBlockAndDeleteStatus(){
 
         //Check if Current User Blocked chat User
-        FirebaseMethods.isUserBlocked(chatUserId,chatUserId,isBlocked -> {
+        FirebaseMethods.isUserBlocked(currUserId,chatUserId,isBlocked -> {
             // TODO: Show Dialog Box
 
 
         });
 
         //Check if Chat User Blocked Current User
-        FirebaseMethods.isUserBlocked(chatUserId,chatUserId,isBlocked -> {
-            //TODO : Hide Edit Text
-
-
+        FirebaseMethods.isUserBlocked(chatUserId,currUserId,isBlocked -> {
+            if(isBlocked){
+                llSendMessage.setVisibility(View.GONE);
+                llDialogMessage.setVisibility(View.VISIBLE);
+                tvMessage.setText(R.string.label_user_blocked_msg);
+            }
         });
 
     }
@@ -151,8 +157,11 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onCallback(boolean isDeleted) {
                 // TODO: Handle if chat User Deleted Chat
-
-
+                if(isDeleted){
+                    llSendMessage.setVisibility(View.GONE);
+                    llDialogMessage.setVisibility(View.VISIBLE);
+                    tvMessage.setText(R.string.label_user_chat_deleted_msg);
+                }
             }
         });
 

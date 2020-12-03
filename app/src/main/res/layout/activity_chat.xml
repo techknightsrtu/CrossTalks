@@ -134,6 +134,7 @@
             <include layout="@layout/typing_indicator_item"/>
 
             <LinearLayout
+                android:id="@+id/llSendMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/bg_fill"
@@ -166,6 +167,34 @@
                     android:layout_gravity="end|bottom"
                     android:background="@drawable/send_button_bg"
                     android:padding="8dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/llDialogMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_fill"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingBottom="8dp"
+                android:paddingEnd="8dp">
+
+                <TextView
+                    android:id="@+id/tvMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/bg_fill"
+                    android:textColor="@color/white"
+                    android:padding="16dp"
+                    android:maxLines="5"
+                    android:text="Write message here"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColorHint="@color/gray_text_color"
+                    android:fontFamily="@font/mont_light"/>
 
             </LinearLayout>
 

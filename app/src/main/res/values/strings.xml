@@ -35,5 +35,7 @@
     <string name="label_tagline">Chat Anonymously.</string>
     <string name="label_no_college_id">nc</string>
 
+    <string name="label_user_chat_deleted_msg">User has deleted this conversation. You can delete the channel if you want.</string>
+    <string name="label_user_blocked_msg">You are blocked.</string>
 
 </resources>
