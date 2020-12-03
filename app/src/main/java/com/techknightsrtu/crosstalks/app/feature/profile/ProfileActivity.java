@@ -78,14 +78,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvUserCollegeName = findViewById(R.id.tvUserCollegeName);
         tvVersionName = findViewById(R.id.tvVersionName);
 
-        try {
-            String versionName = getPackageManager()
-                    .getPackageInfo(getPackageName(), 0).versionName;
-            tvVersionName.setText("Version " + versionName);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
+        tvVersionName.setText("Version " + BuildConfig.VERSION_NAME);
 
         progressDialog = new ProgressDialog(ProfileActivity.this);
 

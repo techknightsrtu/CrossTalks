@@ -46,6 +46,7 @@ import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserData;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetUserOnlineStatus;
 
 import com.techknightsrtu.crosstalks.app.models.User;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetVersionDetails;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.IsUserBlocked;
 
 import java.util.ArrayList;
@@ -405,6 +406,24 @@ public class FirebaseMethods {
                     String url = snapshot.child(urlName).getValue().toString();
                     Log.d(TAG, "onDataChange:  FEEDBACK FORM URL" +  url);
                     getFeedbackFormUrl.onCallback(url);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    public static void getAppVersionDetails(final GetVersionDetails getVersionDetails){
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("app_version_details");
+
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int versionCode = Integer.parseInt(snapshot.child("version_code").getValue().toString());
+                String versionName = snapshot.child("version_code").getValue().toString();
+
+                getVersionDetails.onCallback(versionCode, versionName);
             }
 
             @Override

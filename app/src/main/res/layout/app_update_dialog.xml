@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/gray_fill_rounded_8dp"
     android:gravity="center_horizontal"
@@ -60,6 +60,17 @@
         android:textColor="@color/gray_text_color"
         android:fontFamily="@font/mont_light"/>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading_animation"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="8dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        app:lottie_rawRes="@raw/splash_loading"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"/>
+
     <TextView
         android:id="@+id/tvAppUpdated"
         android:layout_width="wrap_content"
@@ -69,6 +80,7 @@
         android:text="You have latest app."
         android:gravity="center"
         android:padding="8dp"
+        android:visibility="gone"
         android:layout_marginTop="16dp"
         android:textColor="@color/green"
         android:fontFamily="@font/mont_regular"/>
@@ -81,6 +93,7 @@
         android:fontFamily="@font/mont_semibold"
         android:text="Update App"
         android:gravity="center"
+        android:visibility="gone"
         android:drawableStart="@drawable/ic_round_update_24_white"
         android:drawablePadding="8dp"
         android:background="@drawable/red_bg_fill_round_send_button"

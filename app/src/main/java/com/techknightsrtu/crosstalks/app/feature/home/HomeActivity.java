@@ -6,6 +6,8 @@ import androidx.core.app.DialogCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +16,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.inappmessaging.FirebaseInAppMessaging;
+import com.techknightsrtu.crosstalks.BuildConfig;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.feature.home.adapter.MyFragmentPagerAdapter;
 import com.techknightsrtu.crosstalks.app.feature.profile.ProfileActivity;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetVersionDetails;
 import com.techknightsrtu.crosstalks.google_admob.GoogleAdMob;
 import com.techknightsrtu.crosstalks.app.helper.constants.Avatar;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
@@ -157,16 +162,39 @@ public class HomeActivity extends AppCompatActivity {
         Window window = updateDialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
 
+        TextView tvAppUpdated = updateDialogView.findViewById(R.id.tvAppUpdated);
+        TextView tvUpdateAvailable = updateDialogView.findViewById(R.id.tvUpdateAvailable);
+        TextView tvVersionName = updateDialogView.findViewById(R.id.tvVersionName);
+        LottieAnimationView loading_animation = updateDialogView.findViewById(R.id.loading_animation);
 
+        tvVersionName.setText("Version " + BuildConfig.VERSION_NAME);
 
         updateDialogView.findViewById(R.id.tvUpdateAvailable).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //your business logic
+                final String appPackageName = getPackageName();
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
                 updateDialog.dismiss();
             }
         });
 
         updateDialog.show();
+
+        FirebaseMethods.getAppVersionDetails(new GetVersionDetails() {
+            @Override
+            public void onCallback(int versionCode, String versionName) {
+                int currentVersionCode = BuildConfig.VERSION_CODE;
+
+                loading_animation.setVisibility(View.GONE);
+
+                if(versionCode > currentVersionCode){
+                    tvUpdateAvailable.setVisibility(View.VISIBLE);
+                }else{
+                    tvAppUpdated.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 }
