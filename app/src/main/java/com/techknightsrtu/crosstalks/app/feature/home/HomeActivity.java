@@ -53,8 +53,6 @@ public class HomeActivity extends AppCompatActivity {
 
         prefs = new UserProfileDataPref(HomeActivity.this);
 
-        FirebaseInAppMessaging.getInstance().triggerEvent("home_activity");
-
         TextView tvCollegeName = findViewById(R.id.tvCollegeName);
         tvCollegeName.setText(prefs.getCollegeName());
 

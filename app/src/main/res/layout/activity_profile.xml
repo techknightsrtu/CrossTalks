@@ -181,14 +181,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:layout_marginBottom="16dp"
             android:text="CrossTalks"
             android:gravity="center"
             android:textColor="@color/bg_fill"
             android:textSize="32sp"
             android:fontFamily="@font/mansalva_regular"/>
         
-
+        <TextView
+            android:id="@+id/tvVersionName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:gravity="center"
+            android:padding="8dp"
+            android:textColor="@color/bg_fill"
+            android:fontFamily="@font/mont_light"/>
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>
