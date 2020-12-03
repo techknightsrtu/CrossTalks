@@ -55,7 +55,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-perf'
     implementation 'com.google.firebase:firebase-config'
-    implementation 'com.google.firebase:firebase-analytics'
 
     // FirebaseUI for Firebase Realtime Database
     implementation 'com.firebaseui:firebase-ui-database:7.0.0'
