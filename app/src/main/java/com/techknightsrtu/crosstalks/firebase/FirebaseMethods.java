@@ -386,8 +386,8 @@ public class FirebaseMethods {
 
     }
 
-    public static void getFeedbackFormUrl(final GetFeedbackFormUrl getFeedbackFormUrl){
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference("form_url");
+    public static void getFeedbackFormUrl(String urlName, final GetFeedbackFormUrl getFeedbackFormUrl){
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference(urlName);
 
         db.addValueEventListener(new ValueEventListener() {
             @Override

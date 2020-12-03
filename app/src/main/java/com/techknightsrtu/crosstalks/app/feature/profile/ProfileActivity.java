@@ -15,7 +15,9 @@ import com.bumptech.glide.Glide;
 import com.techknightsrtu.crosstalks.BuildConfig;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.SplashActivity;
+import com.techknightsrtu.crosstalks.app.helper.ProgressDialog;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetFeedbackFormUrl;
 import com.techknightsrtu.crosstalks.google_admob.GoogleAdMob;
 import com.techknightsrtu.crosstalks.app.helper.constants.Avatar;
 import com.techknightsrtu.crosstalks.app.helper.local.UserProfileDataPref;
@@ -34,6 +36,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     // User Data Pref
     private UserProfileDataPref profileDataPref;
+
+    // Progress Dialog
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvUserName = findViewById(R.id.tvUserName);
         tvUserOriginalName = findViewById(R.id.tvUserOriginalName);
         tvUserCollegeName = findViewById(R.id.tvUserCollegeName);
+
+        progressDialog = new ProgressDialog(ProfileActivity.this);
 
         tvShareApp = findViewById(R.id.tvShareApp);
         tvShareApp.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +155,19 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void Feedback(View view) {
-        startActivity(new Intent(ProfileActivity.this, FeedbackActivity.class));
+        progressDialog.showProgressDialog();
+
+        FirebaseMethods.getFeedbackFormUrl("form_url", new GetFeedbackFormUrl() {
+            @Override
+            public void onCallback(String url) {
+                progressDialog.hideProgressDialog();
+
+                Intent intent = new Intent(ProfileActivity.this, WebLinkOpenActivity.class);
+
+                intent.putExtra("url", url);
+
+                startActivity(intent);
+            }
+        });
     }
 }

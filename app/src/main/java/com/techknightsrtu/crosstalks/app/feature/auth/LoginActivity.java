@@ -53,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
     //LocalData
     UserProfileDataPref prefs;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

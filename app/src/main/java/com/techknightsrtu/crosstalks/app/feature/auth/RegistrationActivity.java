@@ -43,6 +43,8 @@ import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.feature.auth.models.CaptchaResponse;
 import com.techknightsrtu.crosstalks.app.feature.auth.retrofit.JsonPlaceHolderApi;
 import com.techknightsrtu.crosstalks.app.feature.home.HomeActivity;
+import com.techknightsrtu.crosstalks.app.feature.profile.ProfileActivity;
+import com.techknightsrtu.crosstalks.app.feature.profile.WebLinkOpenActivity;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.CreateNewUser;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetCollegeList;
@@ -51,6 +53,7 @@ import com.techknightsrtu.crosstalks.app.helper.ProgressDialog;
 import com.techknightsrtu.crosstalks.app.helper.Utility;
 import com.techknightsrtu.crosstalks.app.helper.local.UserProfileDataPref;
 import com.techknightsrtu.crosstalks.app.models.User;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetFeedbackFormUrl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -342,6 +345,26 @@ public class RegistrationActivity extends AppCompatActivity {
                 dialog.dismiss();
                 collegeName = "Not a Student";
                 tvCollege.setText("Not a Student");
+            }
+        });
+
+        ChooseCollegeView.findViewById(R.id.btCollegeNotListed).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressDialog.showProgressDialog();
+
+                FirebaseMethods.getFeedbackFormUrl("add_college_url", new GetFeedbackFormUrl() {
+                    @Override
+                    public void onCallback(String url) {
+                        progressDialog.hideProgressDialog();
+
+                        Intent intent = new Intent(RegistrationActivity.this, WebLinkOpenActivity.class);
+
+                        intent.putExtra("url", url);
+
+                        startActivity(intent);
+                    }
+                });
             }
         });
 

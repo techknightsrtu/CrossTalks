@@ -11,16 +11,18 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetFeedbackFormUrl;
 
-public class FeedbackActivity extends AppCompatActivity {
+import java.util.Objects;
+
+public class WebLinkOpenActivity extends AppCompatActivity {
 
     private WebView webView;
     private ProgressBar pbSearchResult;
+
+    private String url = "https://cross-talks-e6d43.firebaseapp.com/#/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +46,14 @@ public class FeedbackActivity extends AppCompatActivity {
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-
-        FirebaseMethods.getFeedbackFormUrl(new GetFeedbackFormUrl() {
-            @Override
-            public void onCallback(String url) {
-                webView.loadUrl(url);
-            }
-        });
+        webView.loadUrl(url);
     }
 
     private void init() {
         pbSearchResult = findViewById(R.id.pbSearchResult);
         webView = findViewById(R.id.webView);
+
+        url = Objects.requireNonNull(getIntent().getExtras()).getString("url");
     }
 
     private void setupToolbar() {
@@ -66,7 +64,7 @@ public class FeedbackActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        getWindow().setStatusBarColor(ContextCompat.getColor(FeedbackActivity.this,R.color.bg_fill));
+        getWindow().setStatusBarColor(ContextCompat.getColor(WebLinkOpenActivity.this,R.color.bg_fill));
     }
 
     @Override
