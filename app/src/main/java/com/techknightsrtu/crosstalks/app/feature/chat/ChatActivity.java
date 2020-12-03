@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -138,24 +139,28 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseMethods.isUserBlocked(currUserId,chatUserId,isBlocked -> {
             // TODO: Show Dialog Box
             if(isBlocked){
-//                LayoutInflater factory = LayoutInflater.from(ChatActivity.this);
-//                final View blockedUserDialogView = factory.inflate(R.layout.blocked_user_dialog, null);
-//                final AlertDialog blockedUserDialog = new AlertDialog.Builder(ChatActivity.this).create();
-//                blockedUserDialog.setView(blockedUserDialogView);
-//
-//                Window window = blockedUserDialog.getWindow();
-//                window.setBackgroundDrawableResource(android.R.color.transparent);
-//
-//                blockedUserDialogView.findViewById(R.id.tvUnblockChat).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        FirebaseMethods.unblockThisUser(chatUserId);
-//                        blockedUserDialog.dismiss();
-//                    }
-//                });
-//
-//                blockedUserDialog.show();
-//                blockedUserDialog.setCancelable(false);
+                if(!((Activity) ChatActivity.this).isFinishing())
+                {
+                    LayoutInflater factory = LayoutInflater.from(ChatActivity.this);
+                    final View blockedUserDialogView = factory.inflate(R.layout.blocked_user_dialog, null);
+                    final AlertDialog blockedUserDialog = new AlertDialog.Builder(ChatActivity.this).create();
+                    blockedUserDialog.setView(blockedUserDialogView);
+
+                    Window window = blockedUserDialog.getWindow();
+                    window.setBackgroundDrawableResource(android.R.color.transparent);
+
+                    blockedUserDialogView.findViewById(R.id.tvUnblockChat).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FirebaseMethods.unblockThisUser(chatUserId);
+                            blockedUserDialog.dismiss();
+                        }
+                    });
+
+                    blockedUserDialog.show();
+                    blockedUserDialog.setCancelable(false);
+                }
+
             }
         });
 

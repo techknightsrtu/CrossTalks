@@ -152,17 +152,16 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
             switch (menuItem.getItemId()){
 
                 case R.id.deleteChat:
-
                     ChatMethods.removeCurrentUserFromChatChannel(channelId,userId);
                     return true;
 
                 case R.id.blockChat:
                     FirebaseMethods.blockThisUser(userId);
-                    Toast.makeText(wrapper, "User Blocked", Toast.LENGTH_SHORT).show();
                     return true;
 
                 case R.id.reportChat:
                     // TODO: write code for reporting a user here
+
                     return true;
             }
 
