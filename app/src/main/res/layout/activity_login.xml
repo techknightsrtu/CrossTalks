@@ -19,7 +19,17 @@
             android:layout_marginTop="48dp"
             android:textColor="@color/white"
             android:fontFamily="@font/mansalva_regular"
-            android:textSize="28sp"/>
+            android:textSize="32sp"/>
+
+        <TextView
+            android:id="@+id/tvTagline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chat Anonymously."
+            android:textColor="@color/gray_text_color"
+            android:gravity="center"
+            android:fontFamily="@font/mont_light"
+            android:layout_below="@id/tvAppName"/>
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animationView"
@@ -28,11 +38,14 @@
             app:lottie_rawRes="@raw/main_illu"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            android:layout_below="@+id/tvAppName"
+            android:adjustViewBounds="true"
+            android:layout_below="@+id/tvTagline"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="48dp"/>
+            android:layout_marginTop="48dp"
+            android:layout_above="@+id/llSignInButton"/>
 
         <LinearLayout
+            android:id="@+id/llSignInButton"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:orientation="horizontal"
@@ -41,8 +54,10 @@
             android:clickable="true"
             android:focusable="true"
             android:onClick="signInWithGoogle"
-            android:layout_margin="16dp"
-            android:layout_alignParentBottom="true">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_above="@id/tvWithLove">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -54,6 +69,18 @@
                 android:drawableStart="@drawable/ic_google_icon"/>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvWithLove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_tagline"
+            android:textColor="@color/gray_text_color"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:padding="8dp"
+            android:layout_alignParentBottom="true"
+            android:fontFamily="@font/mont_light"/>
 
     </RelativeLayout>
 

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.inappmessaging.FirebaseInAppMessaging;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.feature.home.adapter.MyFragmentPagerAdapter;
 import com.techknightsrtu.crosstalks.app.feature.profile.ProfileActivity;
@@ -32,8 +33,6 @@ public class HomeActivity extends AppCompatActivity {
     // Google banner ad
     private FrameLayout ad_view_container;
 
-    private FirebaseAnalytics firebaseAnalytics;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +53,7 @@ public class HomeActivity extends AppCompatActivity {
 
         prefs = new UserProfileDataPref(HomeActivity.this);
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(HomeActivity.this);
+        FirebaseInAppMessaging.getInstance().triggerEvent("home_activity");
 
         TextView tvCollegeName = findViewById(R.id.tvCollegeName);
         tvCollegeName.setText(prefs.getCollegeName());
