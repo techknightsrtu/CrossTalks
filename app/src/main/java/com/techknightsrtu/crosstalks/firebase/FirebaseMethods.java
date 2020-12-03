@@ -27,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.feature.chat.models.Message;
 import com.techknightsrtu.crosstalks.app.feature.home.adapter.UserChatAdapter;
 import com.techknightsrtu.crosstalks.app.feature.home.interfaces.OnChatButtonClick;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class FirebaseMethods {
 
@@ -235,23 +237,31 @@ public class FirebaseMethods {
                     @Override
                     public void onSuccess(final DocumentSnapshot userDocumentSnapshot) {
 
-                        //Fetch college Data
-                        FirebaseFirestore db  = FirebaseFirestore.getInstance();
-                        db.collection("colleges")
-                                .document(userDocumentSnapshot.get("collegeId").toString())
-                                .get()
-                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot collegeDocumentSnapshot) {
+                        if(Objects.equals(userDocumentSnapshot.get("collegeId").toString(), "nc")){
 
-                                        Log.d(TAG, "onSuccess: " + collegeDocumentSnapshot.getData());
+                            userDataCallback.onCallback(userDocumentSnapshot.toObject(User.class),
+                                    "Chat Anonymously.");
 
-                                        String collegeName = collegeDocumentSnapshot.get("collegeName").toString();
+                        }else{
+                            //Fetch college Data
+                            FirebaseFirestore db  = FirebaseFirestore.getInstance();
+                            db.collection("colleges")
+                                    .document(userDocumentSnapshot.get("collegeId").toString())
+                                    .get()
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot collegeDocumentSnapshot) {
 
-                                        userDataCallback.onCallback(userDocumentSnapshot.toObject(User.class),
-                                                collegeName);
-                                    }
-                                });
+                                            Log.d(TAG, "onSuccess: " + collegeDocumentSnapshot.getData());
+
+                                            String collegeName = collegeDocumentSnapshot.get("collegeName").toString();
+
+                                            userDataCallback.onCallback(userDocumentSnapshot.toObject(User.class),
+                                                    collegeName);
+                                        }
+                                    });
+                        }
+
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {

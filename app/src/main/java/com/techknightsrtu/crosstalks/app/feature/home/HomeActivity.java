@@ -20,6 +20,8 @@ import com.techknightsrtu.crosstalks.app.helper.constants.Avatar;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.app.helper.local.UserProfileDataPref;
 
+import java.util.Objects;
+
 public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
@@ -49,6 +51,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void init(){
+
         ad_view_container = findViewById(R.id.ad_view_container);
 
         prefs = new UserProfileDataPref(HomeActivity.this);
@@ -56,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         FirebaseInAppMessaging.getInstance().triggerEvent("home_activity");
 
         TextView tvCollegeName = findViewById(R.id.tvCollegeName);
+
         tvCollegeName.setText(prefs.getCollegeName());
 
         viewPager = findViewById(R.id.viewPager);

@@ -1,6 +1,8 @@
 <resources>
+
     <string name="app_name">Cross talks</string>
     <string name="action_settings">Settings</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -28,8 +30,10 @@
     <string name="chats_notification_channel_name">Chats</string>
 
 
-    <string name="app_tagline">With ❤️ from <font color="white"><b>Believe ✨</b></font> for <font color="white"><b>Techknights ⚔️</b></font></string>
+    <string name="app_tagline">With ❤️ from <font color="white"><b>Believe </b></font> for <font color="white"><b>Techknights</b></font></string>
     <string name="user_agreement_text">By signing in, you agree to our Terms of Use and our Privacy Policy.</string>
+    <string name="label_tagline">Chat Anonymously.</string>
+    <string name="label_no_college_id">nc</string>
 
 
 </resources>

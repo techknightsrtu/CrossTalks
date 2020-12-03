@@ -334,7 +334,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                         }else{
                             Log.w(TAG, "Error adding document");
-                            Toast.makeText(RegistrationActivity.this, "User not created in database", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrationActivity.this, "User Registration Failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -392,8 +392,8 @@ public class RegistrationActivity extends AppCompatActivity {
         ChooseCollegeView.findViewById(R.id.btNotAStudent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                prefs.setCollegeId("nc");
-                prefs.setCollegeName("noCollege");
+                prefs.setCollegeId( getString(R.string.label_no_college_id));
+                prefs.setCollegeName(getString(R.string.label_tagline));
 
                 dialog.dismiss();
                 collegeName = "Not a Student";
