@@ -1,10 +1,12 @@
 package com.techknightsrtu.crosstalks.app;
 
 import android.app.Application;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
@@ -24,7 +26,6 @@ public class CrossTalks extends Application {
         super.onCreate();
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        FirebaseMethods.setUserOnlineStatus("Online");
 
         Log.d(TAG, "onCreate: APPLICATION IS RUNNING");
 
@@ -55,7 +56,6 @@ public class CrossTalks extends Application {
 
     @Override
     public void onTerminate() {
-        FirebaseMethods.setUserOnlineStatus("Offline");
         super.onTerminate();
     }
 }
