@@ -1,6 +1,8 @@
 package com.techknightsrtu.crosstalks.app.feature.home.adapter;
 
 import android.content.Context;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,6 +21,7 @@ import com.techknightsrtu.crosstalks.firebase.ChatMethods;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.app.helper.constants.Avatar;
 import com.techknightsrtu.crosstalks.app.helper.Utility;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.IsUserBlocked;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
@@ -90,6 +93,20 @@ public class RecentChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChanne
                 holder.ivOnlineIndicator.setVisibility(View.GONE);
             }
 
+        });
+
+        FirebaseMethods.isUserBlocked(FirebaseMethods.getUserId(), userId, new IsUserBlocked() {
+            @Override
+            public void onCallback(boolean isBlocked) {
+                Log.i(TAG, "onCallback: " + isBlocked);
+                if(isBlocked){
+                    ColorMatrix matrix = new ColorMatrix();
+                    matrix.setSaturation(0);
+
+                    ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+                    holder.ivUserAvatar.setColorFilter(filter);
+                }
+            }
         });
 
         ChatMethods.getLastMessage(channelId, lastMessage -> {

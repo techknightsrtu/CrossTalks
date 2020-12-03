@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/gray_filled_top_corners_8dp"
+    android:gravity="center_horizontal">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="6dp"
+        android:background="@drawable/gray_fill_rounded_8dp"
+        android:backgroundTint="@color/dark_1"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Report User"
+        android:gravity="center"
+        android:padding="16dp"
+        android:textSize="24sp"
+        android:fontFamily="@font/mansalva_regular"
+        android:textColor="@color/white"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_text_color"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Why you want to block this user?"
+        android:fontFamily="@font/mont_regular"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Abusive Behaviour"
+        android:fontFamily="@font/mont_light"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Explicit Content"
+        android:fontFamily="@font/mont_light"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Not From Your College?"
+        android:fontFamily="@font/mont_light"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
+</LinearLayout>
