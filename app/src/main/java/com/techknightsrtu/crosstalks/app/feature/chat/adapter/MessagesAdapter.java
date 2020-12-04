@@ -12,6 +12,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.feature.chat.models.Message;
+import com.techknightsrtu.crosstalks.app.feature.chat.models.MessageType;
 import com.techknightsrtu.crosstalks.app.feature.chat.viewholder.MessageItemViewHolder;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.app.helper.Utility;
@@ -73,6 +74,10 @@ public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItem
     @Override
     protected void onBindViewHolder(@NonNull final MessageItemViewHolder holder, int position, @NonNull Message m) {
 
+        if (m.getType() == MessageType.TEXT_REPLY){
+            holder.tvDirectReplyMessage.setVisibility(View.VISIBLE);
+            holder.tvDirectReplyMessage.setText(m.getReplyMessage());
+        }
 
         holder.tvMessage.setText(m.getMessage());
 

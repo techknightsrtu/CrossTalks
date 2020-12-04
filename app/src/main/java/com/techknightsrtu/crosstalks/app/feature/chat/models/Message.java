@@ -8,24 +8,42 @@ public class Message {
     private String sendAvatarId;
     private String receiver;
     private String message;
+    private String replyMessage;
     private MessageType type;
     private boolean isSeen;
 
     public Message(String timestamp, String sender,
                    String senderAvatarName, String sendAvatarId,
-                   String receiver, String message, MessageType type, boolean isSeen) {
+                   String receiver, String message, String replyMessage, MessageType type, boolean isSeen) {
         this.timestamp = timestamp;
         this.sender = sender;
         this.senderAvatarName = senderAvatarName;
         this.sendAvatarId = sendAvatarId;
         this.receiver = receiver;
         this.message = message;
+        this.replyMessage = replyMessage;
         this.type = type;
         this.isSeen = isSeen;
     }
 
     public Message() {
 
+    }
+
+    public String getReplyMessage() {
+        return replyMessage;
+    }
+
+    public void setReplyMessage(String replyMessage) {
+        this.replyMessage = replyMessage;
+    }
+
+    public boolean isSeen() {
+        return isSeen;
+    }
+
+    public void setSeen(boolean seen) {
+        isSeen = seen;
     }
 
     public boolean getIsSeen() {

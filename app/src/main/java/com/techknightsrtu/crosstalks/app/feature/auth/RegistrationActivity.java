@@ -43,6 +43,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.feature.auth.models.CaptchaResponse;
 import com.techknightsrtu.crosstalks.app.feature.auth.retrofit.JsonPlaceHolderApi;
@@ -72,6 +73,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private static final String TAG = "RegistrationActivity";
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     private int genderFlag = -1; // 0 = male, 1 = female
     private int avatarId;
     private String collegeName = "";
@@ -95,6 +98,8 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         init();
         generateProfile();
@@ -328,6 +333,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                         if(done){
 
+                            mFirebaseAnalytics.setUserProperty("college_name", prefs.getCollegeName());
                             Intent i = new Intent(RegistrationActivity.this, HomeActivity.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

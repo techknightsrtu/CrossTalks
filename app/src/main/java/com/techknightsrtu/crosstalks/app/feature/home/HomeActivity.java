@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.rewarded.RewardItem;
@@ -48,6 +49,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     //LocalData
     UserProfileDataPref prefs;
 
@@ -64,6 +67,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         init();
         setupBottomNavigationBar();
@@ -202,6 +206,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //your business logic
 
+
                 if(rewardedAd.isLoaded()){
                     Activity activityContext = HomeActivity.this;
                     RewardedAdCallback adCallback = new RewardedAdCallback() {
@@ -220,8 +225,21 @@ public class HomeActivity extends AppCompatActivity {
                         }
 
                         @Override
+                        public void onRewardedAdFailedToShow(AdError adError) {
+                            super.onRewardedAdFailedToShow(adError);
+                            Bundle params = new Bundle();
+                            params.putString("is_removed", "false");
+                            mFirebaseAnalytics.logEvent("ad_removal", params);
+                        }
+
+                        @Override
                         public void onRewardedAdClosed() {
                             // Ad closed.
+
+                            Bundle params = new Bundle();
+                            params.putString("is_removed", "true");
+                            mFirebaseAnalytics.logEvent("ad_removal", params);
+
                             Intent intent = getIntent();
                             finish();
                             startActivity(intent);

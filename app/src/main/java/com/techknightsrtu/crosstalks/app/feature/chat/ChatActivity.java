@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -37,8 +35,6 @@ import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.feature.chat.adapter.MessagesAdapter;
 import com.techknightsrtu.crosstalks.app.feature.chat.models.Message;
 import com.techknightsrtu.crosstalks.app.feature.chat.models.MessageType;
-import com.techknightsrtu.crosstalks.app.feature.home.ChatListFragment;
-import com.techknightsrtu.crosstalks.app.feature.home.HomeActivity;
 import com.techknightsrtu.crosstalks.app.helper.MessageReplyHelper;
 import com.techknightsrtu.crosstalks.firebase.ChatMethods;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
@@ -55,6 +51,7 @@ public class ChatActivity extends AppCompatActivity {
     private static final String TAG = "ChatActivity";
 
     public static boolean isVisible = false;
+    private static boolean isReply = false;
 
     private String chatUserId;
     private String currUserId;
@@ -143,6 +140,7 @@ public class ChatActivity extends AppCompatActivity {
 
             rlDirectReply.setVisibility(View.VISIBLE);
             tvDirectMessageReply.setText(messagesAdapter.getItem(position).getMessage());
+            isReply = true;
 
         });
 
@@ -151,6 +149,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 rlDirectReply.setVisibility(View.GONE);
                 tvDirectMessageReply.setText("");
+                isReply = false;
             }
         });
 
@@ -257,6 +256,7 @@ public class ChatActivity extends AppCompatActivity {
 
         });
 
+
         Log.d(TAG, "onCallback: THIS IS CHAT CHANNEL" + channelId);
 
         ChatMethods.getUserTypingStatus(channelId, chatUserId, typingStatus -> {
@@ -301,10 +301,14 @@ public class ChatActivity extends AppCompatActivity {
 
                     ChatMethods.setChannelLastActiveStatus(timestamp,currUserId,chatUserId);
 
+                    MessageType type;
+
+                    type = isReply ? MessageType.TEXT_REPLY : MessageType.TEXT ;
+
                     Message m = new Message(timestamp,
                             currUserId,senderAvatarName,senderAvatarId,
                             chatUserId,etWriteMessage.getText().toString().trim(),
-                            MessageType.TEXT,false);
+                            tvDirectMessageReply.getText().toString().trim(), type,false);
 
                     ChatMethods.sendTextMessage(channelId,m);
 

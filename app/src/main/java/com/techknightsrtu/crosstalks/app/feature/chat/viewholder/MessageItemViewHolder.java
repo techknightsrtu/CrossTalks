@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MessageItemViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView tvMessage, tvTimeStamp,tvMsgSeen;
+    public TextView tvMessage, tvTimeStamp,tvMsgSeen, tvDirectReplyMessage;
     public LinearLayout ll1;
 
     public MessageItemViewHolder(@NonNull View itemView) {
@@ -20,6 +20,7 @@ public class MessageItemViewHolder extends RecyclerView.ViewHolder {
         tvMessage = itemView.findViewById(R.id.tvMessage);
         tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
         tvMsgSeen = itemView.findViewById(R.id.tvMsgSeen);
+        tvDirectReplyMessage = itemView.findViewById(R.id.tvDirectReplyMessage);
 
         ll1 = itemView.findViewById(R.id.ll1);
     }
