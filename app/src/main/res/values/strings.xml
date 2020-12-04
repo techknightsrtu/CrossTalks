@@ -33,7 +33,7 @@
 
     <string name="app_tagline">With ❤️ from <font color="white"><b>Believe</b></font> for <font color="white"><b>Techknights.</b></font></string>
     <string name="user_agreement_text">By signing in, you agree to our Terms of Use and our Privacy Policy.</string>
-    <string name="label_tagline">Chat Anonymously.</string>
+    <string name="label_tagline">Go Anonymous.</string>
     <string name="label_no_college_id">nc</string>
 
     <string name="label_user_chat_deleted_msg">User has deleted this conversation. You can delete the channel if you want.</string>

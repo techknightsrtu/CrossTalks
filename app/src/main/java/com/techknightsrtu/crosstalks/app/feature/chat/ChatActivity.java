@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -26,6 +29,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.ValueEventListener;
@@ -35,6 +39,7 @@ import com.techknightsrtu.crosstalks.app.feature.chat.models.Message;
 import com.techknightsrtu.crosstalks.app.feature.chat.models.MessageType;
 import com.techknightsrtu.crosstalks.app.feature.home.ChatListFragment;
 import com.techknightsrtu.crosstalks.app.feature.home.HomeActivity;
+import com.techknightsrtu.crosstalks.app.helper.MessageReplyHelper;
 import com.techknightsrtu.crosstalks.firebase.ChatMethods;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
@@ -69,8 +74,9 @@ public class ChatActivity extends AppCompatActivity {
     private LinearLayoutManager linearLayoutManager;
     private AppCompatButton btSendMessage;
     private EditText etWriteMessage;
-    private TextView tvMessage;
-    private ImageView ivOnlineIndicator;
+    private TextView tvMessage, tvDirectMessageReply;
+    private ImageView ivOnlineIndicator, ivCloseDirectMessage;
+    private RelativeLayout rlDirectReply;
 
     private ValueEventListener chatSeenListener;
 
@@ -93,6 +99,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void init() {
+        rlDirectReply = findViewById(R.id.rlDirectReply);
+
+        ivCloseDirectMessage = findViewById(R.id.ivCloseDirectMessage);
+
+        tvDirectMessageReply = findViewById(R.id.tvDirectMessageReply);
 
         progressDialog = new ProgressDialog(ChatActivity.this);
 
@@ -126,6 +137,25 @@ public class ChatActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setStackFromEnd(true);
         rvMessages.setLayoutManager(linearLayoutManager);
+
+        MessageReplyHelper swipeReplyController = new MessageReplyHelper(ChatActivity.this, position -> {
+            //GET YOUR ADAPTER ITEM ON WHICH THE SWIPE REPLY IS CALLED
+
+            rlDirectReply.setVisibility(View.VISIBLE);
+            tvDirectMessageReply.setText(messagesAdapter.getItem(position).getMessage());
+
+        });
+
+        ivCloseDirectMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rlDirectReply.setVisibility(View.GONE);
+                tvDirectMessageReply.setText("");
+            }
+        });
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeReplyController);
+        itemTouchHelper.attachToRecyclerView(rvMessages);
 
         ad_view_container = findViewById(R.id.ad_view_container);
     }
@@ -259,6 +289,8 @@ public class ChatActivity extends AppCompatActivity {
             btSendMessage.startAnimation(animateButton);
 
             if(!etWriteMessage.getText().toString().trim().isEmpty()){
+
+                rlDirectReply.setVisibility(View.GONE);
 
                 new Thread(() -> {
 

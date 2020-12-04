@@ -81,7 +81,7 @@ public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItem
 
         setAnimation(holder.tvMessage, position);
 
-        holder.tvMessage.setOnClickListener(new View.OnClickListener() {
+        holder.ll1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
