@@ -147,9 +147,7 @@ public class ChatActivity extends AppCompatActivity {
         ivCloseDirectMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rlDirectReply.setVisibility(View.GONE);
-                tvDirectMessageReply.setText("");
-                isReply = false;
+                removeReplyView();
             }
         });
 
@@ -157,6 +155,12 @@ public class ChatActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(rvMessages);
 
         ad_view_container = findViewById(R.id.ad_view_container);
+    }
+
+    private void removeReplyView(){
+        rlDirectReply.setVisibility(View.GONE);
+        tvDirectMessageReply.setText("");
+        isReply = false;
     }
 
     private void setupToolbar() {
@@ -292,6 +296,11 @@ public class ChatActivity extends AppCompatActivity {
 
                 rlDirectReply.setVisibility(View.GONE);
 
+                MessageType type;
+                type = isReply ? MessageType.TEXT_REPLY : MessageType.TEXT ;
+
+                removeReplyView();
+
                 new Thread(() -> {
 
                     String senderAvatarName = Avatar.nameList.get(Integer.parseInt(prefs.getAvatarId()));
@@ -301,16 +310,14 @@ public class ChatActivity extends AppCompatActivity {
 
                     ChatMethods.setChannelLastActiveStatus(timestamp,currUserId,chatUserId);
 
-                    MessageType type;
-
-                    type = isReply ? MessageType.TEXT_REPLY : MessageType.TEXT ;
-
                     Message m = new Message(timestamp,
                             currUserId,senderAvatarName,senderAvatarId,
                             chatUserId,etWriteMessage.getText().toString().trim(),
                             tvDirectMessageReply.getText().toString().trim(), type,false);
 
                     ChatMethods.sendTextMessage(channelId,m);
+
+
 
                 }).start();
 

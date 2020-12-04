@@ -13,6 +13,7 @@ public class MessageItemViewHolder extends RecyclerView.ViewHolder {
 
     public TextView tvMessage, tvTimeStamp,tvMsgSeen, tvDirectReplyMessage;
     public LinearLayout ll1;
+    public LinearLayout rlDirectReply;
 
     public MessageItemViewHolder(@NonNull View itemView) {
         super(itemView);

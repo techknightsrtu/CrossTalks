@@ -27,7 +27,6 @@ public class Message {
     }
 
     public Message() {
-
     }
 
     public String getReplyMessage() {
@@ -36,14 +35,6 @@ public class Message {
 
     public void setReplyMessage(String replyMessage) {
         this.replyMessage = replyMessage;
-    }
-
-    public boolean isSeen() {
-        return isSeen;
-    }
-
-    public void setSeen(boolean seen) {
-        isSeen = seen;
     }
 
     public boolean getIsSeen() {
