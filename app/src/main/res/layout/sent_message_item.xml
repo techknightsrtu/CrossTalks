@@ -41,7 +41,6 @@
                 android:textSize="12sp"
                 android:visibility="gone"
                 android:ellipsize="end"
-                android:autoLink="all"
                 android:layout_margin="4dp"
                 android:background="@drawable/direct_reply_message_bg"
                 android:textColor="@color/white"
