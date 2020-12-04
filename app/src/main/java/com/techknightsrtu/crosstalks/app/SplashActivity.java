@@ -3,9 +3,11 @@ package com.techknightsrtu.crosstalks.app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -30,6 +32,21 @@ public class SplashActivity extends AppCompatActivity {
         ivlogo = findViewById(R.id.ivlogo);
 
         ivlogo.animate().scaleX(4).scaleY(4).setDuration(500).start();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(SplashActivity.this);
+        if (!prefs.getBoolean("firstTime", false)) {
+            // <---- run your one time code here
+            // ad pref
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("adPref", 0); // 0 - for private mode
+            SharedPreferences.Editor adeditor = pref.edit();
+            adeditor.putBoolean("showAd",true);
+            adeditor.commit();
+
+            // mark first time has ran.
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("firstTime", true);
+            editor.commit();
+        }
 
         final Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {

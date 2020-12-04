@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gray_fill_rounded_8dp"
+    android:gravity="center_horizontal"
+    android:paddingTop="32dp"
+    android:paddingBottom="16dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="120dp"
+        android:layout_height="120dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/dark_circle_filled"
+            android:backgroundTint="@color/colorPrimary"
+            android:alpha="0.05"/>
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_icons8_ad_blocker"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enjoy ad free experience for one day."
+        android:padding="16dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/mont_light"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/tvAdRemoved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:drawableStart="@drawable/ic_baseline_check_circle_24_green"
+        android:text="Hurrey!!! Ad Removed For Today."
+        android:gravity="center"
+        android:padding="8dp"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/green"
+        android:fontFamily="@font/mont_regular"/>
+
+    <TextView
+        android:id="@+id/tvRemoveAd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:fontFamily="@font/mont_regular"
+        android:text="Remove Ad"
+        android:drawablePadding="8dp"
+        android:background="@drawable/red_bg_fill_round_send_button"
+        android:backgroundTint="@color/blue"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginTop="16dp"
+        android:paddingStart="12sp"
+        android:paddingEnd="12sp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"/>
+
+</LinearLayout>

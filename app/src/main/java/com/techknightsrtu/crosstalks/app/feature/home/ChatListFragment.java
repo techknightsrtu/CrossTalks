@@ -159,6 +159,10 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
                     FirebaseMethods.blockThisUser(userId);
                     return true;
 
+                case R.id.unblockChat:
+                    FirebaseMethods.unblockThisUser(userId);
+                    return true;
+
                 case R.id.reportChat:
                     // TODO: write code for reporting a user here
 

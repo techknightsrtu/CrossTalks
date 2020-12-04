@@ -7,6 +7,9 @@
     <item android:id="@+id/blockChat"
         android:title="Block"/>
 
+    <item android:id="@+id/unblockChat"
+        android:title="Unblock"/>
+
     <item android:id="@+id/reportChat"
         android:title="Report"/>
 

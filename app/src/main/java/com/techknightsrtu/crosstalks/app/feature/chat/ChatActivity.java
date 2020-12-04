@@ -186,6 +186,9 @@ public class ChatActivity extends AppCompatActivity {
                 llSendMessage.setVisibility(View.GONE);
                 llDialogMessage.setVisibility(View.VISIBLE);
                 tvMessage.setText(R.string.label_user_blocked_msg);
+            }else{
+                llSendMessage.setVisibility(View.VISIBLE);
+                llDialogMessage.setVisibility(View.GONE);
             }
         });
 

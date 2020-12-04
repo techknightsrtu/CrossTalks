@@ -22,6 +22,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="AD_UNIT_ID">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="video_ad_id">ca-app-pub-3940256099942544/5224354917</string>
 
     <string name="reCaptcha_Site_Key">6Len5toZAAAAAPzTdKkIQYRGj06hwEicWu3fCwq2</string>
     <string name="reCaptcha_Secret_Key">6Len5toZAAAAABxAw_JpRXnaeId_IsuG0ftEV3Na</string>

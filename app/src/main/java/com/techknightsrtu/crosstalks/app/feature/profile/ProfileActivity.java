@@ -1,14 +1,19 @@
 package com.techknightsrtu.crosstalks.app.feature.profile;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,9 +22,11 @@ import com.bumptech.glide.Glide;
 import com.techknightsrtu.crosstalks.BuildConfig;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.SplashActivity;
+import com.techknightsrtu.crosstalks.app.feature.home.HomeActivity;
 import com.techknightsrtu.crosstalks.app.helper.ProgressDialog;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetFeedbackFormUrl;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetVersionDetails;
 import com.techknightsrtu.crosstalks.google_admob.GoogleAdMob;
 import com.techknightsrtu.crosstalks.app.helper.constants.Avatar;
 import com.techknightsrtu.crosstalks.app.helper.local.UserProfileDataPref;
@@ -28,8 +35,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
 
+    private boolean isUpdateAvailable = false;
+
     // Widgets
     private ImageView ivBack, ivUserAvatar;
+    private ImageView ivUpdateIndicator;
     private CircleImageView ivUserRealAvatar;
     private TextView tvLogOut, tvUserName,tvUserOriginalName, tvUserCollegeName, tvShareApp, tvRateUs, tvVersionName;
 
@@ -50,8 +60,11 @@ public class ProfileActivity extends AppCompatActivity {
         init();
 
         // For Loading Ads
-        GoogleAdMob googleAdMob = new GoogleAdMob(ProfileActivity.this, ad_view_container);
-        googleAdMob.loadAd();
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("adPref", 0); // 0 - for private mode
+        if (pref.getBoolean("showAd", false)) {
+            GoogleAdMob googleAdMob = new GoogleAdMob(ProfileActivity.this, ad_view_container);
+            googleAdMob.loadAd();
+        }
 
         setupUserProfile();
     }
@@ -70,6 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void init() {
+        ivUpdateIndicator = findViewById(R.id.ivUpdateIndicator);
         ivUserAvatar = findViewById(R.id.ivUserAvatar);
         ivUserRealAvatar = findViewById(R.id.ivUserRealAvatar);
 
@@ -81,6 +95,21 @@ public class ProfileActivity extends AppCompatActivity {
         tvVersionName.setText("Version " + BuildConfig.VERSION_NAME);
 
         progressDialog = new ProgressDialog(ProfileActivity.this);
+
+        FirebaseMethods.getAppVersionDetails(new GetVersionDetails() {
+            @Override
+            public void onCallback(int versionCode, String versionName) {
+                int currentVersionCode = BuildConfig.VERSION_CODE;
+
+                if(versionCode > currentVersionCode){
+                    isUpdateAvailable = true;
+                    ivUpdateIndicator.setVisibility(View.VISIBLE);
+                }else{
+                    isUpdateAvailable = false;
+                    ivUpdateIndicator.setVisibility(View.GONE);
+                }
+            }
+        });
 
         tvShareApp = findViewById(R.id.tvShareApp);
         tvShareApp.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +164,44 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         profileDataPref = new UserProfileDataPref(ProfileActivity.this);
+    }
+
+    public void CheckUpdate(View view) {
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View updateDialogView = factory.inflate(R.layout.app_update_dialog, null);
+        final AlertDialog updateDialog = new AlertDialog.Builder(
+                new ContextThemeWrapper(this, R.style.CustomDialogTheme)
+        ).create();
+        updateDialog.setView(updateDialogView);
+        Window window = updateDialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+
+        TextView tvAppUpdated = updateDialogView.findViewById(R.id.tvAppUpdated);
+        TextView tvUpdateAvailable = updateDialogView.findViewById(R.id.tvUpdateAvailable);
+        TextView tvVersionName = updateDialogView.findViewById(R.id.tvVersionName);
+
+        tvVersionName.setText("Version " + BuildConfig.VERSION_NAME);
+
+        updateDialogView.findViewById(R.id.tvUpdateAvailable).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                final String appPackageName = getPackageName();
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                updateDialog.dismiss();
+            }
+        });
+
+        updateDialog.show();
+
+        if(isUpdateAvailable){
+            tvUpdateAvailable.setVisibility(View.VISIBLE);
+            tvAppUpdated.setVisibility(View.GONE);
+        }else {
+            tvUpdateAvailable.setVisibility(View.GONE);
+            tvAppUpdated.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

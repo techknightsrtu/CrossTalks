@@ -1,14 +1,18 @@
 package com.techknightsrtu.crosstalks.app.feature.home;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.DialogCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +20,15 @@ import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.inappmessaging.FirebaseInAppMessaging;
 import com.techknightsrtu.crosstalks.BuildConfig;
@@ -30,23 +41,23 @@ import com.techknightsrtu.crosstalks.app.helper.constants.Avatar;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.app.helper.local.UserProfileDataPref;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
 
-    private boolean isUpdateAvailable = false;
-
     //LocalData
     UserProfileDataPref prefs;
 
     //Widgets
     ViewPager viewPager;
-    private ImageView ivUpdateIndicator;
 
     // Google banner ad
     private FrameLayout ad_view_container;
+
+    private RewardedAd rewardedAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +68,19 @@ public class HomeActivity extends AppCompatActivity {
         init();
         setupBottomNavigationBar();
 
+        aDayCompleted();
+
         // For Loading Ads
-        GoogleAdMob googleAdMob = new GoogleAdMob(HomeActivity.this, ad_view_container);
-        googleAdMob.loadAd();
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("adPref", 0); // 0 - for private mode
+        if (pref.getBoolean("showAd", false)) {
+            loadRewardAd();
+            GoogleAdMob googleAdMob = new GoogleAdMob(HomeActivity.this, ad_view_container);
+            googleAdMob.loadAd();
+        }
 
     }
 
     private void init(){
-        ivUpdateIndicator = findViewById(R.id.ivUpdateIndicator);
 
         ad_view_container = findViewById(R.id.ad_view_container);
 
@@ -73,21 +89,6 @@ public class HomeActivity extends AppCompatActivity {
         TextView tvCollegeName = findViewById(R.id.tvCollegeName);
 
         tvCollegeName.setText(prefs.getCollegeName());
-
-        FirebaseMethods.getAppVersionDetails(new GetVersionDetails() {
-            @Override
-            public void onCallback(int versionCode, String versionName) {
-                int currentVersionCode = BuildConfig.VERSION_CODE;
-
-                if(versionCode > currentVersionCode){
-                    isUpdateAvailable = true;
-                    ivUpdateIndicator.setVisibility(View.VISIBLE);
-                }else{
-                    isUpdateAvailable = false;
-                    ivUpdateIndicator.setVisibility(View.GONE);
-                }
-            }
-        });
 
         viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), getChangingConfigurations()));
@@ -174,41 +175,101 @@ public class HomeActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    public void CheckUpdate(View view) {
+    // for remove ad onclick listener
+    public void removeAd(View view) {
         LayoutInflater factory = LayoutInflater.from(this);
-        final View updateDialogView = factory.inflate(R.layout.app_update_dialog, null);
-        final AlertDialog updateDialog = new AlertDialog.Builder(
+        final View removeAdDialogView = factory.inflate(R.layout.remove_ad_dialog, null);
+        final AlertDialog removeAdDialog = new AlertDialog.Builder(
                 new ContextThemeWrapper(this, R.style.CustomDialogTheme)
         ).create();
-        updateDialog.setView(updateDialogView);
-        Window window = updateDialog.getWindow();
+        removeAdDialog.setView(removeAdDialogView);
+        Window window = removeAdDialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
 
-        TextView tvAppUpdated = updateDialogView.findViewById(R.id.tvAppUpdated);
-        TextView tvUpdateAvailable = updateDialogView.findViewById(R.id.tvUpdateAvailable);
-        TextView tvVersionName = updateDialogView.findViewById(R.id.tvVersionName);
+        TextView tvRemoveAd = removeAdDialogView.findViewById(R.id.tvRemoveAd);
+        TextView tvAdRemoved = removeAdDialogView.findViewById(R.id.tvAdRemoved);
 
-        tvVersionName.setText("Version " + BuildConfig.VERSION_NAME);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("adPref", 0); // 0 - for private mode
+        if (pref.getBoolean("showAd", false)) {
+            tvAdRemoved.setVisibility(View.GONE);
+            tvRemoveAd.setVisibility(View.VISIBLE);
+        }else{
+            tvAdRemoved.setVisibility(View.VISIBLE);
+            tvRemoveAd.setVisibility(View.GONE);
+        }
 
-        updateDialogView.findViewById(R.id.tvUpdateAvailable).setOnClickListener(new View.OnClickListener() {
+        tvRemoveAd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //your business logic
-                final String appPackageName = getPackageName();
-                startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-                updateDialog.dismiss();
+
+                if(rewardedAd.isLoaded()){
+                    Activity activityContext = HomeActivity.this;
+                    RewardedAdCallback adCallback = new RewardedAdCallback() {
+                        @Override
+                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                            // User earned reward.
+                            SharedPreferences pref = getApplicationContext().getSharedPreferences("adPref", 0); // 0 - for private mode
+                            SharedPreferences.Editor adeditor = pref.edit();
+                            adeditor.putBoolean("showAd",false);
+                            adeditor.commit();
+                        }
+
+                        @Override
+                        public void onRewardedAdClosed() {
+                            // Ad closed.
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
+                        }
+                    };
+                    rewardedAd.show(activityContext, adCallback);
+                }else{
+                    Toast.makeText(HomeActivity.this, "Try again after some time.", Toast.LENGTH_SHORT).show();
+                }
+                removeAdDialog.dismiss();
             }
         });
 
-        updateDialog.show();
+        removeAdDialog.show();
+    }
 
-        if(isUpdateAvailable){
-            tvUpdateAvailable.setVisibility(View.VISIBLE);
-            tvAppUpdated.setVisibility(View.GONE);
+    // for load reward ad
+    private void loadRewardAd() {
+        rewardedAd = new RewardedAd(this,
+                getString(R.string.video_ad_id));
+        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
+            @Override
+            public void onRewardedAdLoaded() {
+                // Ad successfully loaded.
+            }
+
+            @Override
+            public void onRewardedAdFailedToLoad(LoadAdError adError) {
+                // Ad failed to load.
+            }
+        };
+        rewardedAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
+    }
+
+    // for checking if a day is completed
+    private void aDayCompleted() {
+        Calendar calendar = Calendar.getInstance();
+        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+        SharedPreferences dayPref = getApplicationContext().getSharedPreferences("dayPref",0);
+        int lastDay = dayPref.getInt("day",0);
+
+        if(lastDay != currentDay){
+            SharedPreferences.Editor editor = dayPref.edit();
+            editor.putInt("day",currentDay);
+            editor.commit();
+            // ----- show ad to true when a day completed -----
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("adPref", 0); // 0 - for private mode
+            SharedPreferences.Editor adeditor = pref.edit();
+            adeditor.putBoolean("showAd",true);
+            adeditor.commit();
         }else {
-            tvUpdateAvailable.setVisibility(View.GONE);
-            tvAppUpdated.setVisibility(View.VISIBLE);
+            Log.d(TAG, "aDayCompleted: " + "a day is not completed yet");
         }
     }
 }

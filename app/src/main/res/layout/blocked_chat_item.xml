@@ -55,6 +55,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/screenBackground"
         app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
         android:clickable="true"
         android:focusable="true">
         <RelativeLayout

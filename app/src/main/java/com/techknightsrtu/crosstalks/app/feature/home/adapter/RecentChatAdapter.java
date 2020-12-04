@@ -7,9 +7,11 @@ import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -31,7 +33,7 @@ public class RecentChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChanne
 
 
     private static final String TAG = "ChatAdapter";
-    
+
     private final OnChatButtonClick onChatButtonClick;
     private final LinearLayout llEmptyView;
 
@@ -83,22 +85,11 @@ public class RecentChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChanne
             holder.rlChatLoaded.setVisibility(View.VISIBLE);
         });
 
-        FirebaseMethods.getUserOnlineStatus(userId, (status) -> {
-
-            Log.d(TAG, "onBindViewHolderStatus: " + status);
-
-            if(status != null && status.equals("Online")){
-                holder.ivOnlineIndicator.setVisibility(View.VISIBLE);
-            }else{
-                holder.ivOnlineIndicator.setVisibility(View.GONE);
-            }
-
-        });
-
         FirebaseMethods.isUserBlocked(FirebaseMethods.getUserId(), userId, new IsUserBlocked() {
             @Override
             public void onCallback(boolean isBlocked) {
                 Log.i(TAG, "onCallback: " + isBlocked);
+
                 if(isBlocked){
                     ColorMatrix matrix = new ColorMatrix();
                     matrix.setSaturation(0);
@@ -118,8 +109,38 @@ public class RecentChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChanne
                             });
                         }
                     });
+                }else{
+                    ColorMatrix matrix = new ColorMatrix();
+                    matrix.setSaturation(1);
+
+                    ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+                    holder.ivUserAvatar.setColorFilter(filter);
+
+                    holder.ivBlockedStamp.animate().scaleX(0.9f).scaleY(0.9f).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.ivBlockedStamp.animate().scaleX(1.5f).scaleY(1.5f).setDuration(100).withEndAction(new Runnable() {
+                                @Override
+                                public void run() {
+                                    holder.ivBlockedStamp.setVisibility(View.GONE);
+                                }
+                            });
+                        }
+                    });
                 }
             }
+        });
+
+        FirebaseMethods.getUserOnlineStatus(userId, (status) -> {
+
+            Log.d(TAG, "onBindViewHolderStatus: " + status);
+
+            if(status != null && status.equals("Online")){
+                holder.ivOnlineIndicator.setVisibility(View.VISIBLE);
+            }else{
+                holder.ivOnlineIndicator.setVisibility(View.GONE);
+            }
+
         });
 
         ChatMethods.getLastMessage(channelId, lastMessage -> {
