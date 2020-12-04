@@ -298,6 +298,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 MessageType type;
                 type = isReply ? MessageType.TEXT_REPLY : MessageType.TEXT ;
+                String replyMessage = tvDirectMessageReply.getText().toString().trim();
 
                 removeReplyView();
 
@@ -313,7 +314,7 @@ public class ChatActivity extends AppCompatActivity {
                     Message m = new Message(timestamp,
                             currUserId,senderAvatarName,senderAvatarId,
                             chatUserId,etWriteMessage.getText().toString().trim(),
-                            tvDirectMessageReply.getText().toString().trim(), type,false);
+                            replyMessage, type,false);
 
                     ChatMethods.sendTextMessage(channelId,m);
 

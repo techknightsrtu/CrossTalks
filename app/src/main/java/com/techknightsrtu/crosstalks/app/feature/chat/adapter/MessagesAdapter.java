@@ -75,10 +75,10 @@ public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItem
     protected void onBindViewHolder(@NonNull final MessageItemViewHolder holder, int position, @NonNull Message m) {
 
         if (m.getType() == MessageType.TEXT_REPLY){
-            holder.tvDirectReplyMessage.setVisibility(View.VISIBLE);
+            holder.rlDirectReply.setVisibility(View.VISIBLE);
             holder.tvDirectReplyMessage.setText(m.getReplyMessage());
         }else{
-            holder.tvDirectReplyMessage.setVisibility(View.GONE);
+            holder.rlDirectReply.setVisibility(View.GONE);
         }
 
         holder.tvMessage.setText(m.getMessage());

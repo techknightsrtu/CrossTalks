@@ -16,6 +16,8 @@
         android:background="@drawable/sended_message_bg_fill_round">
 
         <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/rvDirectReply"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"

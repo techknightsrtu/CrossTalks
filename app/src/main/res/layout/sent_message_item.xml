@@ -16,6 +16,8 @@
         android:background="@drawable/start_new_chat_button">
 
         <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/rvDirectReply"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
@@ -29,7 +31,6 @@
                 android:padding="12dp"
                 android:maxLines="2"
                 android:textSize="12sp"
-                android:visibility="gone"
                 android:ellipsize="end"
                 android:autoLink="all"
                 android:textColor="@color/white"

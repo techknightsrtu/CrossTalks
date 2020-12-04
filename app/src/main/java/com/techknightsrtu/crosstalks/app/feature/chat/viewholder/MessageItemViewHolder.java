@@ -2,6 +2,7 @@ package com.techknightsrtu.crosstalks.app.feature.chat.viewholder;
 
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.techknightsrtu.crosstalks.R;
@@ -13,7 +14,7 @@ public class MessageItemViewHolder extends RecyclerView.ViewHolder {
 
     public TextView tvMessage, tvTimeStamp,tvMsgSeen, tvDirectReplyMessage;
     public LinearLayout ll1;
-    public LinearLayout rlDirectReply;
+    public RelativeLayout rlDirectReply;
 
     public MessageItemViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -22,6 +23,8 @@ public class MessageItemViewHolder extends RecyclerView.ViewHolder {
         tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
         tvMsgSeen = itemView.findViewById(R.id.tvMsgSeen);
         tvDirectReplyMessage = itemView.findViewById(R.id.tvDirectReplyMessage);
+
+        rlDirectReply = itemView.findViewById(R.id.rvDirectReply);
 
         ll1 = itemView.findViewById(R.id.ll1);
     }
