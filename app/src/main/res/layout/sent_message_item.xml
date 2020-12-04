@@ -15,21 +15,26 @@
         android:layout_alignParentEnd="true"
         android:background="@drawable/start_new_chat_button">
 
-        <TextView
-            android:id="@+id/tvDirectReplyMessage"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="This is a demoefeegegegegeg message"
-            android:background="@drawable/direct_reply_message_bg"
             android:layout_margin="4dp"
-            android:padding="12dp"
-            android:maxLines="2"
-            android:textSize="12sp"
-            android:visibility="gone"
-            android:ellipsize="end"
-            android:autoLink="all"
-            android:textColor="@color/white"
-            android:fontFamily="@font/mont_light"/>
+            android:background="@drawable/direct_reply_message_bg">
+
+            <TextView
+                android:id="@+id/tvDirectReplyMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This is a demoefeegegegegeg message"
+                android:padding="12dp"
+                android:maxLines="2"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:ellipsize="end"
+                android:autoLink="all"
+                android:textColor="@color/white"
+                android:fontFamily="@font/mont_light"/>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tvMessage"
