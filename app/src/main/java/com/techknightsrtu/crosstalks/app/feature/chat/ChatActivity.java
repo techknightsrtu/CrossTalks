@@ -349,12 +349,18 @@ public class ChatActivity extends AppCompatActivity {
                         int friendlyMessageCount = messagesAdapter.getItemCount();
                         int lastVisiblePosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
 
+                        Log.i(TAG, "onItemRangeInserted: " + positionStart);
+                        Log.i(TAG, "onItemRangeInserted: " + friendlyMessageCount);
+                        Log.i(TAG, "onItemRangeInserted: " + lastVisiblePosition);
+
                         if (lastVisiblePosition == -1 ||
                                 (positionStart >= (friendlyMessageCount - 1) &&
                                         lastVisiblePosition == (positionStart - 1))) {
 
                             linearLayoutManager.scrollToPosition(positionStart);
 
+                        }else if(positionStart == friendlyMessageCount - 1){
+                            linearLayoutManager.scrollToPosition(positionStart);
                         }
                     }
                 });
