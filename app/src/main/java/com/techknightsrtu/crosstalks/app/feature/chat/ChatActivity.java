@@ -318,8 +318,6 @@ public class ChatActivity extends AppCompatActivity {
 
                     ChatMethods.sendTextMessage(channelId,m);
 
-
-
                 }).start();
 
                 etWriteMessage.setText("");
