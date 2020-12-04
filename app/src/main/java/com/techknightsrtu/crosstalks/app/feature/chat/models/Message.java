@@ -38,9 +38,6 @@ public class Message {
         this.replyMessage = replyMessage;
     }
 
-    public boolean isSeen() {
-        return isSeen;
-    }
 
     public void setSeen(boolean seen) {
         isSeen = seen;
