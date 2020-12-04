@@ -105,6 +105,19 @@ public class RecentChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChanne
 
                     ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
                     holder.ivUserAvatar.setColorFilter(filter);
+
+                    holder.ivBlockedStamp.animate().scaleX(1.5f).scaleY(1.5f).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.ivBlockedStamp.setVisibility(View.VISIBLE);
+                            holder.ivBlockedStamp.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).withEndAction(new Runnable() {
+                                @Override
+                                public void run() {
+                                    holder.ivBlockedStamp.animate().scaleX(1f).scaleY(1f).setDuration(50);
+                                }
+                            });
+                        }
+                    });
                 }
             }
         });

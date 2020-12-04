@@ -189,7 +189,7 @@
         android:fontFamily="@font/mont_regular"
         android:textColor="@color/white"
         android:backgroundTint="@color/colorPrimary"
-        android:layout_gravity="end|bottom"
+        android:layout_gravity="center_horizontal|bottom"
         android:layout_margin="16dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

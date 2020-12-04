@@ -242,6 +242,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         Intent intent = new Intent(RegistrationActivity.this, WebLinkOpenActivity.class);
 
                         intent.putExtra("url", url);
+                        intent.putExtra("activity_name", "Terms & Conditions");
 
                         startActivity(intent);
                     }
@@ -262,6 +263,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         Intent intent = new Intent(RegistrationActivity.this, WebLinkOpenActivity.class);
 
                         intent.putExtra("url", url);
+                        intent.putExtra("activity_name", "Privacy Policy");
 
                         startActivity(intent);
                     }
@@ -414,6 +416,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         Intent intent = new Intent(RegistrationActivity.this, WebLinkOpenActivity.class);
 
                         intent.putExtra("url", url);
+                        intent.putExtra("activity_name", "Add Your College");
 
                         startActivity(intent);
                     }

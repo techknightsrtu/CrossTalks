@@ -9,10 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -154,6 +157,19 @@ public class ChatActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             FirebaseMethods.unblockThisUser(chatUserId);
                             blockedUserDialog.dismiss();
+                        }
+                    });
+
+                    blockedUserDialog.setOnKeyListener(new Dialog.OnKeyListener() {
+
+                        @Override
+                        public boolean onKey(DialogInterface arg0, int keyCode,
+                                             KeyEvent event) {
+                            // TODO Auto-generated method stub
+                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                finish();
+                            }
+                            return true;
                         }
                     });
 

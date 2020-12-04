@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class RecentChatViewHolder extends RecyclerView.ViewHolder {
 
     public TextView tvUserName, tvLastMessage, tvLastMessageTime, tvUnreadCount;
-    public ImageView ivUserAvatar, ivOnlineIndicator;
+    public ImageView ivUserAvatar, ivOnlineIndicator, ivBlockedStamp;
     public ShimmerFrameLayout svChatLoading;
     public RelativeLayout rlChatLoaded;
 
@@ -28,6 +28,7 @@ public class RecentChatViewHolder extends RecyclerView.ViewHolder {
 
         ivUserAvatar = itemView.findViewById(R.id.ivUserAvatar);
         ivOnlineIndicator = itemView.findViewById(R.id.ivOnlineIndicator);
+        ivBlockedStamp = itemView.findViewById(R.id.ivBlockedStamp);
 
         svChatLoading = itemView.findViewById(R.id.svChatLoading);
         rlChatLoaded = itemView.findViewById(R.id.rlChatLoaded);

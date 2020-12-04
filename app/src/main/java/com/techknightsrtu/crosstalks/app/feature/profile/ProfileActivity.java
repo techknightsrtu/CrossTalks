@@ -170,6 +170,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProfileActivity.this, WebLinkOpenActivity.class);
 
                 intent.putExtra("url", url);
+                intent.putExtra("activity_name", "Feedback");
 
                 startActivity(intent);
             }

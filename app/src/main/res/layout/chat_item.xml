@@ -156,6 +156,16 @@
                 android:paddingTop="2dp"
                 android:paddingBottom="2dp"/>
 
+            <ImageView
+                android:id="@+id/ivBlockedStamp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:visibility="gone"
+                android:src="@drawable/ic_blocked_stamp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"/>
         </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>

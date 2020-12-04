@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -35,11 +36,14 @@ public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
 
+    private boolean isUpdateAvailable = false;
+
     //LocalData
     UserProfileDataPref prefs;
 
     //Widgets
     ViewPager viewPager;
+    private ImageView ivUpdateIndicator;
 
     // Google banner ad
     private FrameLayout ad_view_container;
@@ -60,6 +64,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void init(){
+        ivUpdateIndicator = findViewById(R.id.ivUpdateIndicator);
 
         ad_view_container = findViewById(R.id.ad_view_container);
 
@@ -68,6 +73,21 @@ public class HomeActivity extends AppCompatActivity {
         TextView tvCollegeName = findViewById(R.id.tvCollegeName);
 
         tvCollegeName.setText(prefs.getCollegeName());
+
+        FirebaseMethods.getAppVersionDetails(new GetVersionDetails() {
+            @Override
+            public void onCallback(int versionCode, String versionName) {
+                int currentVersionCode = BuildConfig.VERSION_CODE;
+
+                if(versionCode > currentVersionCode){
+                    isUpdateAvailable = true;
+                    ivUpdateIndicator.setVisibility(View.VISIBLE);
+                }else{
+                    isUpdateAvailable = false;
+                    ivUpdateIndicator.setVisibility(View.GONE);
+                }
+            }
+        });
 
         viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), getChangingConfigurations()));
@@ -157,7 +177,9 @@ public class HomeActivity extends AppCompatActivity {
     public void CheckUpdate(View view) {
         LayoutInflater factory = LayoutInflater.from(this);
         final View updateDialogView = factory.inflate(R.layout.app_update_dialog, null);
-        final AlertDialog updateDialog = new AlertDialog.Builder(this).create();
+        final AlertDialog updateDialog = new AlertDialog.Builder(
+                new ContextThemeWrapper(this, R.style.CustomDialogTheme)
+        ).create();
         updateDialog.setView(updateDialogView);
         Window window = updateDialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
@@ -165,7 +187,6 @@ public class HomeActivity extends AppCompatActivity {
         TextView tvAppUpdated = updateDialogView.findViewById(R.id.tvAppUpdated);
         TextView tvUpdateAvailable = updateDialogView.findViewById(R.id.tvUpdateAvailable);
         TextView tvVersionName = updateDialogView.findViewById(R.id.tvVersionName);
-        LottieAnimationView loading_animation = updateDialogView.findViewById(R.id.loading_animation);
 
         tvVersionName.setText("Version " + BuildConfig.VERSION_NAME);
 
@@ -182,19 +203,12 @@ public class HomeActivity extends AppCompatActivity {
 
         updateDialog.show();
 
-        FirebaseMethods.getAppVersionDetails(new GetVersionDetails() {
-            @Override
-            public void onCallback(int versionCode, String versionName) {
-                int currentVersionCode = BuildConfig.VERSION_CODE;
-
-                loading_animation.setVisibility(View.GONE);
-
-                if(versionCode > currentVersionCode){
-                    tvUpdateAvailable.setVisibility(View.VISIBLE);
-                }else{
-                    tvAppUpdated.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+        if(isUpdateAvailable){
+            tvUpdateAvailable.setVisibility(View.VISIBLE);
+            tvAppUpdated.setVisibility(View.GONE);
+        }else {
+            tvUpdateAvailable.setVisibility(View.GONE);
+            tvAppUpdated.setVisibility(View.VISIBLE);
+        }
     }
 }

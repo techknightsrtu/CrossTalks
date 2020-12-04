@@ -1,10 +1,12 @@
 package com.techknightsrtu.crosstalks.app.feature.chat.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -14,11 +16,16 @@ import com.techknightsrtu.crosstalks.app.feature.chat.viewholder.MessageItemView
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.app.helper.Utility;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItemViewHolder> {
 
+    private static final String TAG = "MessagesAdapter";
 
     public static final int MSG_TYPE_RECEIVED = 0;
     public static final int MSG_TYPE_SENT = 1;

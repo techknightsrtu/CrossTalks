@@ -10,6 +10,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
@@ -21,8 +22,10 @@ public class WebLinkOpenActivity extends AppCompatActivity {
 
     private WebView webView;
     private ProgressBar pbSearchResult;
+    private TextView tvActivityName;
 
     private String url = "https://cross-talks-e6d43.firebaseapp.com/#/";
+    private String activityName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +55,12 @@ public class WebLinkOpenActivity extends AppCompatActivity {
     private void init() {
         pbSearchResult = findViewById(R.id.pbSearchResult);
         webView = findViewById(R.id.webView);
+        tvActivityName = findViewById(R.id.tvActivityName);
 
         url = Objects.requireNonNull(getIntent().getExtras()).getString("url");
+        activityName = getIntent().getExtras().getString("activity_name");
+
+        tvActivityName.setText(activityName);
     }
 
     private void setupToolbar() {

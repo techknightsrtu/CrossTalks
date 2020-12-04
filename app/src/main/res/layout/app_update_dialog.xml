@@ -60,17 +60,6 @@
         android:textColor="@color/gray_text_color"
         android:fontFamily="@font/mont_light"/>
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/loading_animation"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginTop="8dp"
-        android:layout_centerInParent="true"
-        android:layout_alignParentBottom="true"
-        app:lottie_rawRes="@raw/splash_loading"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>
-
     <TextView
         android:id="@+id/tvAppUpdated"
         android:layout_width="wrap_content"
@@ -97,7 +86,7 @@
         android:drawableStart="@drawable/ic_round_update_24_white"
         android:drawablePadding="8dp"
         android:background="@drawable/red_bg_fill_round_send_button"
-        android:backgroundTint="@color/yellow"
+        android:backgroundTint="@color/blue"
         android:clickable="true"
         android:focusable="true"
         android:layout_marginTop="16dp"

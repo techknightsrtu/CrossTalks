@@ -17,7 +17,8 @@
             android:layout_height="wrap_content"
             android:text="USERS"
             android:textSize="16sp"
-            android:fontFamily="@font/mont_bold"
+            android:fontFamily="@font/mansalva_regular"
+            android:textStyle="bold"
             android:textColor="@color/white"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="16dp"/>
