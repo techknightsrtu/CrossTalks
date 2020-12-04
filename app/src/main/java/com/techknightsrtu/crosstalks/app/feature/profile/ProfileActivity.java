@@ -61,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // For Loading Ads
         SharedPreferences pref = getApplicationContext().getSharedPreferences("adPref", 0); // 0 - for private mode
-        if (pref.getBoolean("showAd", false)) {
+        if (pref.getBoolean("showAd", false)){
             GoogleAdMob googleAdMob = new GoogleAdMob(ProfileActivity.this, ad_view_container);
             googleAdMob.loadAd();
         }

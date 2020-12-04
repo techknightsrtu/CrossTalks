@@ -15,54 +15,80 @@
         android:layout_marginTop="8dp"
         android:layout_gravity="center_horizontal"/>
 
-    <TextView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Report User"
-        android:gravity="center"
-        android:padding="16dp"
-        android:textSize="24sp"
-        android:fontFamily="@font/mansalva_regular"
-        android:textColor="@color/white"/>
+        android:orientation="horizontal"
+        android:padding="16dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Report"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:fontFamily="@font/mansalva_regular"
+            android:textColor="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" User"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:fontFamily="@font/mansalva_regular"
+            android:textColor="@color/colorPrimary"/>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:alpha="0.4"
         android:background="@color/gray_text_color"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Why you want to block this user?"
+        android:text="Why you want to report this user?"
         android:fontFamily="@font/mont_regular"
         android:padding="16dp"
         android:textColor="@color/white"
         android:textSize="16sp"/>
 
     <TextView
+        android:id="@+id/tvOp1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Abusive Behaviour"
         android:fontFamily="@font/mont_light"
         android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
         android:textColor="@color/white"
         android:textSize="16sp"/>
 
     <TextView
+        android:id="@+id/tvOp2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Explicit Content"
         android:fontFamily="@font/mont_light"
         android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
         android:textColor="@color/white"
         android:textSize="16sp"/>
 
     <TextView
+        android:id="@+id/tvOp3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Not From Your College?"
         android:fontFamily="@font/mont_light"
         android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
         android:textColor="@color/white"
         android:textSize="16sp"/>
 

@@ -223,7 +223,7 @@
             android:text=""
             android:gravity="center"
             android:padding="8dp"
-            android:textColor="@color/bg_fill"
+            android:textColor="@color/gray_text_color"
             android:fontFamily="@font/mont_light"/>
     </LinearLayout>
 

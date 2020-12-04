@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,6 +34,7 @@ import com.techknightsrtu.crosstalks.app.feature.chat.adapter.MessagesAdapter;
 import com.techknightsrtu.crosstalks.app.feature.chat.models.Message;
 import com.techknightsrtu.crosstalks.app.feature.chat.models.MessageType;
 import com.techknightsrtu.crosstalks.app.feature.home.ChatListFragment;
+import com.techknightsrtu.crosstalks.app.feature.home.HomeActivity;
 import com.techknightsrtu.crosstalks.firebase.ChatMethods;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.GetChatChannel;
@@ -80,8 +82,11 @@ public class ChatActivity extends AppCompatActivity {
         init();
 
         // For Loading Ads
-        GoogleAdMob googleAdMob = new GoogleAdMob(ChatActivity.this, ad_view_container);
-        googleAdMob.loadAd();
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("adPref", 0); // 0 - for private mode
+        if (pref.getBoolean("showAd", false)) {
+            GoogleAdMob googleAdMob = new GoogleAdMob(ChatActivity.this, ad_view_container);
+            googleAdMob.loadAd();
+        }
 
         setupToolbar();
 

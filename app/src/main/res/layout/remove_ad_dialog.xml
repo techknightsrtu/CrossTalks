@@ -31,7 +31,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enjoy ad free experience for one day."
+        android:text="Enjoy ad free experience."
         android:padding="16dp"
         android:textColor="@color/white"
         android:fontFamily="@font/mont_light"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"
         android:drawableStart="@drawable/ic_baseline_check_circle_24_green"
-        android:text="Hurrey!!! Ad Removed For Today."
+        android:text="Hurrey!!! Enjoy ad free experience\nfor 30 minutes."
         android:gravity="center"
         android:padding="8dp"
         android:visibility="gone"

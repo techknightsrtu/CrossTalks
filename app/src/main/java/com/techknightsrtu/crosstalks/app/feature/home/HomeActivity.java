@@ -68,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         init();
         setupBottomNavigationBar();
 
-        aDayCompleted();
+        isOneHourCompleted();
 
         // For Loading Ads
         SharedPreferences pref = getApplicationContext().getSharedPreferences("adPref", 0); // 0 - for private mode
@@ -107,7 +107,6 @@ public class HomeActivity extends AppCompatActivity {
         });
 
     }
-
 
     private void setupBottomNavigationBar(){
 
@@ -208,6 +207,11 @@ public class HomeActivity extends AppCompatActivity {
                     RewardedAdCallback adCallback = new RewardedAdCallback() {
                         @Override
                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                            SharedPreferences timePref = getApplicationContext().getSharedPreferences("timePref",0);
+                            SharedPreferences.Editor editor = timePref.edit();
+                            editor.putLong("last_time", System.currentTimeMillis() / 1000);
+                            editor.apply();
+
                             // User earned reward.
                             SharedPreferences pref = getApplicationContext().getSharedPreferences("adPref", 0); // 0 - for private mode
                             SharedPreferences.Editor adeditor = pref.edit();
@@ -252,24 +256,30 @@ public class HomeActivity extends AppCompatActivity {
         rewardedAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
     }
 
-    // for checking if a day is completed
-    private void aDayCompleted() {
-        Calendar calendar = Calendar.getInstance();
-        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-        SharedPreferences dayPref = getApplicationContext().getSharedPreferences("dayPref",0);
-        int lastDay = dayPref.getInt("day",0);
+    // for checking if one hour completed
+    private void isOneHourCompleted(){
+        SharedPreferences timePref = getApplicationContext().getSharedPreferences("timePref",0);
+        SharedPreferences.Editor editor = timePref.edit();
 
-        if(lastDay != currentDay){
-            SharedPreferences.Editor editor = dayPref.edit();
-            editor.putInt("day",currentDay);
-            editor.commit();
-            // ----- show ad to true when a day completed -----
-            SharedPreferences pref = getApplicationContext().getSharedPreferences("adPref", 0); // 0 - for private mode
-            SharedPreferences.Editor adeditor = pref.edit();
-            adeditor.putBoolean("showAd",true);
-            adeditor.commit();
-        }else {
-            Log.d(TAG, "aDayCompleted: " + "a day is not completed yet");
+        long lastTime = timePref.getLong("last_time", 0);
+
+        if(lastTime != 0){
+
+            long currentTime = System.currentTimeMillis() / 1000;
+            Long timeElapsed = currentTime - lastTime;
+
+            if(timeElapsed > 1800){
+                editor.putLong("last_time", 0);
+
+                // show ad
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("adPref", 0); // 0 - for private mode
+                SharedPreferences.Editor adeditor = pref.edit();
+                adeditor.putBoolean("showAd",true);
+                adeditor.commit();
+            }else{
+                Log.i(TAG, "isOneHourCompleted: Time haven't completed yet.");
+            }
+
         }
     }
 }

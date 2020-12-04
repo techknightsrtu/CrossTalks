@@ -1,7 +1,9 @@
 package com.techknightsrtu.crosstalks.app.feature.home;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,7 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.techknightsrtu.crosstalks.R;
+import com.techknightsrtu.crosstalks.app.feature.auth.RegistrationActivity;
 import com.techknightsrtu.crosstalks.app.feature.chat.ChatActivity;
 import com.techknightsrtu.crosstalks.app.feature.home.adapter.RecentChatAdapter;
 import com.techknightsrtu.crosstalks.app.feature.home.adapter.StoriesAdapter;
@@ -165,7 +169,7 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
 
                 case R.id.reportChat:
                     // TODO: write code for reporting a user here
-
+                    showReportSheet();
                     return true;
             }
 
@@ -176,7 +180,36 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
 
     }
 
+    private void showReportSheet() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View ReportUserView = layoutInflater.inflate(R.layout.report_bottom_sheet, null);
 
+        final Dialog dialog = new BottomSheetDialog(getActivity(), R.style.DialogStyle);
+        dialog.setContentView(ReportUserView);
+
+        ReportUserView.findViewById(R.id.tvOp1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: first option
+            }
+        });
+
+        ReportUserView.findViewById(R.id.tvOp2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: second option
+            }
+        });
+
+        ReportUserView.findViewById(R.id.tvOp3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: third option
+            }
+        });
+
+        dialog.show();
+    }
 
 
 }
