@@ -84,7 +84,7 @@ public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItem
         String timeDate = Utility.getTimeFromTimestamp(m.getTimestamp()) + ", " + Utility.getDateFromTimestamp(m.getTimestamp());
         holder.tvTimeStamp.setText(timeDate);
 
-        setAnimation(holder.tvMessage, position);
+        setAnimation(holder.ll1, position);
 
         holder.ll1.setOnClickListener(new View.OnClickListener() {
             @Override

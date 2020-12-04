@@ -315,6 +315,8 @@ public class ChatActivity extends AppCompatActivity {
                 }).start();
 
                 etWriteMessage.setText("");
+                tvDirectMessageReply.setText("");
+                isReply = false;
             }
 
         });
@@ -366,7 +368,6 @@ public class ChatActivity extends AppCompatActivity {
                 });
 
                 chatSeenListener = ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
-
 
             }
         });
