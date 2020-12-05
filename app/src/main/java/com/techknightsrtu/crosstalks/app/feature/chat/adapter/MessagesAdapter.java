@@ -83,6 +83,10 @@ public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItem
 
         holder.tvMessage.setText(m.getMessage());
 
+        int visibility = holder.tvMessage.getVisibility();
+        holder.tvMessage.setVisibility(View.GONE);
+        holder.tvMessage.setVisibility(visibility);
+
         String timeDate = Utility.getTimeFromTimestamp(m.getTimestamp()) + ", " + Utility.getDateFromTimestamp(m.getTimestamp());
         holder.tvTimeStamp.setText(timeDate);
 

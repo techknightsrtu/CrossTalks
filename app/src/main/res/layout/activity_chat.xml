@@ -51,6 +51,7 @@
                         android:id="@+id/ivOnlineIndicator"
                         android:layout_width="10dp"
                         android:layout_height="10dp"
+                        android:visibility="gone"
                         android:src="@drawable/green_circle"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
