@@ -77,6 +77,10 @@ public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItem
         if (m.getType() == MessageType.TEXT_REPLY){
             holder.tvDirectReplyMessage.setVisibility(View.VISIBLE);
             holder.tvDirectReplyMessage.setText(m.getReplyMessage());
+
+            int visibility = holder.tvDirectReplyMessage.getVisibility();
+            holder.tvDirectReplyMessage.setVisibility(View.GONE);
+            holder.tvDirectReplyMessage.setVisibility(visibility);
         }else{
             holder.tvDirectReplyMessage.setVisibility(View.GONE);
         }
@@ -92,7 +96,7 @@ public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItem
 
         setAnimation(holder.ll1, position);
 
-        holder.ll1.setOnClickListener(new View.OnClickListener() {
+        holder.tvMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
