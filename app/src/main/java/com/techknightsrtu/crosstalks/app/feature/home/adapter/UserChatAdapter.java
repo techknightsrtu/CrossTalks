@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -23,10 +24,12 @@ public class UserChatAdapter extends FirestoreRecyclerAdapter<User, UserChatView
     private static final String TAG = "OnlineChatAdapter";
 
     private final OnChatButtonClick onChatButtonClick;
+    private LinearLayout llEmptyView;
 
-    public UserChatAdapter(FirestoreRecyclerOptions<User> options, OnChatButtonClick onChatButtonClick ) {
+    public UserChatAdapter(FirestoreRecyclerOptions<User> options, OnChatButtonClick onChatButtonClick, LinearLayout llEmptyView) {
         super(options);
         this.onChatButtonClick = onChatButtonClick;
+        this.llEmptyView = llEmptyView;
     }
 
     @NonNull
@@ -88,5 +91,10 @@ public class UserChatAdapter extends FirestoreRecyclerAdapter<User, UserChatView
     @Override
     public int getItemViewType(int position) {
         return position;
+    }
+
+    @Override
+    public void onDataChanged() {
+        llEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 }

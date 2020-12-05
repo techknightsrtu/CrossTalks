@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.techknightsrtu.crosstalks.BuildConfig;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.feature.chat.ChatActivity;
 import com.techknightsrtu.crosstalks.app.feature.home.adapter.UserChatAdapter;
@@ -29,6 +32,8 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
     //Widgets
     private RecyclerView rvOnlineUsers;
     private View mView;
+    private TextView tvShareApp;
+    private LinearLayout llEmpty;
 
     //Adapter
     private UserChatAdapter onlineChatAdapter;
@@ -66,11 +71,32 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
 
         rvOnlineUsers = mView.findViewById(R.id.rvOnlineUsers);
 
+        tvShareApp = mView.findViewById(R.id.tvShareApp);
+
+        llEmpty = mView.findViewById(R.id.llEmpty);
+
+        tvShareApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "CrossTalks");
+                    String shareMessage= "\nBored in this Quarantine ??? Let's have some fun, Download CrossTalks and chat with your mates anonymously.   \n\n";
+                    shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                    startActivity(Intent.createChooser(shareIntent, "Invite your friends"));
+                } catch(Exception e) {
+                    //e.toString();
+                }
+            }
+        });
+
     }
 
     private void setupOnlineUsers(){
 
-        onlineChatAdapter = FirebaseMethods.setupOnlineChatsAdapter(prefs.getCollegeId(),UsersListFragment.this);
+        onlineChatAdapter = FirebaseMethods.setupOnlineChatsAdapter(prefs.getCollegeId(),UsersListFragment.this, llEmpty);
         rvOnlineUsers.setAdapter(onlineChatAdapter);
         onlineChatAdapter.notifyDataSetChanged();
 
