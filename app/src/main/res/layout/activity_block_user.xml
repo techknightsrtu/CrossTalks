@@ -85,15 +85,19 @@
             android:fontFamily="@font/mont_light"
             android:layout_marginTop="32dp"/>
 
-        <Button
-            android:id="@+id/btBack"
+        <TextView
+            android:id="@+id/btGoBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="Go Back"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@color/white"
+            android:padding="12sp"
             android:fontFamily="@font/mont_regular"
             android:textAllCaps="false"
-            android:background="@drawable/red_bg_fill_round"/>
+            android:background="@drawable/red_bg_fill_round_send_button"/>
 
     </LinearLayout>
 
