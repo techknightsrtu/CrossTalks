@@ -96,9 +96,21 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
 
     private void setupOnlineUsers(){
 
-        onlineChatAdapter = FirebaseMethods.setupOnlineChatsAdapter(prefs.getCollegeId(),UsersListFragment.this, llEmpty);
+        onlineChatAdapter = FirebaseMethods.setupOnlineChatsAdapter(prefs.getCollegeId(),
+                UsersListFragment.this, llEmpty);
+
         rvOnlineUsers.setAdapter(onlineChatAdapter);
-        onlineChatAdapter.notifyDataSetChanged();
+
+        onlineChatAdapter.onDataChanged();
+
+
+        if(onlineChatAdapter.getItemCount() == 0){
+            rvOnlineUsers.setVisibility(View.VISIBLE);
+            llEmpty.setVisibility(View.GONE);
+        }else {
+            llEmpty.setVisibility(View.VISIBLE);
+            rvOnlineUsers.setVisibility(View.GONE);
+        }
 
     }
 

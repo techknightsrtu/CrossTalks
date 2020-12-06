@@ -310,13 +310,19 @@ public class ChatActivity extends AppCompatActivity {
                             chatUserId,etWriteMessage.getText().toString().trim(),
                             tvDirectMessageReply.getText().toString().trim(), type,false);
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            etWriteMessage.setText("");
+                            tvDirectMessageReply.setText("");
+                            isReply = false;
+                        }
+                    });
+
                     ChatMethods.sendTextMessage(channelId,m);
 
                 }).start();
 
-                etWriteMessage.setText("");
-                tvDirectMessageReply.setText("");
-                isReply = false;
             }
 
         });
@@ -326,13 +332,14 @@ public class ChatActivity extends AppCompatActivity {
 
     private void getChatChannelAndSetup(){
 
+
         ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
             @Override
             public void onCallback(String channelId) {
 
                 setupChatChannel(channelId);
 
-                messagesAdapter = ChatMethods.setupFirebaseChatsAdapter(channelId);
+                messagesAdapter = ChatMethods.setupFirebaseChatsAdapter(channelId,llSafetyGuide);
 
                 if(messagesAdapter.getItemCount() == 0){
                     llSafetyGuide.setVisibility(View.GONE);
@@ -428,7 +435,7 @@ public class ChatActivity extends AppCompatActivity {
         isVisible = false;
         super.onDestroy();
 
-       // ChatMethods.deleteChatChannelIfNoChat(currUserId, chatUserId);
+       //ChatMethods.deleteChatChannelIfNoChat(currUserId, chatUserId);
     }
 
 }

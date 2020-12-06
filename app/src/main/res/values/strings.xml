@@ -39,4 +39,6 @@
     <string name="label_user_chat_deleted_msg">User has deleted this conversation. You can delete the channel if you want.</string>
     <string name="label_user_blocked_msg">You are blocked.</string>
 
+    <string name="label_chat_saftey_guildelines">Please be civil while having conversation anonymously. If reported, necessary action can be taken as per the Cyber Security guidelines. \n\n\n Team CrossTalks</string>
+
 </resources>

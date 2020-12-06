@@ -335,7 +335,7 @@ public class ChatMethods {
 
 
     //FIREBASE RECYCLER ADAPTER
-    public static MessagesAdapter setupFirebaseChatsAdapter(String channelId){
+    public static MessagesAdapter setupFirebaseChatsAdapter(String channelId, LinearLayout llSafetyLayout){
 
         DatabaseReference chatChannelRef = FirebaseDatabase.getInstance().getReference()
                 .child("chatChannels").child(channelId).child("messages");
@@ -348,7 +348,7 @@ public class ChatMethods {
                 .setQuery(q,Message.class)
                 .build();
 
-        return new MessagesAdapter(options);
+        return new MessagesAdapter(options,llSafetyLayout);
 
     }
 

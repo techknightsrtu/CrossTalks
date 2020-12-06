@@ -26,7 +26,8 @@ public class UserChatAdapter extends FirestoreRecyclerAdapter<User, UserChatView
     private final OnChatButtonClick onChatButtonClick;
     private LinearLayout llEmptyView;
 
-    public UserChatAdapter(FirestoreRecyclerOptions<User> options, OnChatButtonClick onChatButtonClick, LinearLayout llEmptyView) {
+    public UserChatAdapter(FirestoreRecyclerOptions<User> options, OnChatButtonClick onChatButtonClick,
+                           LinearLayout llEmptyView) {
         super(options);
         this.onChatButtonClick = onChatButtonClick;
         this.llEmptyView = llEmptyView;
@@ -84,17 +85,11 @@ public class UserChatAdapter extends FirestoreRecyclerAdapter<User, UserChatView
 
         }
 
-
-
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
 
     @Override
     public void onDataChanged() {
-        llEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
+        llEmptyView.setVisibility(getItemCount() == 1 ? View.VISIBLE : View.GONE);
     }
 }

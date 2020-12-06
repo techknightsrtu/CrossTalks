@@ -1,12 +1,11 @@
 package com.techknightsrtu.crosstalks.app.feature.chat.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -17,10 +16,6 @@ import com.techknightsrtu.crosstalks.app.feature.chat.viewholder.MessageItemView
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
 import com.techknightsrtu.crosstalks.app.helper.Utility;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +25,7 @@ public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItem
 
     public static final int MSG_TYPE_RECEIVED = 0;
     public static final int MSG_TYPE_SENT = 1;
+    private LinearLayout llSafetyLayout;
 
     public int MSG_TYPE;
 
@@ -40,9 +36,11 @@ public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItem
      * {@link FirebaseRecyclerOptions} for configuration options.
      *
      * @param options
+     * @param llSafetyLayout
      */
-    public MessagesAdapter(@NonNull FirebaseRecyclerOptions<Message> options) {
+    public MessagesAdapter(@NonNull FirebaseRecyclerOptions<Message> options, LinearLayout llSafetyLayout) {
         super(options);
+        this.llSafetyLayout = llSafetyLayout;
     }
 
 
@@ -91,7 +89,9 @@ public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItem
         holder.tvMessage.setVisibility(View.GONE);
         holder.tvMessage.setVisibility(visibility);
 
-        String timeDate = Utility.getTimeFromTimestamp(m.getTimestamp()) + ", " + Utility.getDateFromTimestamp(m.getTimestamp());
+        String timeDate = Utility.getTimeFromTimestamp(m.getTimestamp())
+                + ", "
+                + Utility.getDateFromTimestamp(m.getTimestamp());
         holder.tvTimeStamp.setText(timeDate);
 
         setAnimation(holder.ll1, position);
@@ -146,6 +146,11 @@ public class MessagesAdapter extends FirebaseRecyclerAdapter<Message,MessageItem
             lastPosition = position;
         }
 
+    }
+
+    @Override
+    public void onDataChanged() {
+        llSafetyLayout.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
 }
