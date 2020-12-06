@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techknightsrtu.crosstalks.R;
@@ -24,7 +25,7 @@ public class BlockUserActivity extends AppCompatActivity implements OnUnblockBut
 
     private LinearLayout llEmpty;
     private RecyclerView rvBlockedChats;
-    private Button btBack;
+    private TextView btBack;
 
     private BlockedUserAdapter blockedUserAdapter;
 
@@ -42,7 +43,7 @@ public class BlockUserActivity extends AppCompatActivity implements OnUnblockBut
 
         llEmpty = findViewById(R.id.llEmpty);
 
-        btBack = findViewById(R.id.btBack);
+        btBack = findViewById(R.id.btGoBack);
 
         rvBlockedChats = findViewById(R.id.rvBlockedChats);
 
