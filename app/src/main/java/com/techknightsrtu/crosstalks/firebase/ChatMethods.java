@@ -287,11 +287,13 @@ public class ChatMethods {
         DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
                 .child("chatChannels").child(channelId);
 
-        chatChannelsRef.child("members").addValueEventListener(new ValueEventListener() {
+        chatChannelsRef.child("members").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if(snapshot.getChildrenCount() == 1){
+                Log.d(TAG, "onDataChange: " + snapshot);
+
+                if(snapshot.getChildrenCount() <= 1){
                     chatChannelsRef.removeValue();
                 }else{
                     chatChannelsRef.child("members").child(FirebaseMethods.getUserId()).removeValue();
