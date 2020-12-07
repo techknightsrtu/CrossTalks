@@ -291,7 +291,9 @@ public class ChatMethods {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if(snapshot.getChildrenCount() == 1){
+                Log.d(TAG, "onDataChange: " + snapshot);
+
+                if(snapshot.getChildrenCount() <= 1){
                     chatChannelsRef.removeValue();
                 }else{
                     chatChannelsRef.child("members").child(FirebaseMethods.getUserId()).removeValue();

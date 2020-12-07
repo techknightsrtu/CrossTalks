@@ -14,7 +14,6 @@ public class MessageItemViewHolder extends RecyclerView.ViewHolder {
 
     public TextView tvMessage, tvTimeStamp,tvMsgSeen, tvDirectReplyMessage;
     public LinearLayout ll1;
-    public RelativeLayout rlDirectReply;
 
     public MessageItemViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -23,8 +22,6 @@ public class MessageItemViewHolder extends RecyclerView.ViewHolder {
         tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
         tvMsgSeen = itemView.findViewById(R.id.tvMsgSeen);
         tvDirectReplyMessage = itemView.findViewById(R.id.tvDirectReplyMessage);
-
-        rlDirectReply = itemView.findViewById(R.id.rvDirectReply);
 
         ll1 = itemView.findViewById(R.id.ll1);
     }
