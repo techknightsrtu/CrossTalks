@@ -96,119 +96,56 @@ public class ChatMethods {
                 .document(sender);
 
         currentUserDocRef.collection("engagedChatChannels")
-                .document(receiver).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
+                .document(receiver)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        assert documentSnapshot != null;
+                        if(documentSnapshot.contains("channelId")){
 
-                assert documentSnapshot != null;
-                if(documentSnapshot.contains("channelId")){
+                            getChatChannel.onCallback(documentSnapshot.get("channelId").toString());
 
-                    getChatChannel.onCallback(documentSnapshot.get("channelId").toString());
+                        }else{
 
-                }else{
+                            DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
+                                    .child("chatChannels").push();
 
-                    DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
-                            .child("chatChannels").push();
+                            ArrayList<String> list = new ArrayList<>();
+                            list.add(sender);
+                            list.add(receiver);
 
-                    ArrayList<String> list = new ArrayList<>();
-                    list.add(sender);
-                    list.add(receiver);
+                            ChatChannel ch = new ChatChannel(list);
+                            ch.setChannelId(chatChannelsRef.getKey());
 
-                    ChatChannel ch = new ChatChannel(list);
-                    ch.setChannelId(chatChannelsRef.getKey());
+                            Log.d(TAG, "onDataChange: CHANNEL CREATED " + chatChannelsRef.getKey());
 
-                    Log.d(TAG, "onDataChange: CHANNEL CREATED " + chatChannelsRef.getKey());
+                            chatChannelsRef.setValue(ch);
 
-                    chatChannelsRef.setValue(ch);
+                            Map<String,String> mp = new HashMap<>();
+                            mp.put("channelId",ch.getChannelId());
+                            mp.put("containsChats","false");
+                            mp.put("lastActive",Utility.getCurrentTimestamp());
 
-                    Map<String,String> mp = new HashMap<>();
-                    mp.put("channelId",ch.getChannelId());
-                    mp.put("containsChats","false");
-                    mp.put("lastActive",Utility.getCurrentTimestamp());
+                            currentUserDocRef
+                                    .collection("engagedChatChannels")
+                                    .document(receiver)
+                                    .set(mp);
 
-                    currentUserDocRef
-                            .collection("engagedChatChannels")
-                            .document(receiver)
-                            .set(mp);
+                            FirebaseFirestore.getInstance()
+                                    .collection("users").document(receiver)
+                                    .collection("engagedChatChannels")
+                                    .document(sender)
+                                    .set(mp);
 
-                    FirebaseFirestore.getInstance()
-                            .collection("users").document(receiver)
-                            .collection("engagedChatChannels")
-                            .document(sender)
-                            .set(mp);
+                            getChatChannel.onCallback(ch.getChannelId());
 
-                    getChatChannel.onCallback(ch.getChannelId());
-
-                }
-
-            }
-        });
-
+                        }
+                    }
+                });
 
     }
 
-
-//    public static void getOrCreateChatChannel(final String sender, final String receiver, final GetChatChannel getChatChannel){
-//
-//        final DatabaseReference currentUserChatChannels = FirebaseDatabase.getInstance().getReference()
-//                .child("engagedChatChannels")
-//                .child(sender);
-//
-//        currentUserChatChannels.child(receiver)
-//                .addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//                        if(snapshot.hasChild("channelId")){
-//                            getChatChannel.onCallback(snapshot.child("channelId").getValue().toString());
-//                        }else{
-//
-//                            DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
-//                                    .child("chatChannels").push();
-//
-//                            ArrayList<String> list = new ArrayList<>();
-//                            list.add(sender);
-//                            list.add(receiver);
-//
-//                            ChatChannel ch = new ChatChannel(list);
-//                            ch.setChannelId(chatChannelsRef.getKey());
-//
-//                            Log.d(TAG, "onDataChange: CHANNEL CREATED " + chatChannelsRef.getKey());
-//
-//                            chatChannelsRef.setValue(ch);
-//
-//                            Map<String,String> mp = new HashMap<>();
-//                            mp.put("channelId",ch.getChannelId());
-//                            mp.put("containsChats","false");
-//                            mp.put("lastActive",Utility.getCurrentTimestamp());
-//
-//
-//                            currentUserChatChannels
-//                                    .child(receiver)
-//                                    .setValue(mp);
-//
-//                            FirebaseDatabase.getInstance().getReference()
-//                                    .child("engagedChatChannels")
-//                                    .child(receiver)
-//                                    .child(sender)
-//                                    .setValue(mp);
-//
-//                            Log.d(TAG, "onDataChange: " + ch.getChannelId());
-//
-//                            getChatChannel.onCallback(ch.getChannelId());
-//
-//                        }
-//
-//                    }
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//
-//                    }
-//                });
-//
-//    }
-//
-//
     public static void sendTextMessage(String channelId, Message message){
 
         Log.d(TAG, "sendTextMessage: " + message.toString());
@@ -351,7 +288,6 @@ public class ChatMethods {
         DatabaseReference chatChannelRef = FirebaseDatabase.getInstance().getReference()
                 .child("chatChannels").child(channelId).child("messages");
 
-        chatChannelRef.keepSynced(true);
 
         Query q = chatChannelRef.limitToLast(50);
 
