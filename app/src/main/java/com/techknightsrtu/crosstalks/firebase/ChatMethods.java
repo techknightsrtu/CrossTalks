@@ -54,7 +54,11 @@ public class ChatMethods {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                isChatDeleted.onCallback(Objects.equals(snapshot.child("userIds").getValue().toString(), chatUser));
+                if(snapshot.child("members").hasChild(chatUser)){
+                    isChatDeleted.onCallback(false);
+                }else{
+                    isChatDeleted.onCallback(true);
+                }
 
             }
             @Override
@@ -111,19 +115,33 @@ public class ChatMethods {
                             DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
                                     .child("chatChannels").push();
 
-                            ArrayList<String> list = new ArrayList<>();
-                            list.add(sender);
-                            list.add(receiver);
+                            ChatChannel ch = new ChatChannel(chatChannelsRef.getKey());
 
-                            ChatChannel ch = new ChatChannel(list);
-                            ch.setChannelId(chatChannelsRef.getKey());
+                            DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
-                            Log.d(TAG, "onDataChange: CHANNEL CREATED " + chatChannelsRef.getKey());
+                            db.child("chatChannels")
+                                    .child(ch.getChannelId())
+                                    .child("members")
+                                    .child(sender)
+                                    .child("typingStatus")
+                                    .setValue("false");
 
-                            chatChannelsRef.setValue(ch);
+                            db.child("chatChannels")
+                                    .child(ch.getChannelId())
+                                    .child("members")
+                                    .child(receiver)
+                                    .child("typingStatus")
+                                    .setValue("false");
+
+                            db.child("chatChannels")
+                                    .child(ch.getChannelId())
+                                    .child("channelId")
+                                    .setValue(ch.getChannelId());
+
+                            Log.d(TAG, "onDataChange: CHANNEL CREATED " + ch.getChannelId());
 
                             Map<String,String> mp = new HashMap<>();
-                            mp.put("channelId",ch.getChannelId());
+                            mp.put("channelId",chatChannelsRef.getKey());
                             mp.put("containsChats","false");
                             mp.put("lastActive",Utility.getCurrentTimestamp());
 
@@ -189,6 +207,7 @@ public class ChatMethods {
 
         db.child("chatChannels")
                 .child(channelId)
+                .child("members")
                 .child(FirebaseMethods.getUserId())
                 .child("typingStatus")
                 .setValue(typingStatus);
@@ -202,6 +221,7 @@ public class ChatMethods {
 
         db.child("chatChannels")
                 .child(channelId)
+                .child("members")
                 .child(chatUserId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -216,7 +236,6 @@ public class ChatMethods {
                     }
                 });
     }
-
 
     public static ValueEventListener updateSeenMessage(String channelId,
                                                          final String sender,
@@ -260,23 +279,20 @@ public class ChatMethods {
          db.removeEventListener(vl);
     }
 
-
     public static void removeCurrentUserFromChatChannel(String channelId, String chatUser){
 
-        DatabaseReference userChatChannel = FirebaseDatabase.getInstance().getReference()
-                .child("engagedChatChannels").child(FirebaseMethods.getUserId()).child(chatUser);
-        userChatChannel.removeValue();
+        final DocumentReference currentUserDocRef = FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(FirebaseMethods.getUserId())
+                .collection("engagedChatChannels")
+                .document(chatUser);
 
+        currentUserDocRef.delete();
 
         DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
                 .child("chatChannels").child(channelId);
 
-        chatChannelsRef.child(FirebaseMethods.getUserId()).removeValue();
-
-        Map<String,Object> map = new HashMap<>();
-        map.put("userIds",chatUser);
-
-        chatChannelsRef.updateChildren(map);
+        chatChannelsRef.child("members").child(FirebaseMethods.getUserId()).removeValue();
 
     }
 

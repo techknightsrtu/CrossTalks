@@ -74,9 +74,10 @@ public class UserChatAdapter extends FirestoreRecyclerAdapter<User, UserChatView
                 @Override
                 public void onCallback(User user) {
 
+                    Log.d(TAG, "onCallback: " + user.toString());
+
                     holder.svChatLoading.setVisibility(View.GONE);
                     holder.rlChatLoaded.setVisibility(View.VISIBLE);
-
                     holder.ivUserAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(user.getAvatarId())));
                     holder.tvUserName.setText(Avatar.nameList.get(Integer.parseInt(user.getAvatarId())));
 
