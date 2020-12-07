@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:background="@drawable/gray_fill_rounded_8dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Chat"
+        android:drawableStart="@drawable/ic_round_delete"
+        android:gravity="center_vertical"
+        android:drawablePadding="8dp"
+        android:fontFamily="@font/mont_regular"
+        android:textColor="@color/white"
+        android:padding="12dp"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Are you sure?"
+        android:layout_marginStart="32dp"
+        android:textColor="@color/gray_text_color"
+        android:padding="12dp"
+        android:fontFamily="@font/mont_light"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp">
+
+        <TextView
+            android:id="@+id/tvCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="@color/last_seen_msg_color"
+            android:fontFamily="@font/mont_semibold"
+            android:padding="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
+
+        <TextView
+            android:id="@+id/tvDeleteChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete Chat"
+            android:textColor="@color/last_seen_msg_color"
+            android:fontFamily="@font/mont_semibold"
+            android:padding="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
+    </LinearLayout>
+
+</LinearLayout>

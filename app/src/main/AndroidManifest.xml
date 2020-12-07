@@ -46,9 +46,10 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel"
             android:value="@string/chats_notification_channel_id" />
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="ca-app-pub-7779434892309266~4590877357" />
 
         <service
             android:name=".app.notifications.FirebaseCloudMessagingService"

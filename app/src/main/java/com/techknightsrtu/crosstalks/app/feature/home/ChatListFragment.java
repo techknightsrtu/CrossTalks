@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -175,7 +177,29 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
             switch (menuItem.getItemId()){
 
                 case R.id.deleteChat:
-                    ChatMethods.removeCurrentUserFromChatChannel(channelId,userId);
+                    LayoutInflater factory = LayoutInflater.from(getActivity());
+                    final View deleteDialogView = factory.inflate(R.layout.delete_chat_dialog, null);
+                    final AlertDialog deleteDialog = new AlertDialog.Builder(getActivity()).create();
+                    deleteDialog.setView(deleteDialogView);
+                    Window window = deleteDialog.getWindow();
+                    window.setBackgroundDrawableResource(android.R.color.transparent);
+
+                    deleteDialogView.findViewById(R.id.tvCancel).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            deleteDialog.dismiss();
+                        }
+                    });
+                    deleteDialogView.findViewById(R.id.tvDeleteChat).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ChatMethods.removeCurrentUserFromChatChannel(channelId,userId);
+                            deleteDialog.dismiss();
+                        }
+                    });
+
+                    deleteDialog.show();
+
                     return true;
 
                 case R.id.blockChat:

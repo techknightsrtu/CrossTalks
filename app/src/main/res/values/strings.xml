@@ -21,15 +21,14 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="AD_UNIT_ID">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="video_ad_id">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="AD_UNIT_ID">ca-app-pub-7779434892309266/7440918890</string>
+    <string name="video_ad_id">ca-app-pub-7779434892309266/6871146051</string>
 
     <string name="reCaptcha_Site_Key">6Len5toZAAAAAPzTdKkIQYRGj06hwEicWu3fCwq2</string>
     <string name="reCaptcha_Secret_Key">6Len5toZAAAAABxAw_JpRXnaeId_IsuG0ftEV3Na</string>
 
     <string name="chats_notification_channel_id">chat_id</string>
     <string name="chats_notification_channel_name">Chats</string>
-
 
     <string name="app_tagline">With ❤️ from <font color="white"><b>Believe</b></font> for <font color="white"><b>Techknights.</b></font></string>
     <string name="user_agreement_text">By signing in, you agree to our Terms of Use and our Privacy Policy.</string>
@@ -39,6 +38,6 @@
     <string name="label_user_chat_deleted_msg">User has deleted this conversation. You can delete the channel if you want.</string>
     <string name="label_user_blocked_msg">You are blocked.</string>
 
-    <string name="label_chat_saftey_guildelines">Please be civil while having conversation anonymously. If reported, necessary action can be taken as per the Cyber Security guidelines. \n\n\n Team CrossTalks</string>
+    <string name="label_chat_saftey_guildelines">Please be civil while having conversation anonymously. If reported, necessary action can be taken as per the Cyber Security guidelines. \n\n\n Team Cross<font color="red">Talks</font></string>
 
 </resources>

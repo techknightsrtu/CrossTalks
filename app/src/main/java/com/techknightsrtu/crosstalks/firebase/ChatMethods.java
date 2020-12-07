@@ -287,7 +287,7 @@ public class ChatMethods {
         DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
                 .child("chatChannels").child(channelId);
 
-        chatChannelsRef.child("members").addValueEventListener(new ValueEventListener() {
+        chatChannelsRef.child("members").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
