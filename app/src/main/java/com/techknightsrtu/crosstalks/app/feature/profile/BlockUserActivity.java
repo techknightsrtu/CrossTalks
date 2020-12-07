@@ -47,6 +47,8 @@ public class BlockUserActivity extends AppCompatActivity implements OnUnblockBut
 
         rvBlockedChats = findViewById(R.id.rvBlockedChats);
 
+        btBack.setVisibility(View.GONE);
+
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

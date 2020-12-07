@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.techknightsrtu.crosstalks.BuildConfig;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.SplashActivity;
@@ -36,6 +37,8 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
 
     private boolean isUpdateAvailable = false;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     // Widgets
     private ImageView ivBack, ivUserAvatar;
@@ -56,6 +59,8 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        mFirebaseAnalytics =  FirebaseAnalytics.getInstance(this);
 
         init();
 
@@ -122,6 +127,11 @@ public class ProfileActivity extends AppCompatActivity {
                     String shareMessage= "\nBored in this Quarantine ??? Let's have some fun, Download CrossTalks and chat with your mates anonymously.   \n\n";
                     shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
                     shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Invite", "done");
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle);
+
                     startActivity(Intent.createChooser(shareIntent, "Invite your friends"));
                 } catch(Exception e) {
                     //e.toString();

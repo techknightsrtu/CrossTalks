@@ -333,6 +333,10 @@ public class RegistrationActivity extends AppCompatActivity {
 
                         if(done){
 
+                            Bundle bundle = new Bundle();
+                            bundle.putString(FirebaseAnalytics.Param.METHOD, "google-sign-in");
+                            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
+
                             mFirebaseAnalytics.setUserProperty("college_name", prefs.getCollegeName());
                             Intent i = new Intent(RegistrationActivity.this, HomeActivity.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
