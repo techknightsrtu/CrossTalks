@@ -233,10 +233,10 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setupChatChannel(String channelId){
 
-        ChatMethods.checkIfChatUserDeletedChat(channelId, currUserId, new IsChatDeleted() {
+        ChatMethods.checkIfChatUserDeletedChat(channelId, chatUserId, new IsChatDeleted() {
             @Override
             public void onCallback(boolean isDeleted) {
-                // TODO: Handle if chat User Deleted Chat
+                Log.d(TAG, "onCallback: " + isDeleted);
                 if(isDeleted){
                     llSendMessage.setVisibility(View.GONE);
                     llDialogMessage.setVisibility(View.VISIBLE);

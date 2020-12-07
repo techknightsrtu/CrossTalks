@@ -54,12 +54,7 @@ public class ChatMethods {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if(snapshot.child("members").hasChild(chatUser)){
-                    isChatDeleted.onCallback(false);
-                }else{
-                    isChatDeleted.onCallback(true);
-                }
-
+                isChatDeleted.onCallback(!snapshot.child("members").hasChild(chatUser));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -292,11 +287,22 @@ public class ChatMethods {
         DatabaseReference chatChannelsRef = FirebaseDatabase.getInstance().getReference()
                 .child("chatChannels").child(channelId);
 
-        chatChannelsRef.child("members").child(FirebaseMethods.getUserId()).removeValue();
+        chatChannelsRef.child("members").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if(snapshot.getChildrenCount() == 1){
+                    chatChannelsRef.removeValue();
+                }else{
+                    chatChannelsRef.child("members").child(FirebaseMethods.getUserId()).removeValue();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
     }
-
-
 
     //FIREBASE RECYCLER ADAPTER
     public static MessagesAdapter setupFirebaseChatsAdapter(String channelId, LinearLayout llSafetyLayout){
