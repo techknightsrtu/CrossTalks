@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -23,10 +24,13 @@ public class UserChatAdapter extends FirestoreRecyclerAdapter<User, UserChatView
     private static final String TAG = "OnlineChatAdapter";
 
     private final OnChatButtonClick onChatButtonClick;
+    private LinearLayout llEmptyView;
 
-    public UserChatAdapter(FirestoreRecyclerOptions<User> options, OnChatButtonClick onChatButtonClick ) {
+    public UserChatAdapter(FirestoreRecyclerOptions<User> options, OnChatButtonClick onChatButtonClick,
+                           LinearLayout llEmptyView) {
         super(options);
         this.onChatButtonClick = onChatButtonClick;
+        this.llEmptyView = llEmptyView;
     }
 
     @NonNull
@@ -70,23 +74,45 @@ public class UserChatAdapter extends FirestoreRecyclerAdapter<User, UserChatView
                 @Override
                 public void onCallback(User user) {
 
+                    Log.d(TAG, "onCallback: " + user.toString());
+
                     holder.svChatLoading.setVisibility(View.GONE);
                     holder.rlChatLoaded.setVisibility(View.VISIBLE);
-
                     holder.ivUserAvatar.setImageResource(Avatar.avatarList.get(Integer.parseInt(user.getAvatarId())));
                     holder.tvUserName.setText(Avatar.nameList.get(Integer.parseInt(user.getAvatarId())));
 
                 }
             });
 
+            holder.rlChatLoaded.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    int avatarId = Avatar.nameList.indexOf(holder.tvUserName.getText().toString());
+
+                    onChatButtonClick.onChatClick(avatarId,model.getUserId());
+
+                }
+            });
+
+            holder.tvStartChat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    int avatarId = Avatar.nameList.indexOf(holder.tvUserName.getText().toString());
+
+                    onChatButtonClick.onChatClick(avatarId,model.getUserId());
+
+                }
+            });
+
         }
-
-
 
     }
 
+
     @Override
-    public int getItemViewType(int position) {
-        return position;
+    public void onDataChanged() {
+        llEmptyView.setVisibility(getItemCount() == 1 ? View.VISIBLE : View.GONE);
     }
 }

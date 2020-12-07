@@ -17,9 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.feature.auth.RegistrationActivity;
 import com.techknightsrtu.crosstalks.app.feature.chat.ChatActivity;
@@ -29,6 +31,7 @@ import com.techknightsrtu.crosstalks.app.feature.home.interfaces.OnChatButtonCli
 import com.techknightsrtu.crosstalks.firebase.ChatMethods;
 import com.techknightsrtu.crosstalks.app.helper.local.UserProfileDataPref;
 import com.techknightsrtu.crosstalks.firebase.FirebaseMethods;
+import com.techknightsrtu.crosstalks.firebase.callbackInterfaces.IsUserBlocked;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +50,7 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
     private StoriesAdapter storiesAdapter;
     private RecentChatAdapter chatAdapter;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     //LocalData
     UserProfileDataPref prefs;
@@ -82,6 +86,8 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
         //rvAnonymousStories = mView.findViewById(R.id.rvAnonymousStories);
 //        storiesAdapter = new StoriesAdapter(getActivity());
 //        rvAnonymousStories.setAdapter(storiesAdapter);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
         prefs = new UserProfileDataPref(getActivity());
         rvChats = mView.findViewById(R.id.rvChats);
@@ -149,6 +155,19 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
 
         PopupMenu recentChatMenu = new PopupMenu(wrapper, v);
 
+        FirebaseMethods.isUserBlocked(prefs.getUserId(), userId, new IsUserBlocked() {
+            @Override
+            public void onCallback(boolean isBlocked) {
+                if(isBlocked){
+                    recentChatMenu.getMenu().findItem(R.id.blockChat).setVisible(false);
+                    recentChatMenu.getMenu().findItem(R.id.unblockChat).setVisible(true);
+                }else{
+                    recentChatMenu.getMenu().findItem(R.id.blockChat).setVisible(true);
+                    recentChatMenu.getMenu().findItem(R.id.unblockChat).setVisible(false);
+                }
+            }
+        });
+
         recentChatMenu.getMenuInflater().inflate(R.menu.recent_chat_item_poupup_menu, recentChatMenu.getMenu());
 
         recentChatMenu.setOnMenuItemClickListener(menuItem -> {
@@ -168,8 +187,7 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
                     return true;
 
                 case R.id.reportChat:
-                    // TODO: write code for reporting a user here
-                    showReportSheet();
+                    showReportSheet(userId);
                     return true;
             }
 
@@ -180,7 +198,7 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
 
     }
 
-    private void showReportSheet() {
+    private void showReportSheet(String userId) {
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
         View ReportUserView = layoutInflater.inflate(R.layout.report_bottom_sheet, null);
 
@@ -191,6 +209,16 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
             @Override
             public void onClick(View view) {
                 // TODO: first option
+                TextView txt = (TextView) view;
+                Bundle params = new Bundle();
+                params.putString("reportedBy",prefs.getUserId());
+                params.putString("reportedUser",userId);
+                params.putString("reason", txt.getText().toString());
+                mFirebaseAnalytics.logEvent("report_user", params);
+
+                Toast.makeText(getContext(), "User Reported Successfully!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+
             }
         });
 
@@ -198,6 +226,15 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
             @Override
             public void onClick(View view) {
                 // TODO: second option
+                TextView txt = (TextView) view;
+                Bundle params = new Bundle();
+                params.putString("reportedBy",prefs.getUserId());
+                params.putString("reportedUser",userId);
+                params.putString("reason", txt.getText().toString());
+                mFirebaseAnalytics.logEvent("report_user", params);
+
+                Toast.makeText(getContext(), "User Reported Successfully!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
 
@@ -205,6 +242,15 @@ public class ChatListFragment extends Fragment implements OnChatButtonClick {
             @Override
             public void onClick(View view) {
                 // TODO: third option
+                TextView txt = (TextView) view;
+                Bundle params = new Bundle();
+                params.putString("reportedBy",prefs.getUserId());
+                params.putString("reportedUser",userId);
+                params.putString("reason", txt.getText().toString());
+                mFirebaseAnalytics.logEvent("report_user", params);
+
+                Toast.makeText(getContext(), "User Reported Successfully!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
 

@@ -336,7 +336,7 @@ public class FirebaseMethods {
 
 
 
-    public static UserChatAdapter setupOnlineChatsAdapter(String collegeId, OnChatButtonClick onChatButtonClick){
+    public static UserChatAdapter setupOnlineChatsAdapter(String collegeId, OnChatButtonClick onChatButtonClick, LinearLayout llEmptyView){
 
         final FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
@@ -348,7 +348,7 @@ public class FirebaseMethods {
                 .setQuery(q,User.class)
                 .build();
 
-        return new UserChatAdapter(options,onChatButtonClick);
+        return new UserChatAdapter(options,onChatButtonClick, llEmptyView);
 
     }
 

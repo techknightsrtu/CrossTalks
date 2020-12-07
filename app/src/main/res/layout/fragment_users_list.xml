@@ -35,7 +35,46 @@
             android:clipToPadding="false"
             android:layout_marginTop="20dp"
             android:overScrollMode="never"
+            android:visibility="visible"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <LinearLayout
+            android:id="@+id/llEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:src="@drawable/ic_share_link_illu"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seems like no one is here."
+                android:gravity="center"
+                android:fontFamily="@font/mont_light"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/gray_text_color"/>
+
+            <TextView
+                android:id="@+id/tvShareApp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Invite Your Friends"
+                android:background="@drawable/red_bg_fill_round_send_button"
+                android:textColor="@color/white"
+                android:fontFamily="@font/mont_regular"
+                android:padding="8dp"
+                android:layout_marginTop="24dp"/>
+
+        </LinearLayout>
+
 
 <!--        <include layout="@layout/bottom_nav" />-->
 

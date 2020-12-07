@@ -122,10 +122,12 @@ public class HomeActivity extends AppCompatActivity {
         profileLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent i = new Intent(HomeActivity.this, ProfileActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
+
             }
         });
 

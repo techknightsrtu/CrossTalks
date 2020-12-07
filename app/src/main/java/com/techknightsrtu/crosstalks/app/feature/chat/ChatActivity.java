@@ -82,6 +82,13 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        currUserId = FirebaseMethods.getUserId();
+
+        chatUserId = getIntent().getStringExtra("userId");
+        chatUserAvatarId = getIntent().getStringExtra("avatarId");
+
+        Log.d(TAG, "onCreate: " + chatUserId);
+
         init();
 
         // For Loading Ads
@@ -96,6 +103,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void init() {
+
         rlDirectReply = findViewById(R.id.rlDirectReply);
 
         ivCloseDirectMessage = findViewById(R.id.ivCloseDirectMessage);
@@ -110,11 +118,6 @@ public class ChatActivity extends AppCompatActivity {
         llSendMessage = findViewById(R.id.llSendMessage);
 
         prefs = new UserProfileDataPref(ChatActivity.this);
-
-        currUserId = FirebaseMethods.getUserId();
-
-        chatUserId = getIntent().getStringExtra("userId");
-        chatUserAvatarId = getIntent().getStringExtra("avatarId");
 
         TextView tvChatUserName = findViewById(R.id.tvChatUserName);
         tvChatUserName.setText(Avatar.nameList.get(Integer.parseInt(chatUserAvatarId)));
@@ -234,12 +237,10 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setupChatChannel(String channelId){
 
-        progressDialog.showProgressDialog();
-
-        ChatMethods.checkIfChatUserDeletedChat(channelId, currUserId, new IsChatDeleted() {
+        ChatMethods.checkIfChatUserDeletedChat(channelId, chatUserId, new IsChatDeleted() {
             @Override
             public void onCallback(boolean isDeleted) {
-                // TODO: Handle if chat User Deleted Chat
+                Log.d(TAG, "onCallback: " + isDeleted);
                 if(isDeleted){
                     llSendMessage.setVisibility(View.GONE);
                     llDialogMessage.setVisibility(View.VISIBLE);
@@ -316,11 +317,19 @@ public class ChatActivity extends AppCompatActivity {
                             chatUserId,etWriteMessage.getText().toString().trim(),
                             replyMessage, type,false);
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            etWriteMessage.setText("");
+                            tvDirectMessageReply.setText("");
+                            isReply = false;
+                        }
+                    });
+
                     ChatMethods.sendTextMessage(channelId,m);
 
                 }).start();
 
-                etWriteMessage.setText("");
             }
 
         });
@@ -334,9 +343,11 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onCallback(String channelId) {
 
+                Log.d(TAG, "onCallback: " + channelId);
+
                 setupChatChannel(channelId);
 
-                messagesAdapter = ChatMethods.setupFirebaseChatsAdapter(channelId);
+                messagesAdapter = ChatMethods.setupFirebaseChatsAdapter(channelId,llSafetyGuide);
 
                 if(messagesAdapter.getItemCount() == 0){
                     llSafetyGuide.setVisibility(View.GONE);
@@ -361,13 +372,13 @@ public class ChatActivity extends AppCompatActivity {
 
                             linearLayoutManager.scrollToPosition(positionStart);
 
+                        }else if(positionStart == friendlyMessageCount - 1){
+                            linearLayoutManager.scrollToPosition(positionStart);
                         }
                     }
                 });
 
                 chatSeenListener = ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
-
-
             }
         });
     }
@@ -427,7 +438,7 @@ public class ChatActivity extends AppCompatActivity {
         isVisible = false;
         super.onDestroy();
 
-       // ChatMethods.deleteChatChannelIfNoChat(currUserId, chatUserId);
+       //ChatMethods.deleteChatChannelIfNoChat(currUserId, chatUserId);
     }
 
 }

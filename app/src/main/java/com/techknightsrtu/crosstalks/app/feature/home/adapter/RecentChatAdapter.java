@@ -15,6 +15,8 @@ import android.widget.PopupMenu;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.techknightsrtu.crosstalks.R;
 import com.techknightsrtu.crosstalks.app.feature.chat.models.EngagedChatChannel;
 import com.techknightsrtu.crosstalks.app.feature.home.interfaces.OnChatButtonClick;
@@ -29,7 +31,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecentChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChannel, RecentChatViewHolder> {
+public class RecentChatAdapter extends FirestoreRecyclerAdapter<EngagedChatChannel, RecentChatViewHolder> {
 
 
     private static final String TAG = "ChatAdapter";
@@ -46,13 +48,12 @@ public class RecentChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChanne
      * @param options
      * @param llEmpty
      */
-    public RecentChatAdapter(@NonNull FirebaseRecyclerOptions<EngagedChatChannel> options,
+    public RecentChatAdapter(@NonNull FirestoreRecyclerOptions<EngagedChatChannel> options,
                              OnChatButtonClick onChatButtonClick, LinearLayout llEmpty) {
         super(options);
         this.onChatButtonClick = onChatButtonClick;
         this.llEmptyView = llEmpty;
     }
-
 
     @NonNull
     @Override
@@ -72,7 +73,8 @@ public class RecentChatAdapter extends FirebaseRecyclerAdapter<EngagedChatChanne
 
         Log.d(TAG, "onBindViewHolder: " + model.getChannelId());
 
-        final String userId = getRef(position).getKey();
+
+        final String userId = getSnapshots().getSnapshot(position).getId();
         String channelId = model.getChannelId();
 
         FirebaseMethods.getOnlyUserData(userId, user -> {

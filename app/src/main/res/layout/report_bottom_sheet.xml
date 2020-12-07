@@ -50,7 +50,7 @@
         android:text="Why you want to report this user?"
         android:fontFamily="@font/mont_regular"
         android:padding="16dp"
-        android:textColor="@color/white"
+        android:textColor="@color/last_seen_msg_color"
         android:textSize="16sp"/>
 
     <TextView

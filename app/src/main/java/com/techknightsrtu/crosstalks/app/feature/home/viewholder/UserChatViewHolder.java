@@ -38,27 +38,6 @@ public class UserChatViewHolder extends RecyclerView.ViewHolder {
 
         svChatLoading = itemView.findViewById(R.id.svChatLoading);
 
-        rlChatLoaded.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                int avatarId = Avatar.nameList.indexOf(tvUserName.getText().toString());
-
-                onChatButtonClick.onChatClick(avatarId,model.getUserId());
-
-            }
-        });
-
-        tvStartChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                int avatarId = Avatar.nameList.indexOf(tvUserName.getText().toString());
-
-                onChatButtonClick.onChatClick(avatarId,model.getUserId());
-
-            }
-        });
 
     }
 
