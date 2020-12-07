@@ -82,6 +82,13 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        currUserId = FirebaseMethods.getUserId();
+
+        chatUserId = getIntent().getStringExtra("userId");
+        chatUserAvatarId = getIntent().getStringExtra("avatarId");
+
+        Log.d(TAG, "onCreate: " + chatUserId);
+
         init();
 
         // For Loading Ads
@@ -96,6 +103,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void init() {
+
         rlDirectReply = findViewById(R.id.rlDirectReply);
 
         ivCloseDirectMessage = findViewById(R.id.ivCloseDirectMessage);
@@ -110,11 +118,6 @@ public class ChatActivity extends AppCompatActivity {
         llSendMessage = findViewById(R.id.llSendMessage);
 
         prefs = new UserProfileDataPref(ChatActivity.this);
-
-        currUserId = FirebaseMethods.getUserId();
-
-        chatUserId = getIntent().getStringExtra("userId");
-        chatUserAvatarId = getIntent().getStringExtra("avatarId");
 
         TextView tvChatUserName = findViewById(R.id.tvChatUserName);
         tvChatUserName.setText(Avatar.nameList.get(Integer.parseInt(chatUserAvatarId)));
@@ -230,8 +233,6 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setupChatChannel(String channelId){
 
-        progressDialog.showProgressDialog();
-
         ChatMethods.checkIfChatUserDeletedChat(channelId, currUserId, new IsChatDeleted() {
             @Override
             public void onCallback(boolean isDeleted) {
@@ -332,10 +333,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private void getChatChannelAndSetup(){
 
-
         ChatMethods.getOrCreateChatChannel(currUserId, chatUserId, new GetChatChannel() {
             @Override
             public void onCallback(String channelId) {
+
+                Log.d(TAG, "onCallback: " + channelId);
 
                 setupChatChannel(channelId);
 
@@ -358,10 +360,6 @@ public class ChatActivity extends AppCompatActivity {
                         int friendlyMessageCount = messagesAdapter.getItemCount();
                         int lastVisiblePosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
 
-                        Log.i(TAG, "onItemRangeInserted: " + positionStart);
-                        Log.i(TAG, "onItemRangeInserted: " + friendlyMessageCount);
-                        Log.i(TAG, "onItemRangeInserted: " + lastVisiblePosition);
-
                         if (lastVisiblePosition == -1 ||
                                 (positionStart >= (friendlyMessageCount - 1) &&
                                         lastVisiblePosition == (positionStart - 1))) {
@@ -375,7 +373,6 @@ public class ChatActivity extends AppCompatActivity {
                 });
 
                 chatSeenListener = ChatMethods.updateSeenMessage(channelId,currUserId,chatUserId);
-
             }
         });
     }

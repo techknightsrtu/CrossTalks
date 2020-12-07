@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,6 +130,9 @@ public class UsersListFragment extends Fragment implements OnChatButtonClick {
 
     @Override
     public void onChatClick(int avatarId, String userId) {
+
+        Log.d(TAG, "onChatClick: " + avatarId + " " + userId);
+
 
         Intent i = new Intent(getContext(), ChatActivity.class);
         i.putExtra("userId",userId);

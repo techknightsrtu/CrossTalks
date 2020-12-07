@@ -83,6 +83,28 @@ public class UserChatAdapter extends FirestoreRecyclerAdapter<User, UserChatView
                 }
             });
 
+            holder.rlChatLoaded.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    int avatarId = Avatar.nameList.indexOf(holder.tvUserName.getText().toString());
+
+                    onChatButtonClick.onChatClick(avatarId,model.getUserId());
+
+                }
+            });
+
+            holder.tvStartChat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    int avatarId = Avatar.nameList.indexOf(holder.tvUserName.getText().toString());
+
+                    onChatButtonClick.onChatClick(avatarId,model.getUserId());
+
+                }
+            });
+
         }
 
     }
